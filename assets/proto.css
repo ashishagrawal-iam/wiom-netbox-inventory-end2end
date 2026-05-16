@@ -8,7 +8,11 @@ html, body {
   background: #F2EEF8;
   color: var(--wc-text-primary);
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: contain;
 }
+
+/* Mobile-only toggles (hidden on desktop, visible <900px) */
+.mobile-rail-btn, .mobile-side-btn, .mobile-scrim { display: none; }
 
 .app {
   display: grid;
@@ -736,6 +740,160 @@ body.show-amendments .deprecation-overlay { display: flex; }
 body.show-tap-hints .phone-screen [data-tap] {
   outline: 1px dashed rgba(217, 0, 141, 0.5);
   outline-offset: 1px;
+}
+
+/* ============================================================
+   Mobile responsive (≤900px) — phone becomes the centerpiece,
+   rail & annotations slide in from edges as overlays.
+   ============================================================ */
+@media (max-width: 900px) {
+  :root {
+    --phone-w: min(360px, calc(100vw - 24px));
+    --phone-h: calc(var(--phone-w) * 2.04);
+  }
+
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px 1fr;
+    grid-template-areas:
+      "topbar"
+      "stage";
+    height: 100dvh;
+    min-height: auto;
+  }
+
+  /* Compact top bar */
+  .topbar {
+    padding: 0 10px;
+    gap: 8px;
+    height: 56px;
+  }
+  .topbar h1 { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar .sub { display: none; }
+  .topbar .spacer { display: none; }
+  .toggle-group {
+    font-size: 11px;
+    padding: 2px;
+    flex-shrink: 0;
+  }
+  .toggle-group button { padding: 5px 9px; }
+
+  /* Mobile rail button (☰) in topbar */
+  .mobile-rail-btn {
+    display: grid;
+    place-items: center;
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.10);
+    border: 0;
+    border-radius: 8px;
+    color: var(--wc-text-inverse);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  .mobile-rail-btn svg { width: 22px; height: 22px; fill: currentColor; }
+
+  /* Rail becomes a slide-in drawer from the left */
+  .rail {
+    position: fixed;
+    top: 56px; left: 0;
+    height: calc(100dvh - 56px);
+    width: min(300px, 85vw);
+    z-index: 200;
+    transform: translateX(-105%);
+    transition: transform 0.22s ease;
+    box-shadow: 4px 0 16px rgba(22, 16, 33, 0.18);
+    overflow-y: auto;
+    padding-bottom: 80px;
+  }
+  body.rail-open .rail { transform: translateX(0); }
+
+  /* Annotations become a slide-up bottom sheet */
+  .side {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 72vh;
+    max-height: 72dvh;
+    border-radius: 18px 18px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.22s ease;
+    z-index: 200;
+    box-shadow: 0 -6px 18px rgba(22, 16, 33, 0.20);
+    padding: 24px 18px 24px;
+  }
+  body.side-open .side { transform: translateY(0); }
+
+  /* Floating "Notes" button at bottom-right opens annotations */
+  .mobile-side-btn {
+    display: flex;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 150;
+    background: var(--wc-brand-primary);
+    color: white;
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 14px;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(217, 0, 141, 0.4);
+    cursor: pointer;
+  }
+  .mobile-side-btn svg { width: 16px; height: 16px; fill: currentColor; }
+  body.side-open .mobile-side-btn { display: none; }
+
+  .mobile-side-close {
+    position: absolute;
+    top: 8px; right: 12px;
+    background: var(--wc-bg-secondary);
+    border: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--wc-text-primary);
+    line-height: 1;
+    display: grid;
+    place-items: center;
+  }
+
+  /* Scrim behind drawer / sheet */
+  .mobile-scrim {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(22, 16, 33, 0.50);
+    z-index: 180;
+  }
+  body.rail-open .mobile-scrim,
+  body.side-open .mobile-scrim { display: block; }
+
+  /* Stage gets all the room. Reduce padding so phone fits. */
+  .stage {
+    padding: 12px 12px 90px;
+    gap: 10px;
+    align-items: center;
+  }
+  .stage h2 { font-size: 15px; align-self: flex-start; }
+  .stage .stage-sub { font-size: 11px; align-self: flex-start; }
+
+  /* Workflow stepper — already wraps; just compact spacing */
+  .wf-stepper {
+    padding: 10px 12px;
+    max-width: 100%;
+  }
+  .wf-stepper .wf-title { font-size: 12px; }
+  .wf-stepper .wf-purpose { font-size: 11px; margin-bottom: 8px; }
+  .wf-stepper .wf-step { padding: 6px 10px; font-size: 11px; }
+}
+
+/* Very small (≤380px) — squeeze more */
+@media (max-width: 380px) {
+  .toggle-group button { padding: 4px 7px; font-size: 10px; }
+  .topbar h1 { font-size: 11px; }
 }
 
 /* Misc */

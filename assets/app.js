@@ -10,6 +10,31 @@
   const wfStepper = document.getElementById('wf-stepper');
   const phoneFrame = document.querySelector('.phone-frame');
 
+  // Mobile drawer / bottom-sheet toggles
+  const mobileRailBtn = document.getElementById('mobile-rail-btn');
+  const mobileSideBtn = document.getElementById('mobile-side-btn');
+  const mobileSideClose = document.getElementById('mobile-side-close');
+  const mobileScrim = document.getElementById('mobile-scrim');
+
+  function closeMobileOverlays() {
+    body.classList.remove('rail-open', 'side-open');
+  }
+  if (mobileRailBtn) mobileRailBtn.addEventListener('click', () => {
+    body.classList.remove('side-open');
+    body.classList.toggle('rail-open');
+  });
+  if (mobileSideBtn) mobileSideBtn.addEventListener('click', () => {
+    body.classList.remove('rail-open');
+    body.classList.add('side-open');
+  });
+  if (mobileSideClose) mobileSideClose.addEventListener('click', closeMobileOverlays);
+  if (mobileScrim) mobileScrim.addEventListener('click', closeMobileOverlays);
+
+  // Esc closes any open mobile overlay
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMobileOverlays();
+  });
+
   const sourceLabel = {
     'PR #222':  'PR #222 · order-side journey',
     'DD-state': 'netbox-drilldown-states branch · device states',
@@ -217,6 +242,7 @@
     if (!item) return;
     if (item.dataset.workflow) {
       gotoWorkflowStep(item.dataset.workflow, 0);
+      closeMobileOverlays();
       return;
     }
     const id = item.dataset.screen;
@@ -226,6 +252,7 @@
       currentScreen = null;
       showScreen(id);
       if (history.replaceState) history.replaceState(null, '', '#' + id);
+      closeMobileOverlays();
     }
   });
 

@@ -53,6 +53,9 @@
 <div class="app">
   <!-- Top bar -->
   <header class="topbar">
+    <button class="mobile-rail-btn" id="mobile-rail-btn" aria-label="Open menu">
+      <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3zm0-5h18v-2H3zm0-7v2h18V6z"/></svg>
+    </button>
     <div>
       <h1>NetBox · Inventory End-to-End</h1>
       <div class="sub">Order → Deliver → Custodied → Deployed → Idle → Recovery → Return → Settlement</div>
@@ -63,6 +66,15 @@
       <button data-mode="hide">Pre-amendment only</button>
     </div>
   </header>
+
+  <!-- Mobile scrim (shown behind drawer / bottom sheet on mobile) -->
+  <div class="mobile-scrim" id="mobile-scrim"></div>
+
+  <!-- Mobile floating button to open annotations sheet -->
+  <button class="mobile-side-btn" id="mobile-side-btn" aria-label="View annotations">
+    <svg viewBox="0 0 24 24"><path d="M19 5v14H5V5h14m0-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm-4 8H7v-2h6v2z"/></svg>
+    Notes
+  </button>
 
   <!-- Left rail -->
   <nav class="rail" id="rail">
@@ -1616,8 +1628,9 @@
     </div><!-- /phone-frame -->
   </main>
 
-  <!-- Right annotations panel -->
+  <!-- Right annotations panel (becomes bottom sheet on mobile) -->
   <aside class="side" id="side-panel">
+    <button class="mobile-side-close" id="mobile-side-close" aria-label="Close notes">×</button>
     <!-- populated by JS -->
   </aside>
 </div>
