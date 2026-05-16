@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NetBox · Inventory End-to-End Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/proto.css">
+</head>
+<body class="show-amendments">
+
+<!-- Icon sprite -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-back" viewBox="0 0 24 24"><path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path fill="currentColor" d="M3 18h18v-2H3zm0-5h18v-2H3zm0-7v2h18V6z"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><path fill="currentColor" d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></symbol>
+  <symbol id="i-bug" viewBox="0 0 24 24"><path fill="currentColor" d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81a5.99 5.99 0 0 0 10.38 0H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20zm-6 8h-4v-2h4zm0-4h-4v-2h4z"/></symbol>
+  <symbol id="i-add" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></symbol>
+  <symbol id="i-remove" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13H5v-2h14z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></symbol>
+  <symbol id="i-cancel" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12z"/></symbol>
+  <symbol id="i-autorenew" viewBox="0 0 24 24"><path fill="currentColor" d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8A5.87 5.87 0 0 1 6 12c0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path fill="currentColor" d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2a3 3 0 1 0 6 0h6a3 3 0 1 0 6 0h2v-5zm-.5 1.5 1.96 2.5H17V9.5zM6 18.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm12 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></symbol>
+  <symbol id="i-task-alt" viewBox="0 0 24 24"><path fill="currentColor" d="m22 5.18-10.59 10.6-4.24-4.24 1.41-1.41 2.83 2.83L20.59 3.77zM12 20c-4.42 0-8-3.58-8-8 0-3.95 2.87-7.23 6.63-7.88l1.59 1.59C8.31 5.91 5 8.57 5 12c0 3.86 3.14 7 7 7s7-3.14 7-7c0-.45-.05-.89-.13-1.32l1.62-1.62c.32.91.51 1.9.51 2.94 0 4.42-3.58 8-8 8z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path fill="currentColor" d="M21 18v1c0 1.1-.9 2-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2zm-9-2h10V8H12zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></symbol>
+  <symbol id="i-router" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11h-2V8c0-1.1-.9-2-2-2h-5c.1-.3.1-.7.1-1 0-1.66-1.34-3-3-3S6 3.34 6 5c0 .3 0 .7.1 1H4c-1.1 0-2 .9-2 2v3h2v9h16v-9h1zM9 5c0-.55.45-1 1-1s1 .45 1 1-.45 1-1 1-1-.45-1-1zm9 13H5v-6h13zM6 9V7h12v2z"/></symbol>
+  <symbol id="i-warning" viewBox="0 0 24 24"><path fill="currentColor" d="M1 21h22L12 2zm12-3h-2v-2h2zm0-4h-2v-4h2z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z"/></symbol>
+  <symbol id="i-search-off" viewBox="0 0 24 24"><path fill="currentColor" d="M19.07 4.93l-1.41 1.41A8 8 0 1 0 7.34 17.66l-3.41 3.41 1.41 1.41 17-17zM12 17a5 5 0 0 1-5-5 5 5 0 0 1 .82-2.76l7.94 7.94A5 5 0 0 1 12 17z"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><path fill="currentColor" d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27zM12 17.3c-.72 0-1.3-.58-1.3-1.3s.58-1.3 1.3-1.3 1.3.58 1.3 1.3-.58 1.3-1.3 1.3zm1-4.3h-2V7h2z"/></symbol>
+  <symbol id="i-inventory" viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4a1 1 0 0 0-1 1v3.01c0 .36.21.69.5.89V20a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V6.9c.3-.2.5-.5.5-.89V3a1 1 0 0 0-1-1zm-5 12H9v-2h6zM19 6H5V4h14z"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></symbol>
+  <symbol id="i-assignment-return" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm5 11h-4v3l-5-5 5-5v3h4z"/></symbol>
+  <symbol id="i-checklist" viewBox="0 0 24 24"><path fill="currentColor" d="m22 7-1.41-1.41-6.34 6.34 1.41 1.41zm-11.59 4.58L8 9.17 6.59 10.59 10.41 14.41l8-8L17 4.99zM4 18h17v2H4zm0-5h7v2H4zm0-5h7v2H4z"/></symbol>
+  <symbol id="i-dollar" viewBox="0 0 24 24"><path fill="currentColor" d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16C8.06 5.58 6.55 6.84 6.55 8.77c0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c2.05-.39 3.68-1.57 3.69-3.65 0-2.85-2.44-3.8-4.94-4.4z"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><path fill="currentColor" d="M11 18h2v-2h-2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path fill="currentColor" d="m7.41 15.41 4.59-4.58 4.59 4.58L18 14l-6-6-6 6z"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path fill="currentColor" d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5zm-2 16-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9z"/></symbol>
+  <symbol id="i-trending-up" viewBox="0 0 24 24"><path fill="currentColor" d="m16 6 2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24"><path fill="currentColor" d="M18 17H6v-2h12zm0-4H6v-2h12zm0-4H6V7h12zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2z"/></symbol>
+  <symbol id="i-gavel" viewBox="0 0 24 24"><path fill="currentColor" d="m6.85 12.65 6.49-6.49 1.5 1.5-6.49 6.49zM18.5 17h-13v2h13zm-2-13.5L20.5 7.5l-3 3L13.5 6.5z"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31A7.902 7.902 0 0 1 12 20zm6.31-3.1L7.1 5.69A7.902 7.902 0 0 1 12 4c4.41 0 8 3.59 8 8 0 1.85-.63 3.55-1.69 4.9z"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path fill="currentColor" d="m17 8-1.41 1.41L17.17 11H9v2h8.17l-1.58 1.58L17 16l4-4zM5 5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7v-2H5z"/></symbol>
+</svg>
+
+<div class="app">
+  <!-- Top bar -->
+  <header class="topbar">
+    <div>
+      <h1>NetBox · Inventory End-to-End</h1>
+      <div class="sub">Order → Deliver → Custodied → Deployed → Idle → Recovery → Return → Settlement</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="toggle-group" id="overlay-toggle">
+      <button class="on" data-mode="show">Show amendments</button>
+      <button data-mode="hide">Pre-amendment only</button>
+    </div>
+  </header>
+
+  <!-- Left rail -->
+  <nav class="rail" id="rail">
+    <div class="group">Workflows · Design Note 3</div>
+    <div class="item is-workflow" data-workflow="W1"><span class="dot"></span> W1 · SD at Onboarding <span class="meta">5 steps</span></div>
+    <div class="item is-workflow" data-workflow="W2"><span class="dot"></span> W2 · Growth Intent (A/B/C/D) <span class="meta">7 steps</span></div>
+    <div class="item is-workflow" data-workflow="W3"><span class="dot"></span> W3 · Custody Loss <span class="meta">5 steps</span></div>
+    <div class="item is-workflow" data-workflow="W4"><span class="dot"></span> W4 · Customer Non-Recovery <span class="meta">6 steps</span></div>
+    <div class="item is-workflow" data-workflow="W5"><span class="dot"></span> W5 · Device Return to Wiom <span class="meta">5 steps</span></div>
+    <div class="item is-workflow" data-workflow="W6"><span class="dot"></span> W6 · Scheduled Reconciliation <span class="meta">3 steps</span></div>
+    <div class="item is-workflow" data-workflow="W7"><span class="dot"></span> W7 · Risk Escalation <span class="meta">4 steps</span></div>
+    <div class="item is-workflow" data-workflow="W8"><span class="dot"></span> W8 · Exit Settlement <span class="meta">2 steps</span></div>
+    <div class="item is-workflow" data-workflow="W9"><span class="dot"></span> W9 · Standalone SD Top-Up <span class="meta">3 steps</span></div>
+    <div class="item is-workflow" data-workflow="W10"><span class="dot"></span> W10 · Dispute / Correction <span class="meta">5 steps</span></div>
+    <div class="item is-workflow" data-workflow="W11"><span class="dot"></span> W11 · Legacy Migration <span class="meta">2 steps</span></div>
+    <div class="item is-workflow" data-workflow="W12"><span class="dot"></span> W12 · Late Recovery <span class="meta">3 steps</span></div>
+
+    <div class="group">Order side · Pre-amendment</div>
+    <div class="item active" data-screen="nb-home"><span class="dot"></span> NetBox Home</div>
+    <div class="item has-change" data-screen="request-sheet"><span class="dot"></span> Request New <span class="meta">changed</span></div>
+    <div class="item has-change" data-screen="low-balance"><span class="dot"></span> Low Balance <span class="meta">changed</span></div>
+    <div class="item" data-screen="add-funds-input"><span class="dot"></span> Add Funds · Input</div>
+    <div class="item" data-screen="add-funds-method"><span class="dot"></span> Add Funds · Method</div>
+    <div class="item" data-screen="add-funds-processing"><span class="dot"></span> Add Funds · Processing</div>
+    <div class="item" data-screen="add-funds-success"><span class="dot"></span> Add Funds · Success</div>
+    <div class="item" data-screen="request-success"><span class="dot"></span> Request Success</div>
+    <div class="item" data-screen="nb-home-tracking"><span class="dot"></span> Home · Order in transit</div>
+    <div class="item has-change" data-screen="nb-home-delivered"><span class="dot"></span> Home · Delivered (CTA) <span class="meta">changed</span></div>
+    <div class="item has-change" data-screen="delivery-confirm"><span class="dot"></span> Delivery Confirm <span class="meta">changed</span></div>
+    <div class="item" data-screen="delivery-confirmed"><span class="dot"></span> Delivery Confirmed</div>
+
+    <div class="group">Device states · Pre-amendment</div>
+    <div class="item" data-screen="dev-deployed"><span class="dot"></span> DEPLOYED</div>
+    <div class="item has-change" data-screen="dev-idle"><span class="dot"></span> IDLE (with fee) <span class="meta">changed</span></div>
+    <div class="item has-change" data-screen="dev-custodied"><span class="dot"></span> CUSTODIED <span class="meta">changed</span></div>
+    <div class="item has-change" data-screen="dev-recovery-pending"><span class="dot"></span> RECOVERY_PENDING <span class="meta">changed</span></div>
+    <div class="item" data-screen="dev-retrieval-pending"><span class="dot"></span> RETRIEVAL_PENDING</div>
+    <div class="item has-change" data-screen="dev-returned"><span class="dot"></span> RETURNED <span class="meta">changed</span></div>
+    <div class="item has-change" data-screen="dev-damaged"><span class="dot"></span> DAMAGED <span class="meta">changed</span></div>
+    <div class="item has-change" data-screen="dev-lost"><span class="dot"></span> LOST <span class="meta">changed</span></div>
+    <div class="item" data-screen="dev-writtenoff"><span class="dot"></span> WRITTEN_OFF</div>
+
+    <div class="group">New · Proposed by amendments</div>
+    <div class="item is-new" data-screen="onboarding-prompt"><span class="dot"></span> SD Onboarding · prompt <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="onboarding-success"><span class="dot"></span> SD Onboarding · success <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="growth-intent"><span class="dot"></span> Capacity बढ़ाएं · State A <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="growth-intent-B"><span class="dot"></span> Capacity · State B (enough) <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="growth-intent-C"><span class="dot"></span> Capacity · State C (top-up) <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="growth-intent-D"><span class="dot"></span> Capacity · State D (no cap) <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="growth-intent-blocked"><span class="dot"></span> Capacity · Blocked (1 reason) <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="sd-profile"><span class="dot"></span> SD Profile <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="legacy-above"><span class="dot"></span> SD Profile · Legacy (above) <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="legacy-below"><span class="dot"></span> SD Profile · Legacy (below) <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="sd-topup"><span class="dot"></span> SD Top-Up <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="loss-card-custody"><span class="dot"></span> Wallet · Custody loss card <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="loss-card-norecovery"><span class="dot"></span> Wallet · Non-recovery card <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="recovery-success"><span class="dot"></span> Recovery success · +₹50 <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="late-recovery-card"><span class="dot"></span> Wallet · Late recovery <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="settlement-detail"><span class="dot"></span> Settlement Detail <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="escalation-notice"><span class="dot"></span> Escalation Notice <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="dispute-form"><span class="dot"></span> Dispute · Form <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="dispute-pending"><span class="dot"></span> Dispute · Under review <span class="meta">NEW</span></div>
+    <div class="item is-new" data-screen="exit-settlement"><span class="dot"></span> Exit Settlement <span class="meta">NEW</span></div>
+  </nav>
+
+  <!-- Stage -->
+  <main class="stage">
+    <h2 id="stage-title">NetBox Home</h2>
+    <div class="stage-sub" id="stage-sub">Surface 1 · NetBoxHomeScreen.kt · Pre-amendment truth from PR #222</div>
+
+    <!-- Workflow stepper (only visible when a workflow is selected) -->
+    <div class="wf-stepper" id="wf-stepper" style="display:none;"></div>
+
+    <div class="phone-frame">
+      <div class="phone-screen" id="screen-container">
+
+        <!-- ============================================================
+             ORDER-SIDE SCREENS
+             ============================================================ -->
+
+        <!-- 1. NetBox Home (no active order) -->
+        <section class="screen active" id="screen-nb-home">
+          <div class="status-bar dark"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar">
+              <div class="icon-btn" data-tap="__back"><svg class="mi"><use href="#i-back"/></svg></div>
+              <div class="title">नेट बॉक्स</div>
+              <div class="spacer"></div>
+              <div class="icon-btn"><svg class="mi"><use href="#i-bug"/></svg></div>
+            </header>
+            <div class="scrollable" style="padding: 16px;">
+              <!-- Hero summary card -->
+              <div class="card" style="margin-bottom: 12px;">
+                <div class="t-bodyLg text-secondary">आपके पास</div>
+                <div class="t-heroAmount" style="margin-top: 2px;">82 <span class="t-bodyLg" style="font-weight:400;color:var(--wc-text-secondary);">नेट बॉक्स</span></div>
+                <div class="row between mt-md" style="padding: 8px 12px; background: var(--wc-bg-warning); border-radius: 8px;">
+                  <div class="t-bodyMd"><svg class="mi mi-sm" style="vertical-align:middle;color:var(--wc-text-on-warning);"><use href="#i-dollar"/></svg> रोज़ का कैरी फ़ी: <strong>₹5</strong></div>
+                  <svg class="mi mi-sm" style="color:var(--wc-text-on-warning);"><use href="#i-chevron-right"/></svg>
+                </div>
+              </div>
+
+              <!-- Device list card -->
+              <div class="card" style="margin-bottom: 12px;">
+                <div class="row between">
+                  <div class="t-titleSm">कुछ नेट बॉक्स पर ध्यान दें</div>
+                  <span class="t-bodySmall text-secondary">3</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row" data-tap="dev-idle" style="padding: 8px 0;gap:12px;">
+                  <div style="width:32px;height:32px;border-radius:8px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-warning"/></svg></div>
+                  <div style="flex:1;">
+                    <div class="t-body" style="font-weight:600;">NB-00472</div>
+                    <div class="t-bodySmall text-secondary">22 दिन से खाली · ₹110 कैरी</div>
+                  </div>
+                  <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+                </div>
+                <div class="divider" style="margin:4px 0;"></div>
+                <div class="row" data-tap="dev-recovery-pending" style="padding: 8px 0;gap:12px;">
+                  <div style="width:32px;height:32px;border-radius:8px;background:var(--wc-bg-info);display:grid;place-items:center;color:var(--wc-state-info);"><svg class="mi mi-sm"><use href="#i-truck"/></svg></div>
+                  <div style="flex:1;">
+                    <div class="t-body" style="font-weight:600;">NB-00891</div>
+                    <div class="t-bodySmall text-secondary">कस्टमर से वापस लाना है</div>
+                  </div>
+                  <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+                </div>
+                <div class="divider" style="margin:4px 0;"></div>
+                <div class="row" data-tap="dev-damaged" style="padding: 8px 0;gap:12px;">
+                  <div style="width:32px;height:32px;border-radius:8px;background:var(--wc-bg-negative);display:grid;place-items:center;color:var(--wc-state-negative);"><svg class="mi mi-sm"><use href="#i-report"/></svg></div>
+                  <div style="flex:1;">
+                    <div class="t-body" style="font-weight:600;">NB-00103</div>
+                    <div class="t-bodySmall text-secondary">डैमेज क्लेम जाँच में</div>
+                  </div>
+                  <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+                </div>
+                <div class="divider"></div>
+                <div class="cta cta-link" style="margin: 4px auto 0;width:auto;">सारे (82) नेट बॉक्स देखें</div>
+              </div>
+
+              <!-- Quick actions -->
+              <div class="qa-grid">
+                <div class="qa-tile">
+                  <div class="icon-circle" style="background:var(--wc-bg-info);color:var(--wc-state-info);"><svg class="mi"><use href="#i-assignment-return"/></svg></div>
+                  <div class="label">वापसी स्वीकार करें</div>
+                </div>
+                <div class="qa-tile" style="position:relative;" data-tap-pre="request-sheet" data-tap-post="growth-intent">
+                  <div class="icon-circle preamend-only" style="background:var(--wc-bg-positive);color:var(--wc-state-positive);"><svg class="mi"><use href="#i-add"/></svg></div>
+                  <div class="icon-circle amended-only" style="background:var(--wc-bg-brand-tint);color:var(--wc-brand-primary);"><svg class="mi"><use href="#i-trending-up"/></svg></div>
+                  <div class="label preamend-only">नया ऑर्डर करें</div>
+                  <div class="label amended-only">Capacity बढ़ाएं</div>
+                  <span class="amendment-badge changed" style="top:-6px;right:-6px;">CHANGED</span>
+                </div>
+                <div class="qa-tile">
+                  <div class="icon-circle" style="background:var(--wc-bg-brand-tint);color:var(--wc-brand-primary);"><svg class="mi"><use href="#i-checklist"/></svg></div>
+                  <div class="label">कई वापस करें</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. NetBox Home — with order tracker -->
+        <section class="screen" id="screen-nb-home-tracking">
+          <div class="status-bar dark"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar">
+              <div class="icon-btn" data-tap="__back"><svg class="mi"><use href="#i-back"/></svg></div>
+              <div class="title">नेट बॉक्स</div>
+              <div class="spacer"></div>
+              <div class="icon-btn"><svg class="mi"><use href="#i-bug"/></svg></div>
+            </header>
+            <div class="scrollable" style="padding: 16px;">
+              <!-- Order tracker card -->
+              <div class="card" data-tap="nb-home-delivered" style="padding:0;overflow:hidden;margin-bottom:12px;"><!--clickable-tracker-->
+                <div style="background:var(--wc-bg-info);padding:14px 16px;display:flex;gap:12px;align-items:center;">
+                  <div style="width:40px;height:40px;border-radius:50%;background:white;display:grid;place-items:center;color:var(--wc-state-info);"><svg class="mi"><use href="#i-truck"/></svg></div>
+                  <div class="t-titleSm" style="flex:1;">नेट बॉक्स निकल गए हैं</div>
+                </div>
+                <div style="padding:20px 16px 14px;">
+                  <!-- milestones -->
+                  <div style="display:flex;align-items:center;gap:0;">
+                    <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-state-positive);display:grid;place-items:center;color:white;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                    <div style="flex:1;height:2px;background:var(--wc-state-positive);"></div>
+                    <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-state-positive);display:grid;place-items:center;color:white;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                    <div style="flex:1;height:2px;background:var(--wc-state-positive);"></div>
+                    <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-state-positive);display:grid;place-items:center;color:white;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                    <div style="flex:1;height:2px;background:var(--wc-bg-secondary);"></div>
+                    <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--wc-stroke-secondary);background:white;"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                    <span class="t-bodySmall">आर्डर दिया</span>
+                    <span class="t-bodySmall" style="text-align:center;">कन्फर्म</span>
+                    <span class="t-bodySmall" style="text-align:center;font-weight:600;">निकल गया</span>
+                    <span class="t-bodySmall text-secondary" style="text-align:right;">पहुंच गया</span>
+                  </div>
+                  <div class="divider"></div>
+                  <div class="t-titleSm preamend-only">5 नेट बॉक्स का आर्डर</div>
+                  <div class="t-titleSm amended-only">5 connections की capacity आ रही है</div>
+                  <div class="t-bodySmall text-secondary mt-sm">पहुँचने की संभावित तारीख: 18 May</div>
+                </div>
+              </div>
+
+              <!-- Hero -->
+              <div class="card" style="margin-bottom: 12px;">
+                <div class="t-bodyLg text-secondary">आपके पास</div>
+                <div class="t-heroAmount" style="margin-top: 2px;">82 <span class="t-bodyLg" style="font-weight:400;color:var(--wc-text-secondary);">नेट बॉक्स</span></div>
+              </div>
+
+              <div class="qa-grid">
+                <div class="qa-tile"><div class="icon-circle" style="background:var(--wc-bg-info);color:var(--wc-state-info);"><svg class="mi"><use href="#i-assignment-return"/></svg></div><div class="label">वापसी स्वीकार</div></div>
+                <div class="qa-tile" style="opacity:0.5;">
+                  <div class="icon-circle" style="background:var(--wc-bg-disabled);color:var(--wc-text-hint);"><svg class="mi"><use href="#i-add"/></svg></div>
+                  <div class="label preamend-only">नया ऑर्डर</div>
+                  <div class="label amended-only">Capacity बढ़ाएं</div>
+                  <div class="t-bodySmall text-secondary">पहले वाला पूरा होने दें</div>
+                </div>
+                <div class="qa-tile"><div class="icon-circle" style="background:var(--wc-bg-brand-tint);color:var(--wc-brand-primary);"><svg class="mi"><use href="#i-checklist"/></svg></div><div class="label">कई वापस करें</div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. NetBox Home — delivered, awaiting confirmation -->
+        <section class="screen" id="screen-nb-home-delivered">
+          <div class="status-bar dark"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar">
+              <div class="icon-btn" data-tap="__back"><svg class="mi"><use href="#i-back"/></svg></div>
+              <div class="title">नेट बॉक्स</div>
+              <div class="spacer"></div>
+            </header>
+            <div class="scrollable" style="padding: 16px;">
+              <!-- Order tracker card — delivered variant -->
+              <div class="card" style="padding:0;overflow:hidden;margin-bottom:12px;">
+                <div style="background:var(--wc-bg-info);padding:14px 16px;display:flex;gap:12px;align-items:center;">
+                  <div style="width:40px;height:40px;border-radius:50%;background:white;display:grid;place-items:center;color:var(--wc-state-info);"><svg class="mi"><use href="#i-task-alt"/></svg></div>
+                  <div class="t-titleSm preamend-only" style="flex:1;">नेट बॉक्स पहुंच गए</div>
+                  <div class="t-titleSm amended-only" style="flex:1;">Capacity पहुंच गई</div>
+                </div>
+                <!-- delivered block (pink-tint), replaces milestones -->
+                <div style="padding:16px;">
+                  <div style="background:var(--wc-bg-brand-tint);border-radius:12px;padding:14px;">
+                    <div class="t-body" style="font-weight:600;line-height:20px;margin-bottom:12px;">नेट बॉक्स इस्तेमाल करने के लिए पहले कन्फर्म करना जरूरी है</div>
+                    <button data-tap="delivery-confirm" class="cta cta-primary">डिलीवरी कन्फर्म करें</button>
+                  </div>
+                  <div class="row mt-md" style="gap:8px;color:var(--wc-state-positive);">
+                    <svg class="mi mi-sm"><use href="#i-check-circle"/></svg>
+                    <span class="t-bodyMd preamend-only" style="color:var(--wc-state-positive);">5 नेट बॉक्स का आर्डर पहुंच गया</span>
+                    <span class="t-bodyMd amended-only" style="color:var(--wc-state-positive);">5 connections की capacity आ गई</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="t-bodyLg text-secondary">आपके पास</div>
+                <div class="t-heroAmount" style="margin-top: 2px;">82 <span class="t-bodyLg" style="font-weight:400;color:var(--wc-text-secondary);">नेट बॉक्स</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Request New Sheet — overlay over home dim -->
+        <section class="screen" id="screen-request-sheet">
+          <div class="status-bar dark"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body" style="position:relative;">
+            <header class="app-bar">
+              <div class="icon-btn" data-tap="__back"><svg class="mi"><use href="#i-back"/></svg></div>
+              <div class="title">नेट बॉक्स</div>
+            </header>
+            <div class="scrollable" style="padding:16px;opacity:0.35;">
+              <div class="card"><div class="t-bodyLg text-secondary">आपके पास</div><div class="t-heroAmount">82 <span class="t-bodyLg" style="font-weight:400;color:var(--wc-text-secondary);">नेट बॉक्स</span></div></div>
+            </div>
+            <div style="position:absolute;inset:0;background:rgba(22,16,33,0.45);"></div>
+            <div class="sheet">
+              <div class="handle"></div>
+              <div class="t-headingLg">आपको कितने नेट बॉक्स चाहिए?</div>
+              <div style="background:var(--wc-bg-subtle);border-radius:12px;padding:14px;">
+                <div class="row between mb-md">
+                  <div class="t-bodyLg">10 नेट बॉक्स</div>
+                </div>
+                <div class="qty-stepper">
+                  <button>−</button>
+                  <div class="val">10</div>
+                  <button>+</button>
+                </div>
+              </div>
+              <div style="height:32px;"></div>
+              <button data-tap="low-balance" class="cta cta-primary">रिक्वेस्ट भेजें</button>
+            </div>
+            <div class="deprecation-overlay">
+              <div class="badge">DEPRECATED BY AMENDMENTS</div>
+              <div class="arrow">यह sheet हटा दी गई है<br>→ <strong>Capacity बढ़ाएं</strong> screen देखें<br><span style="font-size:11px;opacity:0.85;">CSP अब device quantity नहीं चुनता — system तय करता है</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Low Balance Dialog -->
+        <section class="screen" id="screen-low-balance">
+          <div class="status-bar dark"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body" style="position:relative;">
+            <header class="app-bar">
+              <div class="icon-btn" data-tap="__back"><svg class="mi"><use href="#i-back"/></svg></div>
+              <div class="title">नेट बॉक्स</div>
+            </header>
+            <div class="scrollable" style="padding:16px;opacity:0.25;">
+              <div class="card" style="height:120px;"></div>
+            </div>
+            <div class="modal-scrim">
+              <div class="modal-dialog">
+                <div class="icon-circle" style="background:var(--wc-bg-negative);color:var(--wc-state-negative);"><svg class="mi"><use href="#i-wallet"/></svg></div>
+                <div class="t-headingLg">आपके वॉलेट में बैलेंस कम है</div>
+                <div class="t-body text-secondary">ऑर्डर देने के लिए आपके पास <strong>₹200</strong> कम हैं</div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body text-secondary">ऑर्डर राशि</span><span class="t-body">₹2,000</span></div>
+                <div class="row between"><span class="t-body text-secondary">वॉलेट बैलेंस</span><span class="t-body">₹1,800</span></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">देय राशि</span><span class="t-body" style="font-weight:700;">₹200</span></div>
+                <div class="amended-only" style="background:var(--wc-bg-info);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--wc-state-info);line-height:1.5;">
+                  <strong>केवल wallet top-up</strong> — सुरक्षा राशि पर कोई असर नहीं
+                </div>
+                <div style="height:8px;"></div>
+                <button data-tap="add-funds-input" class="cta cta-primary">₹200 पे करें</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. Add Funds — Input -->
+        <section class="screen" id="screen-add-funds-input">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">वॉलेट में पैसे डालें</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="t-bodySmall text-secondary mb-sm">अपना अमाउंट लिखें</div>
+              <div style="height:64px;background:var(--wc-input-bg);border:1px solid var(--wc-input-border);border-radius:12px;display:flex;align-items:center;padding:0 16px;gap:8px;">
+                <span class="t-chipValue" style="color:var(--wc-text-secondary);">₹</span>
+                <span class="t-chipValue">2,000</span>
+              </div>
+
+              <div class="t-bodySmall text-secondary mt-lg mb-sm">पैसे जोड़ें</div>
+              <div class="row gap-md" style="gap:8px;">
+                <div style="flex:1;height:44px;border-radius:10px;background:var(--wc-bg-brand-tint);color:var(--wc-brand-primary);display:grid;place-items:center;font-weight:600;font-size:14px;">+ ₹1,000</div>
+                <div style="flex:1;height:44px;border-radius:10px;background:var(--wc-brand-primary);color:white;display:grid;place-items:center;font-weight:600;font-size:14px;">+ ₹2,000</div>
+                <div style="flex:1;height:44px;border-radius:10px;background:var(--wc-bg-brand-tint);color:var(--wc-brand-primary);display:grid;place-items:center;font-weight:600;font-size:14px;">+ ₹5,000</div>
+              </div>
+
+              <div class="row mt-lg" style="gap:8px;color:var(--wc-brand-primary);">
+                <svg class="mi mi-sm"><use href="#i-help"/></svg>
+                <span class="t-bodyMd" style="color:var(--wc-brand-primary);font-weight:600;">पैसे जोड़ने में दिक्कत? सपोर्ट से बात करें</span>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="add-funds-method" class="cta cta-primary">पैसे जोड़ें</button></div>
+          </div>
+        </section>
+
+        <!-- 7. Add Funds — Method -->
+        <section class="screen" id="screen-add-funds-method">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">भुगतान विधि</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:var(--wc-bg-brand-tint);border-color:transparent;">
+                <div class="t-bodySmall text-secondary">वॉलेट में पैसे डालें</div>
+                <div class="t-headingLg" style="margin-top:2px;">₹2,000</div>
+                <div class="t-bodySmall text-secondary mt-sm">अपने वॉलेट में जोड़ा जाएगा</div>
+              </div>
+
+              <div class="t-titleSm mt-lg mb-sm">UPI</div>
+              <div class="card" style="padding:0;">
+                <div class="row" style="padding:14px 16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#1A73E8;display:grid;place-items:center;color:white;font-weight:700;font-size:12px;">G</div>
+                  <div class="t-body" style="flex:1;">Google Pay</div>
+                  <div style="width:20px;height:20px;border:2px solid var(--wc-stroke-secondary);border-radius:50%;"></div>
+                </div>
+                <div class="row" style="padding:14px 16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#5F259F;display:grid;place-items:center;color:white;font-weight:700;font-size:12px;">P</div>
+                  <div class="t-body" style="flex:1;">PhonePe</div>
+                  <div style="width:20px;height:20px;border:6px solid var(--wc-brand-primary);border-radius:50%;background:white;"></div>
+                </div>
+                <div class="row" style="padding:14px 16px;gap:12px;">
+                  <div style="width:32px;height:32px;border-radius:8px;background:var(--wc-bg-secondary);display:grid;place-items:center;"><svg class="mi mi-sm"><use href="#i-add"/></svg></div>
+                  <div class="t-body" style="flex:1;">अन्य UPI विकल्प</div>
+                </div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="add-funds-processing" class="cta cta-primary">₹2,000 pay करें</button></div>
+          </div>
+        </section>
+
+        <!-- 8. Add Funds — Processing -->
+        <section class="screen" id="screen-add-funds-processing" data-tap="add-funds-success">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light"><div class="title">पेमेंट</div></header>
+            <div class="scrollable" style="display:grid;place-items:center;padding:32px;">
+              <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;">
+                <div style="width:120px;height:120px;border-radius:50%;background:var(--wc-bg-brand-tint);display:grid;place-items:center;">
+                  <div style="width:48px;height:48px;border:4px solid var(--wc-brand-primary);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div>
+                </div>
+                <div class="t-headingLg">धैर्य रखें</div>
+                <div class="t-bodyLg text-secondary">पैसे जोड़े जा रहे हैं</div>
+              </div>
+              <div style="position:absolute;bottom:24px;left:16px;right:16px;background:var(--wc-text-primary);color:white;border-radius:12px;padding:12px 16px;display:flex;gap:8px;align-items:center;">
+                <svg class="mi mi-sm"><use href="#i-info"/></svg>
+                <span class="t-bodyMd" style="color:white;">भुगतान पूरा होने तक इस स्क्रीन को बंद न करें</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. Add Funds — Success -->
+        <section class="screen" id="screen-add-funds-success">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light"></header>
+            <div class="scrollable" style="display:flex;flex-direction:column;align-items:center;padding:32px 24px;text-align:center;gap:16px;">
+              <div style="width:96px;height:96px;border-radius:50%;background:var(--wc-state-positive);display:grid;place-items:center;color:white;margin-top:24px;">
+                <svg style="width:56px;height:56px;"><use href="#i-check"/></svg>
+              </div>
+              <div class="t-headingLg">पेमेंट हो गया!</div>
+              <div class="t-bodyLg text-secondary">₹2,000 वॉलेट में जुड़ गया</div>
+              <div style="background:var(--wc-bg-brand-tint);border-radius:16px;padding:16px 20px;width:100%;margin-top:8px;">
+                <div class="t-bodySmall text-secondary">नया वॉलेट बैलेंस</div>
+                <div class="t-heroAmount text-brand" style="margin-top:4px;">₹3,800</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="nb-home-tracking" class="cta cta-primary">ठीक है</button></div>
+          </div>
+        </section>
+
+        <!-- 10. Request Success Dialog -->
+        <section class="screen" id="screen-request-success">
+          <div class="status-bar dark"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body" style="position:relative;">
+            <header class="app-bar"><div class="title">नेट बॉक्स</div></header>
+            <div class="scrollable" style="opacity:0.25;padding:16px;"><div class="card" style="height:80px;"></div></div>
+            <div class="modal-scrim">
+              <div class="modal-dialog" style="align-items:center;text-align:center;">
+                <div class="icon-circle" style="background:var(--wc-bg-positive);color:var(--wc-state-positive);align-self:center;"><svg class="mi"><use href="#i-check"/></svg></div>
+                <div class="t-headingLg preamend-only">5 नए नेट बॉक्स की रिक्वेस्ट भेज दी गई है</div>
+                <div class="t-headingLg amended-only">Capacity बढ़ाने की व्यवस्था शुरू हुई</div>
+                <div class="t-bodyMd text-secondary amended-only">System ज़रूरी devices भेजेगा — आपको tracker में update मिलेगा</div>
+                <div style="height:24px;"></div>
+                <button data-tap="nb-home-tracking" class="cta cta-primary">ठीक है</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 11. Delivery Confirm -->
+        <section class="screen" id="screen-delivery-confirm">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="spacer"></div>
+              <div class="app-bar-help">मदद</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div style="display:grid;place-items:center;padding:8px 0 16px;">
+                <div style="width:140px;height:140px;border-radius:24px;background:var(--wc-bg-brand-tint);display:grid;place-items:center;color:var(--wc-brand-primary);">
+                  <svg style="width:80px;height:80px;"><use href="#i-router"/></svg>
+                </div>
+              </div>
+              <div class="t-headingLg" style="margin-bottom:16px;">5 नेट बॉक्स की डिलीवरी कन्फर्म करें</div>
+              <div class="card">
+                <div class="t-titleSm">नेट बॉक्स डिटेल</div>
+                <div class="divider"></div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                  <div class="row" style="gap:6px;"><svg class="mi mi-sm" style="color:var(--wc-state-info);"><use href="#i-router"/></svg><span class="t-bodyMd">SY-4112</span></div>
+                  <div class="row" style="gap:6px;"><svg class="mi mi-sm" style="color:var(--wc-state-info);"><use href="#i-router"/></svg><span class="t-bodyMd">SY-4113</span></div>
+                  <div class="row" style="gap:6px;"><svg class="mi mi-sm" style="color:var(--wc-state-info);"><use href="#i-router"/></svg><span class="t-bodyMd">SY-4114</span></div>
+                  <div class="row" style="gap:6px;"><svg class="mi mi-sm" style="color:var(--wc-state-info);"><use href="#i-router"/></svg><span class="t-bodyMd">GX-2271</span></div>
+                  <div class="row" style="gap:6px;"><svg class="mi mi-sm" style="color:var(--wc-state-info);"><use href="#i-router"/></svg><span class="t-bodyMd">GX-2272</span></div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:12px 16px 16px;background:var(--wc-bg-brand-tint);">
+              <div class="row" data-tap="delivery-confirmed" style="gap:12px;padding:12px;">
+                <div style="width:24px;height:24px;border:2px solid var(--wc-brand-primary);border-radius:6px;background:white;"></div>
+                <span class="t-cta">हाँ, 5 नेट बॉक्स का ऑर्डर मिल गया</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 12. Delivery Confirmed -->
+        <section class="screen" id="screen-delivery-confirmed" data-tap="nb-home">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;gap:32px;">
+            <div style="width:120px;height:120px;border-radius:50%;border:8px solid var(--wc-state-positive);display:grid;place-items:center;color:var(--wc-state-positive);">
+              <svg style="width:64px;height:64px;"><use href="#i-check"/></svg>
+            </div>
+            <div class="t-headingLg" style="white-space:pre-line;">ये सभी नेट बॉक्स<br>अब इस्तेमाल के लिए तैयार हैं</div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             DEVICE-STATE SCREENS — DeviceDetailScreen.kt
+             ============================================================ -->
+
+        <!-- 13. DEPLOYED -->
+        <section class="screen" id="screen-dev-deployed">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00210</div>
+              <div class="spacer"></div>
+              <div class="icon-btn"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-more"/></svg></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-positive">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-person"/></svg></div>
+                <div class="text">
+                  <div class="title">ग्राहक के पास चल रहा है</div>
+                  <div class="sub">कनेक्शन चालू — कोई कैरी फ़ी नहीं</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या करना है</div>
+                <div class="t-body text-secondary">यह नेट बॉक्स अभी ग्राहक के पास काम कर रहा है। कोई कार्रवाई ज़रूरी नहीं।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-md">समय रेखा</div>
+                <div style="position:relative;padding-left:20px;">
+                  <div style="position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--wc-stroke-secondary);"></div>
+                  <div style="position:relative;padding-bottom:14px;">
+                    <div style="position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--wc-state-info);"></div>
+                    <div class="t-body" style="font-weight:600;">DEPLOYED</div>
+                    <div class="t-bodySmall text-secondary">12 May 2026 · ग्राहक के पास लगाया</div>
+                  </div>
+                  <div style="position:relative;padding-bottom:14px;">
+                    <div style="position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--wc-stroke-secondary);"></div>
+                    <div class="t-bodyMd text-secondary">CUSTODIED</div>
+                    <div class="t-bodySmall text-secondary">05 May 2026</div>
+                  </div>
+                  <div style="position:relative;">
+                    <div style="position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--wc-stroke-secondary);"></div>
+                    <div class="t-bodyMd text-secondary">PENDING_CSP_RECEIPT</div>
+                    <div class="t-bodySmall text-secondary">28 Apr 2026</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 14. IDLE (with fee) -->
+        <section class="screen" id="screen-dev-idle">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00472</div>
+              <div class="spacer"></div>
+              <div class="icon-btn"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-more"/></svg></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-caution">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-warning"/></svg></div>
+                <div class="text">
+                  <div class="title">यह नेट बॉक्स खाली पड़ा है</div>
+                  <div class="sub">डिप्लॉय करें या वापस करें — कैरी फ़ी लग रही है</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="row between">
+                  <div class="t-titleSm">क्या करना है</div>
+                  <span class="t-bodySmall" style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);padding:2px 8px;border-radius:4px;font-weight:600;">22 दिन</span>
+                </div>
+                <div class="t-body text-secondary mt-sm">इसे जल्दी ग्राहक के पास लगाएं या व्योम को वापस करें। जब तक खाली है, रोज़ कैरी फ़ी लग रही है।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="row" style="gap:10px;">
+                  <svg class="mi" style="color:var(--wc-state-caution);"><use href="#i-dollar"/></svg>
+                  <div class="t-titleSm">कैरी फ़ी</div>
+                </div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body text-secondary">रोज़ का</span><span class="t-body" style="font-weight:600;">₹5</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">अब तक</span><span class="t-body" style="font-weight:600;">₹110</span></div>
+                <div style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);border-radius:8px;padding:8px 12px;margin-top:12px;font-size:13px;font-weight:600;">रोज़ ₹5 कट रहे हैं</div>
+              </div>
+            </div>
+            <div class="cta-bar">
+              <button data-tap="dev-retrieval-pending" class="cta cta-primary">वापस करें</button>
+              <button data-tap="dev-damaged" class="cta cta-tertiary">स्थिति बताएं</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 15. CUSTODIED -->
+        <section class="screen" id="screen-dev-custodied">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00123</div>
+              <div class="spacer"></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-caution">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-inventory"/></svg></div>
+                <div class="text">
+                  <div class="title">सेट-अप के लिए चुना गया</div>
+                  <div class="sub preamend-only">ग्राहक के पास लगाएं या सेटअप में नहीं लगाना चुनें</div>
+                  <div class="sub amended-only">कभी deploy नहीं हुआ — 45 दिन में setup या return</div>
+                </div>
+              </div>
+              <div class="card mt-md amended-only" style="background:var(--wc-bg-warning);border-color:transparent;">
+                <div class="row between"><span class="t-body" style="color:var(--wc-text-on-warning);font-weight:600;">Recall की संभावना</span><span class="t-titleSm" style="color:var(--wc-text-on-warning);">38 दिन बाकी</span></div>
+                <div class="t-bodySmall mt-sm" style="color:var(--wc-text-on-warning);">45 दिन बाद system auto-recall करेगा — कोई carry fee नहीं लगेगा, exposure हटेगी।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या करना है</div>
+                <div class="t-body text-secondary preamend-only">सेटअप पूरा करें और ग्राहक को कनेक्ट करें। वापस करने का विकल्प भी है।</div>
+                <div class="t-body text-secondary amended-only">सेटअप पूरा करें — यह device "kabhi deployed नहीं" category में है, इसलिए carry fee नहीं लग रही (deploy होने तक)।</div>
+              </div>
+            </div>
+            <div class="cta-bar">
+              <button data-tap="dev-idle" class="cta cta-tertiary">सेटअप में नहीं लगाना</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 16. CUSTOMER_RECOVERY_PENDING -->
+        <section class="screen" id="screen-dev-recovery-pending">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00891</div>
+              <div class="spacer"></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-caution">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-truck"/></svg></div>
+                <div class="text">
+                  <div class="title">कस्टमर से वापस लाना है</div>
+                  <div class="sub preamend-only">रिकवरी टीम असाइन है — डिवाइस ग्राहक के पास है</div>
+                  <div class="sub amended-only">Recovery deadline: <strong>24 May 2026</strong> · 8 दिन बाकी</div>
+                </div>
+              </div>
+              <div class="card mt-md amended-only" style="background:var(--wc-bg-positive);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-state-positive);"><svg class="mi mi-sm"><use href="#i-trending-up"/></svg><span class="t-titleSm" style="color:var(--wc-state-positive);">समय पर recovery पर reward</span></div>
+                <div class="row between mt-sm"><span class="t-body">SLA में वापस लाने पर</span><span class="t-titleSm text-positive">+ ₹50</span></div>
+                <div class="t-bodySmall text-secondary mt-sm">Real-time wallet credit — settlement का इंतज़ार नहीं</div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body text-secondary">SLA चूक जाने पर</span><span class="t-body" style="color:var(--wc-state-caution);">₹200 देय (₹50 reward नहीं)</span></div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या करना है</div>
+                <div class="t-body text-secondary">रिकवरी टीम से संपर्क होगा। अगर आप खुद डिवाइस ले आए हैं तो 'नेट बॉक्स वापस लें' करें।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="row between">
+                  <div class="t-titleSm">पिकअप करेगा</div>
+                  <span class="text-brand t-ctaSecondary" style="font-weight:600;cursor:pointer;">बदलें</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row" style="gap:10px;">
+                  <div style="width:40px;height:40px;border-radius:50%;background:var(--wc-bg-brand-tint);display:grid;place-items:center;color:var(--wc-brand-primary);"><svg class="mi mi-sm"><use href="#i-person"/></svg></div>
+                  <div><div class="t-body" style="font-weight:600;">आप खुद</div><div class="t-bodySmall text-secondary">EXEC-SELF</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="cta-bar">
+              <button data-tap="recovery-success" class="cta cta-primary">मैंने डिवाइस ले लिया</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 17. RETRIEVAL_PENDING -->
+        <section class="screen" id="screen-dev-retrieval-pending">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00310</div>
+              <div class="spacer"></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-info">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-truck"/></svg></div>
+                <div class="text">
+                  <div class="title">वापस होने की प्रक्रिया में</div>
+                  <div class="sub">व्योम पिकअप करेगा — 3 दिन में</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या करना है</div>
+                <div class="t-body text-secondary">व्योम पिकअप टीम आपसे संपर्क करेगी। नेट बॉक्स तैयार रखें।</div>
+              </div>
+            </div>
+            <div class="cta-bar">
+              <button data-tap="dev-damaged" class="cta cta-tertiary">स्थिति बताएं</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 18. RETURNED -->
+        <section class="screen" id="screen-dev-returned">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00211</div>
+              <div class="spacer"></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-positive">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-check"/></svg></div>
+                <div class="text">
+                  <div class="title">व्योम को वापस हो गया</div>
+                  <div class="sub preamend-only">जमा राशि सेटलमेंट में वापस होगी</div>
+                  <div class="sub amended-only">Exposure कम हुआ — partnership सुरक्षा यथावत</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या हुआ</div>
+                <div class="t-body text-secondary preamend-only">यह नेट बॉक्स व्योम को वापस हो गया है। अब आप नया डिवाइस ऑर्डर कर सकते हैं।</div>
+                <div class="t-body text-secondary amended-only">NetBox Wiom को लौटाया गया। आपकी custody exposure -1 हुई।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm preamend-only">वित्तीय असर</div>
+                <div class="t-titleSm mb-sm amended-only">अब क्या होगा</div>
+                <div class="row between"><span class="t-body text-secondary">कैरी शुल्क</span><span class="t-body">₹60</span></div>
+                <div class="row between mt-sm preamend-only"><span class="t-body text-secondary">नेट बॉक्स वापसी क्रेडिट</span><span class="t-body text-positive">पूरा</span></div>
+                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">Condition जाँच</span><span class="t-body">Wiom warehouse में</span></div>
+                <div class="t-bodySmall text-secondary mt-sm amended-only">कोई पैसा वापस नहीं आता — return = exposure closure (SD-4)। केवल exit settlement पर SD bank में जाती है।</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 19. DAMAGED -->
+        <section class="screen" id="screen-dev-damaged">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00103</div>
+              <div class="spacer"></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-negative">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-report"/></svg></div>
+                <div class="text">
+                  <div class="title">खराब बताया गया है</div>
+                  <div class="sub preamend-only">जाँच चल रही है — डैमेज क्लेम लग सकता है</div>
+                  <div class="sub amended-only">Age-band के हिसाब से देय — अगले settlement में</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या होगा</div>
+                <div class="t-body text-secondary preamend-only">व्योम जाँच के बाद फ़ैसला करेगा। डैमेज क्लेम आपके वॉलेट से कट सकता है।</div>
+                <div class="t-body text-secondary amended-only">Wiom warehouse में जाँच के बाद age-band के हिसाब से liability तय होगी। अगले settlement में wallet से समायोजित।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm preamend-only">संभावित देय</div>
+                <div class="t-titleSm mb-sm amended-only">देय राशि</div>
+                <div class="row between preamend-only"><span class="t-body text-secondary">डैमेज क्लेम</span><span class="t-body text-negative" style="font-weight:700;">₹1,538</span></div>
+                <div class="row between amended-only"><span class="t-body text-secondary">Damage (24mo · 40% slab)</span><span class="t-body text-negative" style="font-weight:700;">₹600</span></div>
+                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">अगला settlement</span><span class="t-body">1 Jul 2026</span></div>
+                <div class="t-bodySmall text-secondary mt-sm">अगले settlement में शामिल होगा</div>
+              </div>
+              <div class="card mt-md amended-only row between" data-tap="dispute-form" style="cursor:pointer;">
+                <span class="t-body" style="color:var(--wc-brand-primary);font-weight:600;">विवाद दर्ज करें</span>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="dev-retrieval-pending" class="cta cta-tertiary">नेट बॉक्स सही है</button></div>
+          </div>
+        </section>
+
+        <!-- 20. LOST -->
+        <section class="screen" id="screen-dev-lost">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00567</div>
+              <div class="spacer"></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-negative">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-search-off"/></svg></div>
+                <div class="text">
+                  <div class="title">गुम बताया गया है</div>
+                  <div class="sub preamend-only">रिकवरी राशि लगेगी — पूरा मूल्य</div>
+                  <div class="sub amended-only">Custody loss — age-band के हिसाब से देय</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या होगा</div>
+                <div class="t-body text-secondary preamend-only">रिकवरी राशि आपके वॉलेट से कटेगी। अगर मिल जाए तो तुरंत व्योम को बताएं।</div>
+                <div class="t-body text-secondary amended-only">Device आपकी custody में था — आपकी ज़िम्मेदारी। अगले settlement में wallet से समायोजित होगा।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">देय राशि</div>
+                <div class="row between preamend-only"><span class="t-body text-secondary">नुकसान वसूली</span><span class="t-body text-negative" style="font-weight:700;">₹3,000</span></div>
+                <div class="row between amended-only"><span class="t-body text-secondary">Custody loss देय</span><span class="t-body text-negative" style="font-weight:700;">₹600</span></div>
+                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">Device age</span><span class="t-body">28 months · 40% slab</span></div>
+                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">अगला settlement</span><span class="t-body">1 Jul 2026</span></div>
+                <div class="amended-only t-bodySmall text-secondary mt-sm">Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="dev-retrieval-pending" class="cta cta-tertiary">नेट बॉक्स खोज गया</button></div>
+          </div>
+        </section>
+
+        <!-- 21. WRITTEN_OFF -->
+        <section class="screen" id="screen-dev-writtenoff">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">NB-00822</div>
+              <div class="spacer"></div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-negative">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-report"/></svg></div>
+                <div class="text">
+                  <div class="title">राइट-ऑफ़ हो गया</div>
+                  <div class="sub">कैप पूरा — अब कोई शुल्क नहीं लगेगा</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या हुआ</div>
+                <div class="t-body text-secondary">कैप पूरा हो गया है। इस नेट बॉक्स पर अब कोई और शुल्क नहीं लगेगा।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">अंतिम देय</div>
+                <div class="row between"><span class="t-body text-secondary">कैरी शुल्क</span><span class="t-body">₹500</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">राइट-ऑफ़</span><span class="t-body text-negative" style="font-weight:700;">₹5,000</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             NEW SCREENS — Proposed by SD Amendments
+             ============================================================ -->
+
+        <!-- 22. Growth Capacity Intent -->
+        <section class="screen" id="screen-growth-intent">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">Capacity बढ़ाएं</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;">
+                <div class="row" style="gap:8px;color:var(--wc-brand-primary);"><svg class="mi mi-sm"><use href="#i-trending-up"/></svg><span class="t-titleSm">आपके area में मौका</span></div>
+                <div class="t-headingLg mt-sm">आप अभी <span class="text-brand">25 और</span><br>connections ले सकते हैं</div>
+                <div class="t-bodyMd text-secondary mt-sm">System आपकी capacity बढ़ाने की व्यवस्था करेगा</div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="t-titleSm mb-md">क्या होगा</div>
+                <div class="row" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">System आपको ज़रूरी devices भेजेगा</div>
+                </div>
+                <div class="row mt-md" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">नए customers आपके area में route होंगे</div>
+                </div>
+                <div class="row mt-md" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">हर नए connection पर commission मिलेगा</div>
+                </div>
+              </div>
+
+              <div style="margin-top:12px;background:var(--wc-bg-info);border-radius:12px;padding:12px 14px;display:flex;gap:10px;">
+                <svg class="mi mi-sm" style="color:var(--wc-state-info);flex-shrink:0;margin-top:2px;"><use href="#i-info"/></svg>
+                <div class="t-bodyMd">आप device की मात्रा नहीं चुनते — System तय करता है कि कितने devices ज़रूरी हैं</div>
+              </div>
+            </div>
+            <div class="cta-bar">
+              <button data-tap="nb-home-tracking" class="cta cta-primary">हाँ, capacity बढ़ाइए</button>
+              <button class="cta cta-link" style="margin:0 auto;">सिर्फ अभी नहीं</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 23. SD Profile -->
+        <section class="screen" id="screen-sd-profile">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">सुरक्षा राशि</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:var(--wc-brand-secondary);color:white;border:0;">
+                <div class="row" style="gap:8px;color:white;opacity:0.85;"><svg class="mi mi-sm"><use href="#i-shield-check"/></svg><span class="t-bodyMd" style="color:white;">साझेदारी की सुरक्षा</span></div>
+                <div class="t-heroAmount" style="color:white;margin-top:8px;">₹24,000</div>
+                <div class="t-bodyMd" style="color:white;opacity:0.85;margin-top:4px;">ज़रूरी न्यूनतम: ₹20,000</div>
+                <div style="height:6px;background:rgba(255,255,255,0.15);border-radius:3px;margin-top:14px;overflow:hidden;">
+                  <div style="height:100%;width:83%;background:#FF7AC9;"></div>
+                </div>
+                <div class="row between mt-sm" style="color:white;opacity:0.85;">
+                  <span class="t-bodySmall" style="color:white;">कुशन: ₹4,000 ऊपर</span>
+                  <span class="t-bodySmall" style="color:white;">100 devices custody में</span>
+                </div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="row between">
+                  <div class="t-titleSm">बकाया देय</div>
+                  <span class="t-bodySmall text-secondary">अगला settlement · 1 Jul 2026</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body">NetBox not recovered (×2)</span><span class="t-body text-negative">₹400</span></div>
+                <div class="row between mt-sm"><span class="t-body">Damage claim (×1)</span><span class="t-body text-negative">₹200</span></div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">कुल</span><span class="t-body" style="font-weight:700;">₹600</span></div>
+                <div class="t-bodySmall text-secondary mt-sm">Wallet से समायोजित होगा — SD पर असर नहीं</div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">यह क्या है</div>
+                <div class="t-bodyMd text-secondary">यह सुरक्षा राशि Wiom के devices की custody risk के लिए रखी जाती है। Settlement तय cycle (हर 3 महीने) या partnership बंद होने पर होता है।</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="sd-topup" class="cta cta-tertiary">सुरक्षा राशि में top-up करें</button></div>
+          </div>
+        </section>
+
+        <!-- 24. SD Top-Up -->
+        <section class="screen" id="screen-sd-topup">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">सुरक्षा राशि में top-up</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-info">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-shield-check"/></svg></div>
+                <div class="text">
+                  <div class="title">Capacity बढ़ाने के लिए ₹5,000 top-up ज़रूरी है</div>
+                  <div class="sub">मौजूदा devices और connections पर कोई असर नहीं</div>
+                </div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="t-bodyMd text-secondary">मौजूदा सुरक्षा राशि</div>
+                <div class="t-titleSm">₹20,000</div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body">ज़रूरी न्यूनतम</span><span class="t-body">₹20,000</span></div>
+                <div class="row between mt-sm"><span class="t-body">नई capacity के लिए चाहिए</span><span class="t-body">₹5,000</span></div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">Top-up राशि</span><span class="t-titleSm" style="color:var(--wc-brand-primary);">₹5,000</span></div>
+              </div>
+
+              <div class="card mt-md" style="background:var(--wc-bg-info);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-state-info);"><svg class="mi mi-sm"><use href="#i-info"/></svg><span class="t-titleSm" style="color:var(--wc-state-info);">यह राशि क्यों</span></div>
+                <div class="t-bodyMd mt-sm">हर नया device जो आपकी custody में आता है, उसका custody risk सुरक्षा राशि से जुड़ा है। Top-up होने के बाद capacity बढ़ाने की व्यवस्था आगे बढ़ेगी।</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="add-funds-method" class="cta cta-primary">₹5,000 top-up करें</button></div>
+          </div>
+        </section>
+
+        <!-- 25. Settlement Detail -->
+        <section class="screen" id="screen-settlement-detail">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">Settlement · Apr–Jun 2026</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:var(--wc-bg-positive);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-state-positive);"><svg class="mi mi-sm"><use href="#i-check-circle"/></svg><span class="t-titleSm" style="color:var(--wc-state-positive);">Settlement पूरा हुआ</span></div>
+                <div class="t-bodyMd mt-sm">1 Jul 2026 को reconcile हुआ। आपकी सुरक्षा राशि पर कोई असर नहीं।</div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">देय राशि</div>
+                <div class="row between"><span class="t-body">NetBox ग्राहक से वापस नहीं आया (×2)</span><span class="t-body text-negative">−₹400</span></div>
+                <div class="t-bodySmall text-secondary">NB-00891, NB-00742</div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body">Damage claim (×1)</span><span class="t-body text-negative">−₹200</span></div>
+                <div class="t-bodySmall text-secondary">NB-00103 · 24 months · age-band</div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">कुल समायोजित</span><span class="t-body text-negative" style="font-weight:700;">−₹600</span></div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">कहाँ से</div>
+                <div class="row between"><span class="t-body text-secondary">Wallet से</span><span class="t-body">₹600</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">सुरक्षा राशि से</span><span class="t-body text-positive">₹0</span></div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">SD यथावत</span><span class="t-body" style="font-weight:700;">₹24,000</span></div>
+              </div>
+
+              <div style="background:var(--wc-bg-warning);border-radius:12px;padding:12px 14px;margin-top:12px;display:flex;gap:10px;">
+                <svg class="mi mi-sm" style="color:var(--wc-text-on-warning);"><use href="#i-info"/></svg>
+                <div class="t-bodyMd" style="color:var(--wc-text-on-warning);">गलत लगता है? 7 दिन के अंदर विवाद दर्ज करें।</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="dispute-form" class="cta cta-tertiary">विवाद दर्ज करें</button></div>
+          </div>
+        </section>
+
+        <!-- 26. Escalation Notice -->
+        <section class="screen" id="screen-escalation-notice">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">सूचना</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-negative">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-stop"/></svg></div>
+                <div class="text">
+                  <div class="title">Capacity बढ़ाना रोक दिया गया</div>
+                  <div class="sub">बकाया देय सीमा से अधिक हो गया है</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या हुआ</div>
+                <div class="t-body text-secondary">पिछले 30 दिनों में आपकी कुल बकाया देय ₹15,000 हो गई है, जो सुरक्षा सीमा से अधिक है। अभी नए devices नहीं भेजे जा सकेंगे।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-md">अभी क्या चालू है</div>
+                <div class="row" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">सभी मौजूदा connections चालू हैं</div>
+                </div>
+                <div class="row mt-md" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">Commission और payouts जारी रहेंगे</div>
+                </div>
+                <div class="row mt-md" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-negative);color:var(--wc-state-negative);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-cancel"/></svg></div>
+                  <div class="t-body" style="flex:1;">नए devices का order अभी रुका हुआ है</div>
+                </div>
+              </div>
+              <div class="card mt-md" style="background:var(--wc-bg-warning);border-color:transparent;">
+                <div class="t-titleSm" style="color:var(--wc-text-on-warning);">आगे क्या</div>
+                <div class="t-bodyMd mt-sm" style="color:var(--wc-text-on-warning);">15 दिन के अंदर top-up करें या early settlement कर के देय कम करें। Settlement में SD पर असर हो सकता है।</div>
+              </div>
+            </div>
+            <div class="cta-bar">
+              <button data-tap="sd-topup" class="cta cta-primary">अभी top-up करें</button>
+              <button data-tap="settlement-detail" class="cta cta-link" style="margin:0 auto;">Settlement details देखें</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 27. Dispute Form -->
+        <section class="screen" id="screen-dispute-form">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">विवाद दर्ज करें</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card">
+                <div class="t-bodySmall text-secondary">किस पर विवाद</div>
+                <div class="t-titleSm mt-sm">NB-00891 · ग्राहक से वापस नहीं आया · ₹200</div>
+              </div>
+
+              <div class="t-titleSm mt-lg mb-sm">क्या वजह है</div>
+              <div class="card" style="padding:0;">
+                <label class="row" style="padding:14px 16px;border-bottom:1px solid var(--wc-stroke-primary);gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:6px solid var(--wc-brand-primary);border-radius:50%;background:white;flex-shrink:0;"></div>
+                  <span class="t-body">Device वापस मिल गया — गलत entry</span>
+                </label>
+                <label class="row" style="padding:14px 16px;border-bottom:1px solid var(--wc-stroke-primary);gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:2px solid var(--wc-stroke-secondary);border-radius:50%;flex-shrink:0;"></div>
+                  <span class="t-body">गलत device ID</span>
+                </label>
+                <label class="row" style="padding:14px 16px;border-bottom:1px solid var(--wc-stroke-primary);gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:2px solid var(--wc-stroke-secondary);border-radius:50%;flex-shrink:0;"></div>
+                  <span class="t-body">Condition की गलत classification</span>
+                </label>
+                <label class="row" style="padding:14px 16px;gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:2px solid var(--wc-stroke-secondary);border-radius:50%;flex-shrink:0;"></div>
+                  <span class="t-body">कुछ और (बताइए)</span>
+                </label>
+              </div>
+
+              <div class="t-titleSm mt-lg mb-sm">और जानकारी</div>
+              <textarea style="width:100%;min-height:90px;border:1px solid var(--wc-input-border);border-radius:12px;padding:12px;font-family:inherit;font-size:14px;background:var(--wc-input-bg);resize:none;" placeholder="जैसे: 12 May को device वापस लिया, photo है"></textarea>
+
+              <div style="background:var(--wc-bg-info);border-radius:12px;padding:12px 14px;margin-top:12px;display:flex;gap:10px;">
+                <svg class="mi mi-sm" style="color:var(--wc-state-info);"><use href="#i-info"/></svg>
+                <div class="t-bodyMd">विवाद दर्ज होगा। Settlement से अलग रहेगा। 7 दिन में decision मिलेगा।</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="dispute-pending" class="cta cta-primary">विवाद भेजें</button></div>
+          </div>
+        </section>
+
+        <!-- 28. Exit Settlement -->
+        <section class="screen" id="screen-exit-settlement">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">साझेदारी समाप्ति · final reconciliation</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:var(--wc-brand-secondary);color:white;border:0;">
+                <div class="row" style="gap:8px;color:white;opacity:0.85;"><svg class="mi mi-sm"><use href="#i-logout"/></svg><span class="t-bodyMd" style="color:white;">अंतिम settlement</span></div>
+                <div class="t-bodyMd" style="color:white;opacity:0.85;margin-top:10px;">आपके bank account में जाएगा</div>
+                <div class="t-heroAmount" style="color:white;">₹22,200</div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">कैसे बना</div>
+                <div class="row between"><span class="t-body">सुरक्षा राशि जमा</span><span class="t-body">₹24,000</span></div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body text-secondary">Custody loss (NB-00567 · 28 mo)</span><span class="t-body text-negative">−₹600</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Non-recovery (×6)</span><span class="t-body text-negative">−₹1,200</span></div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">वापसी राशि</span><span class="t-titleSm" style="color:var(--wc-brand-primary);">₹22,200</span></div>
+              </div>
+
+              <div class="card mt-md" style="background:var(--wc-bg-info);border-color:transparent;">
+                <div class="t-titleSm" style="color:var(--wc-state-info);">क्या होगा</div>
+                <div class="t-bodyMd mt-sm">5 दिनों के अंदर आपके registered bank account में राशि भेज दी जाएगी। यही partnership में पहली और आखिरी बार पैसा वापस होगा।</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="nb-home" class="cta cta-primary">कन्फर्म करें</button></div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             DESIGN NOTE 3 — additional workflow stages
+             ============================================================ -->
+
+        <!-- 29. W1 · SD Onboarding Prompt -->
+        <section class="screen" id="screen-onboarding-prompt">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">Wiom partnership शुरू</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;">
+                <div class="row" style="gap:8px;color:var(--wc-brand-primary);"><svg class="mi mi-sm"><use href="#i-shield-check"/></svg><span class="t-titleSm">सुरक्षा राशि</span></div>
+                <div class="t-headingLg mt-sm">Wiom partnership शुरू करने के लिए</div>
+                <div class="t-heroAmount text-brand" style="margin-top:8px;">₹20,000</div>
+                <div class="t-bodyMd text-secondary mt-sm">एक बार जमा करनी है</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">यह क्यों</div>
+                <div class="t-body text-secondary">Wiom के devices आपकी custody में आएंगे। यह सुरक्षा राशि उस custody risk के लिए है — हर device पर नहीं, पूरी partnership पर एक बार।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-md">क्या होगा</div>
+                <div class="row" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">सुरक्षा राशि सुरक्षित रखी जाएगी — partnership बंद होने पर वापस</div>
+                </div>
+                <div class="row mt-md" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">हर 3 महीने settlement — पारदर्शी, पूर्व-निर्धारित</div>
+                </div>
+                <div class="row mt-md" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">Capacity बढ़ाने की request कर सकेंगे</div>
+                </div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="add-funds-method" class="cta cta-primary">₹20,000 UPI से जमा करें</button></div>
+          </div>
+        </section>
+
+        <!-- 30. W1 · Onboarding Success -->
+        <section class="screen" id="screen-onboarding-success">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light"></header>
+            <div class="scrollable" style="display:flex;flex-direction:column;align-items:center;padding:32px 24px;text-align:center;gap:16px;">
+              <div style="width:96px;height:96px;border-radius:50%;background:var(--wc-state-positive);display:grid;place-items:center;color:white;margin-top:16px;"><svg style="width:56px;height:56px;"><use href="#i-shield-check"/></svg></div>
+              <div class="t-headingLg">सुरक्षा राशि जमा हो गई</div>
+              <div class="t-bodyLg text-secondary">अब आप capacity बढ़ाने की request कर सकते हैं</div>
+              <div style="background:var(--wc-bg-brand-tint);border-radius:16px;padding:16px 20px;width:100%;margin-top:8px;">
+                <div class="t-bodySmall text-secondary">वर्तमान सुरक्षा राशि</div>
+                <div class="t-heroAmount text-brand" style="margin-top:4px;">₹20,000</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="growth-intent" class="cta cta-primary">Capacity बढ़ाएं</button></div>
+          </div>
+        </section>
+
+        <!-- 31. W2 · Growth Intent · State B (enough devices) -->
+        <section class="screen" id="screen-growth-intent-B">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">Capacity बढ़ाएं</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:var(--wc-bg-positive);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-state-positive);"><svg class="mi mi-sm"><use href="#i-check-circle"/></svg><span class="t-titleSm" style="color:var(--wc-state-positive);">कोई action ज़रूरी नहीं</span></div>
+                <div class="t-headingLg mt-sm">आप अभी <span class="text-positive">5 और</span><br>connections ले सकते हैं</div>
+                <div class="t-bodyMd text-secondary mt-sm">आपके पास पर्याप्त devices हैं। System आपको connections भेजेगा।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">अभी आपके पास</div>
+                <div class="row between"><span class="t-body text-secondary">कुल devices</span><span class="t-body" style="font-weight:600;">82</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">IDLE / CUSTODIED (deployable)</span><span class="t-body text-positive" style="font-weight:600;">7</span></div>
+                <div class="divider"></div>
+                <div class="t-bodyMd">5 नए connections के लिए 5 devices चाहिए। आपके पास 7 तैयार हैं।</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 32. W2 · Growth Intent · State C (SD top-up needed, inline) -->
+        <section class="screen" id="screen-growth-intent-C">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">Capacity बढ़ाएं</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-info">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-shield-check"/></svg></div>
+                <div class="text">
+                  <div class="title">और connections लेने के लिए</div>
+                  <div class="sub">सुरक्षा राशि में <strong>₹2,000 top-up</strong> ज़रूरी</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्या होगा</div>
+                <div class="t-body text-secondary">Top-up के बाद capacity बढ़ाने की व्यवस्था आगे बढ़ेगी। System ज़रूरी devices भेजेगा।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="row between"><span class="t-body text-secondary">वर्तमान सुरक्षा राशि</span><span class="t-body">₹20,000</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">और चाहिए</span><span class="t-body" style="font-weight:600;">₹2,000</span></div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">Top-up</span><span class="t-titleSm" style="color:var(--wc-brand-primary);">₹2,000</span></div>
+              </div>
+              <div style="background:var(--wc-bg-subtle);border-radius:12px;padding:12px 14px;margin-top:12px;">
+                <span class="t-bodyMd text-secondary">मौजूदा devices और connections पर कोई असर नहीं।</span>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="sd-topup" class="cta cta-primary">₹2,000 जमा करें</button></div>
+          </div>
+        </section>
+
+        <!-- 33. W2 · Growth Intent · State D (no capacity in area) -->
+        <section class="screen" id="screen-growth-intent-D">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">Capacity बढ़ाएं</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:var(--wc-bg-subtle);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-text-secondary);"><svg class="mi mi-sm"><use href="#i-clock"/></svg><span class="t-titleSm">अभी इंतज़ार</span></div>
+                <div class="t-headingLg mt-sm">आपके area में अभी और<br>connections उपलब्ध नहीं</div>
+                <div class="t-bodyMd text-secondary mt-sm">ज़रूरत होने पर system आपको बताएगा।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">अभी क्या चालू है</div>
+                <div class="row" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">मौजूदा 82 connections पर कोई असर नहीं</div>
+                </div>
+                <div class="row mt-md" style="gap:10px;align-items:flex-start;">
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
+                  <div class="t-body" style="flex:1;">Commission और payouts जारी रहेंगे</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 34. W2 · Growth Intent · BLOCKED (one-reason variant) -->
+        <section class="screen" id="screen-growth-intent-blocked">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">Capacity बढ़ाएं</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="banner banner-caution">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-stop"/></svg></div>
+                <div class="text">
+                  <div class="title">अभी capacity नहीं बढ़ा सकते</div>
+                  <div class="sub">पहले मौजूदा devices deploy करें</div>
+                </div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">क्यों</div>
+                <div class="t-body text-secondary">आपके पास 7 devices CUSTODIED हैं जो अभी customer के पास नहीं लगाए। पहले इन्हें deploy करें, फिर system नई capacity की व्यवस्था करेगा।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="row between"><span class="t-body" style="font-weight:600;">7 devices · deploy होने बाकी</span><span class="text-brand t-ctaSecondary" style="font-weight:600;">देखें</span></div>
+              </div>
+              <div style="background:var(--wc-bg-info);border-radius:12px;padding:12px 14px;margin-top:12px;display:flex;gap:10px;">
+                <svg class="mi mi-sm" style="color:var(--wc-state-info);flex-shrink:0;"><use href="#i-info"/></svg>
+                <div class="t-bodyMd">System एक ही वजह दिखाता है — सबसे ज़रूरी action। बाकी तभी दिखेंगे जब यह पूरा हो।</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 35. W3 · Wallet feed — Custody loss card -->
+        <section class="screen" id="screen-loss-card-custody">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">वॉलेट · लेन-देन</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="t-bodySmall text-secondary mb-sm" style="text-transform:uppercase;letter-spacing:0.5px;">आज</div>
+              <div class="card" style="border-left:4px solid var(--wc-state-negative);">
+                <div class="row" style="gap:8px;color:var(--wc-state-negative);">
+                  <svg class="mi mi-sm"><use href="#i-warning"/></svg>
+                  <span class="t-titleSm">NetBox custody loss</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body text-secondary">Device</span><span class="t-body" style="font-weight:600;">NB-00472</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">देय राशि</span><span class="t-titleSm text-negative">₹600</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Device age</span><span class="t-body">28 months · 40% slab</span></div>
+                <div class="divider"></div>
+                <div class="t-bodyMd">Device आपकी custody में था — आपकी ज़िम्मेदारी।</div>
+                <div class="t-bodyMd text-secondary mt-sm">अगले settlement में शामिल होगा।</div>
+              </div>
+              <div class="card mt-md row between" data-tap="dispute-form" style="cursor:pointer;">
+                <span class="t-body">विवाद दर्ज करें</span>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="t-bodySmall text-secondary mt-md" style="text-transform:uppercase;letter-spacing:0.5px;">कल</div>
+              <div class="card mt-sm">
+                <div class="row between"><span class="t-body">WALLET_TOPUP</span><span class="t-body text-positive">+ ₹2,000</span></div>
+                <div class="t-bodySmall text-secondary">UPI · 14 May 11:30 AM</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 36. W4 · Wallet feed — Non-recovery card -->
+        <section class="screen" id="screen-loss-card-norecovery">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">वॉलेट · लेन-देन</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="t-bodySmall text-secondary mb-sm" style="text-transform:uppercase;letter-spacing:0.5px;">आज</div>
+              <div class="card" style="border-left:4px solid var(--wc-state-caution);">
+                <div class="row" style="gap:8px;color:var(--wc-state-caution);">
+                  <svg class="mi mi-sm"><use href="#i-warning"/></svg>
+                  <span class="t-titleSm">NetBox not recovered</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body text-secondary">Device</span><span class="t-body" style="font-weight:600;">NB-00891</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">देय राशि</span><span class="t-titleSm" style="color:var(--wc-state-caution);">₹200</span></div>
+                <div class="divider"></div>
+                <div class="t-bodyMd">ग्राहक ने NetBox recovery SLA में वापस नहीं किया। आंशिक देय।</div>
+                <div class="t-bodyMd text-secondary mt-sm">अगले settlement में शामिल होगा।</div>
+              </div>
+              <div class="card mt-md row between" data-tap="dispute-form" style="cursor:pointer;">
+                <span class="t-body">विवाद दर्ज करें</span>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 37. W4 · Recovery success — ₹50 reward -->
+        <section class="screen" id="screen-recovery-success">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light"></header>
+            <div class="scrollable" style="display:flex;flex-direction:column;align-items:center;padding:32px 24px;text-align:center;gap:16px;">
+              <div style="width:96px;height:96px;border-radius:50%;background:var(--wc-state-positive);display:grid;place-items:center;color:white;margin-top:16px;"><svg style="width:56px;height:56px;"><use href="#i-check"/></svg></div>
+              <div class="t-headingLg">NB-00891 वापस मिल गया</div>
+              <div class="t-bodyLg text-secondary">समय पर recovery · कोई loss charge नहीं</div>
+              <div style="background:var(--wc-bg-positive);border-radius:16px;padding:16px 20px;width:100%;margin-top:8px;">
+                <div class="t-bodySmall" style="color:var(--wc-state-positive);">Recovery reward</div>
+                <div class="t-heroAmount text-positive" style="margin-top:4px;">+ ₹50</div>
+                <div class="t-bodySmall text-secondary mt-sm">आपके wallet में अभी जोड़ दिया गया</div>
+              </div>
+              <div style="background:var(--wc-bg-subtle);border-radius:12px;padding:12px 14px;width:100%;display:flex;gap:10px;text-align:left;">
+                <svg class="mi mi-sm" style="color:var(--wc-text-secondary);flex-shrink:0;margin-top:2px;"><use href="#i-info"/></svg>
+                <div class="t-bodyMd text-secondary">Device अब IDLE state में है — deploy करें या वापस करें।</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="dev-idle" class="cta cta-primary">ठीक है</button></div>
+          </div>
+        </section>
+
+        <!-- 38. W10 · Dispute pending (after raise) -->
+        <section class="screen" id="screen-dispute-pending">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">विवाद · समीक्षा में</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="border-left:4px solid var(--wc-state-info);">
+                <div class="row" style="gap:8px;color:var(--wc-state-info);">
+                  <svg class="mi mi-sm"><use href="#i-autorenew"/></svg>
+                  <span class="t-titleSm">समीक्षा में</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body text-secondary">Device</span><span class="t-body" style="font-weight:600;">NB-00891</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">देय राशि (रोका गया)</span><span class="t-body" style="text-decoration:line-through;color:var(--wc-text-hint);">₹200</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">वजह</span><span class="t-body">Device वापस मिल गया</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">दर्ज</span><span class="t-body">15 May 2026</span></div>
+                <div class="divider"></div>
+                <div class="t-bodyMd">Settlement में शामिल नहीं होगा जब तक समीक्षा पूरी न हो।</div>
+                <div class="t-bodyMd text-secondary mt-sm">7 दिन में decision मिलेगा।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-md">अब तक</div>
+                <div style="position:relative;padding-left:20px;">
+                  <div style="position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--wc-stroke-secondary);"></div>
+                  <div style="position:relative;padding-bottom:14px;">
+                    <div style="position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--wc-state-info);"></div>
+                    <div class="t-body" style="font-weight:600;">विवाद दर्ज हुआ</div>
+                    <div class="t-bodySmall text-secondary">15 May · सुबह 11:20</div>
+                  </div>
+                  <div style="position:relative;padding-bottom:14px;">
+                    <div style="position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--wc-state-caution);"></div>
+                    <div class="t-body" style="font-weight:600;">Ops समीक्षा कर रहा है</div>
+                    <div class="t-bodySmall text-secondary">15 May · दोपहर 2:00</div>
+                  </div>
+                  <div style="position:relative;">
+                    <div style="position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--wc-stroke-secondary);"></div>
+                    <div class="t-bodyMd text-secondary">Decision · अधिकतम 22 May तक</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 39. W11 · Legacy migration · Case A (above minimum) -->
+        <section class="screen" id="screen-legacy-above">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">सुरक्षा राशि</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:var(--wc-brand-secondary);color:white;border:0;">
+                <div class="row" style="gap:8px;color:white;opacity:0.85;"><svg class="mi mi-sm"><use href="#i-shield-check"/></svg><span class="t-bodyMd" style="color:white;">साझेदारी की सुरक्षा</span></div>
+                <div class="t-heroAmount" style="color:white;margin-top:8px;">₹25,000</div>
+                <div class="t-bodyMd" style="color:white;opacity:0.85;margin-top:4px;">ज़रूरी न्यूनतम: ₹20,000</div>
+              </div>
+              <div class="card mt-md" style="background:var(--wc-bg-positive);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-state-positive);"><svg class="mi mi-sm"><use href="#i-check-circle"/></svg><span class="t-titleSm" style="color:var(--wc-state-positive);">सब ठीक है</span></div>
+                <div class="t-bodyMd mt-sm">Capacity बढ़ा सकते हैं — पूरी partnership सुरक्षित है।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">Device status</div>
+                <div class="row between"><span class="t-body text-secondary">आपके पास</span><span class="t-body" style="font-weight:600;">60</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Wiom को वापस</span><span class="t-body">8</span></div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">यह क्या है</div>
+                <div class="t-bodyMd text-secondary">यह सुरक्षा राशि Wiom के devices की custody risk के लिए रखी जाती है। Settlement तय cycle या partnership बंद होने पर होता है।</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 40. W11 · Legacy migration · Case B (below minimum) -->
+        <section class="screen" id="screen-legacy-below">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">सुरक्षा राशि</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:var(--wc-brand-secondary);color:white;border:0;">
+                <div class="row" style="gap:8px;color:white;opacity:0.85;"><svg class="mi mi-sm"><use href="#i-shield-check"/></svg><span class="t-bodyMd" style="color:white;">साझेदारी की सुरक्षा</span></div>
+                <div class="t-heroAmount" style="color:white;margin-top:8px;">₹12,000</div>
+                <div class="t-bodyMd" style="color:white;opacity:0.85;margin-top:4px;">ज़रूरी न्यूनतम: ₹20,000 · <span style="color:#FFB2E4;">कमी ₹8,000</span></div>
+              </div>
+              <div class="card mt-md" style="background:var(--wc-bg-warning);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-text-on-warning);"><svg class="mi mi-sm"><use href="#i-warning"/></svg><span class="t-titleSm" style="color:var(--wc-text-on-warning);">Capacity बढ़ाने के लिए top-up ज़रूरी</span></div>
+                <div class="t-bodyMd mt-sm" style="color:var(--wc-text-on-warning);">मौजूदा devices और connections पर कोई असर नहीं। सिर्फ नई capacity के लिए top-up चाहिए।</div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">Device status</div>
+                <div class="row between"><span class="t-body text-secondary">आपके पास</span><span class="t-body" style="font-weight:600;">40</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Wiom को वापस</span><span class="t-body">3</span></div>
+              </div>
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">यह क्या है</div>
+                <div class="t-bodyMd text-secondary">यह सुरक्षा राशि Wiom के devices की custody risk के लिए रखी जाती है।</div>
+              </div>
+            </div>
+            <div class="cta-bar"><button data-tap="sd-topup" class="cta cta-primary">₹8,000 top-up करें</button></div>
+          </div>
+        </section>
+
+        <!-- 41. W12 · Late recovery card -->
+        <section class="screen" id="screen-late-recovery-card">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">वॉलेट · लेन-देन</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="t-bodySmall text-secondary mb-sm" style="text-transform:uppercase;letter-spacing:0.5px;">आज</div>
+              <div class="card" style="border-left:4px solid var(--wc-state-info);">
+                <div class="row" style="gap:8px;color:var(--wc-state-info);">
+                  <svg class="mi mi-sm"><use href="#i-autorenew"/></svg>
+                  <span class="t-titleSm">NetBox late recovery</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body text-secondary">Device</span><span class="t-body" style="font-weight:600;">NB-00891</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Status</span><span class="t-body">Wiom को वापस · exposure कम हुआ</span></div>
+                <div class="divider"></div>
+                <div class="t-bodyMd">₹200 non-recovery charge यथावत — recovery SLA समाप्त हो चुकी थी।</div>
+                <div class="t-bodyMd text-secondary mt-sm">₹50 recovery reward नहीं मिलेगा (समय निकल चुका)।</div>
+              </div>
+              <div style="background:var(--wc-bg-info);border-radius:12px;padding:12px 14px;margin-top:12px;display:flex;gap:10px;">
+                <svg class="mi mi-sm" style="color:var(--wc-state-info);flex-shrink:0;margin-top:2px;"><use href="#i-info"/></svg>
+                <div class="t-bodyMd">यह device अभी redeploy नहीं हो सकता — पहले ACS reassign करेगा।</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /phone-screen -->
+    </div><!-- /phone-frame -->
+  </main>
+
+  <!-- Right annotations panel -->
+  <aside class="side" id="side-panel">
+    <!-- populated by JS -->
+  </aside>
+</div>
+
+<style>
+  @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
+</style>
+
+<script src="assets/annotations.js"></script>
+<script src="assets/annotations-new.js"></script>
+<script src="assets/workflows.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

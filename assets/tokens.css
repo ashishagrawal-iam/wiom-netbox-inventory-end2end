@@ -1,0 +1,109 @@
+/* Wiom design tokens — extracted from core/common/.../theme/WiomTokens.kt
+   Light theme only (v1.0). Devanagari headroom = +4dp on line-heights.
+   No raw hex anywhere in components — always use var(--wc-*).
+*/
+
+:root {
+  /* §1.1 Color tokens */
+  --wc-brand-primary:          #D9008D;
+  --wc-brand-secondary:        #4A1535;
+  --wc-brand-tint:             #FFE5F6;
+  --wc-brand-stroke:           #FFB2E4;
+  --wc-brand-selection:        #FFCCED;
+  --wc-brand-primary-pressed:  #A30070;
+  --wc-brand-primary-subtle:   #FFCCED;
+
+  --wc-text-primary:           #161021;
+  --wc-text-secondary:         #5C5570;
+  --wc-text-hint:              #A7A1B2;
+  --wc-text-inverse:           #FFFFFF;
+  --wc-text-on-brand:          #FFFFFF;
+  --wc-text-on-warning:        #372902;
+
+  --wc-bg-screen:              #FAF9FC;
+  --wc-bg-surface:             #FFFFFF;
+  --wc-bg-secondary:           #E8E4F0;
+  --wc-bg-subtle:              #F1EDF7;
+  --wc-bg-disabled:            #D7D3E0;
+  --wc-bg-brand-tint:          #FFE5F6;
+  --wc-bg-overdue:             #FFE5E7;
+  --wc-bg-urgent:              #FFF2BF;
+  --wc-bg-positive:            #E1FAED;
+  --wc-bg-negative:            #FFE5E7;
+  --wc-bg-warning:             #FFF2BF;
+  --wc-bg-caution:             #FFF8E1;
+  --wc-bg-info:                #F1E5FF;
+
+  --wc-state-positive:         #008043;
+  --wc-state-negative:         #D92130;
+  --wc-state-warning:          #B85C00;
+  --wc-state-caution:          #E65100;
+  --wc-state-info:             #6D17CE;
+  --wc-icon-warning:           #E2B203;
+
+  --wc-stroke-primary:         #E8E4F0;
+  --wc-stroke-secondary:       #D7D3E0;
+  --wc-stroke-focus:           #352D42;
+  --wc-stroke-brand:           #FFB2E4;
+
+  --wc-input-bg:               #FAF8FC;
+  --wc-input-border:           #D7D3E0;
+  --wc-dialog-bg:              #F7F5FA;
+
+  /* §1.3 Spacing — 4dp grid */
+  --wc-sp-xxs: 4px;
+  --wc-sp-xs:  4px;
+  --wc-sp-sm:  8px;
+  --wc-sp-md:  12px;
+  --wc-sp-lg:  16px;
+  --wc-sp-xl:  16px;
+  --wc-sp-xxl: 24px;
+  --wc-sp-huge:32px;
+  --wc-sp-cardPadding: 16px;
+  --wc-sp-sheetContentToCta: 48px;
+
+  /* §1.4 Radius */
+  --wc-r-card:   12px;
+  --wc-r-chip:   8px;
+  --wc-r-cta:    16px;
+  --wc-r-dialog: 24px;
+  --wc-r-tiny:   4px;
+  --wc-r-large:  16px;
+
+  /* Typography — Noto Sans Devanagari with Devanagari headroom */
+  --wc-font: 'Noto Sans Devanagari', 'Noto Sans', system-ui, -apple-system, sans-serif;
+
+  /* Component */
+  --wc-header-height: 64px;
+  --wc-cta-height: 52px;
+  --wc-cta-height-small: 44px;
+  --wc-banner-min-height: 44px;
+  --wc-icon-md: 24px;
+  --wc-icon-sm: 20px;
+  --wc-icon-lg: 48px;
+
+  /* Phone frame */
+  --phone-w: 392px;
+  --phone-h: 800px;
+  --status-bar-h: 28px;
+}
+
+/* Type roles */
+.t-heroAmount  { font-size: 32px; font-weight: 700; line-height: 40px; }
+.t-headingLg   { font-size: 24px; font-weight: 700; line-height: 32px; }
+.t-titleLg     { font-size: 20px; font-weight: 500; line-height: 28px; }
+.t-titleSm     { font-size: 16px; font-weight: 700; line-height: 24px; }
+.t-headerTitle { font-size: 16px; font-weight: 700; line-height: 28px; }
+.t-menuItem    { font-size: 16px; font-weight: 400; line-height: 28px; }
+.t-bodyLg      { font-size: 16px; font-weight: 400; line-height: 24px; }
+.t-body        { font-size: 14px; font-weight: 400; line-height: 24px; }
+.t-bodyMd      { font-size: 14px; font-weight: 400; line-height: 20px; }
+.t-bodySmall   { font-size: 12px; font-weight: 400; line-height: 20px; letter-spacing: 0.4px; }
+.t-labelMd     { font-size: 14px; font-weight: 600; line-height: 20px; }
+.t-cta         { font-size: 16px; font-weight: 600; line-height: 24px; }
+.t-ctaSecondary{ font-size: 14px; font-weight: 600; line-height: 24px; }
+.t-banner      { font-size: 14px; font-weight: 600; line-height: 24px; }
+.t-batchCount  { font-size: 16px; font-weight: 700; line-height: 28px; }
+.t-chipValue   { font-size: 20px; font-weight: 700; line-height: 32px; }
+.t-chipLabel   { font-size: 12px; font-weight: 600; line-height: 20px; letter-spacing: 0.3px; }
+.t-metaXs      { font-size: 10px; font-weight: 400; line-height: 16px; }
