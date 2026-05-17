@@ -69,11 +69,15 @@ Object.assign(window.ANNOTATIONS, {
         ]},
       { crumb: 'Section order',
         anchors: [
-          { kind: 'added', text: '1. <strong>Batch hero (NEW v8.2)</strong>: green "अंतिम पुष्टि · 5 नए connections" — same as State B.' },
-          { kind: 'added', text: '2. <strong>Devices card (NEW v8.2)</strong>: custody 82 / deploy-ready 7 — same as State B.' },
-          { kind: 'unchanged', text: '3. <strong>Top-up banner</strong>: "इस capacity के लिए ₹2,000 top-up ज़रूरी" — bridges batch to cost.' },
+          { kind: 'added', text: '1. <strong>Batch hero (v8.2)</strong>: green "अंतिम पुष्टि · 5 नए connections" — same as State B.' },
+          { kind: 'changed', text: '2. <strong>Devices card (v8.3 corrected)</strong>: shipping-not-stock math. Custody 82 (all deployed) · Deploy-ready 0 · Wiom से आ रहे +5 · post-top-up custody 87. Tells the right story: SD-low only applies when system has to ship new devices.' },
+          { kind: 'changed', text: '3. <strong>Pivot banner (v8.3)</strong>: "5 नए devices custody में आ रहे हैं · इसलिए ₹2,000 top-up ज़रूरी" — explicit causal link from incoming devices to SD movement.' },
           { kind: 'unchanged', text: '4. <strong>Top-up math card</strong>: current ₹20k + needed ₹2k = top-up ₹2k.' },
           { kind: 'unchanged', text: '5. <strong>Reassurance</strong>: "मौजूदा connections और custody पर कोई असर नहीं।"' }
+        ]},
+      { crumb: 'Why shipping-not-stock (v8.3)',
+        anchors: [
+          { kind: 'policy', text: '<strong>SD scales with custody, not with connections.</strong> If CSP already had idle deploy-ready devices in custody, the existing SD already covers them — no top-up needed. State C only makes sense when system must SHIP new devices, which raises custody exposure. Using State B\'s 7-deploy-ready math here was a copy-paste bug that broke the causal logic.' }
         ]},
       { crumb: 'CTA semantics',
         anchors: [
