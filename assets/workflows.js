@@ -272,6 +272,54 @@ window.WORKFLOWS = {
     ]
   },
 
+  // v9.4 · Device State Variants. Walkable single-step workflows that morph
+  // dev-custodied / dev-idle into 7 sub-states. CUSTODIED is always carry-fee
+  // exempt (Decision 9); IDLE accumulates ₹5/day until recall-trigger freezes.
+
+  DSC1: {
+    title: 'DS·C1 · CUSTODIED · fresh (day 7)',
+    purpose: 'Just-received device. 38 दिन recall window. No carry fee (was_ever_deployed = false → Decision 9 exempt). Normal action: deploy or return.',
+    steps: [{ num: 1, label: 'CUSTODIED · day 7', screen: 'dev-custodied',
+      note: 'Recall countdown shows 38 दिन बाकी. Body emphasises "deploy या return". CTA: "Wiom को वापस करना है" (routes to RETRIEVAL_PENDING — the only valid CUSTODIED → next transition per ACS spec).' }]
+  },
+  DSC2: {
+    title: 'DS·C2 · CUSTODIED · recall imminent (day 42)',
+    purpose: 'Recall window almost expired. 3 दिन बाकी. Still no carry fee. Last chance for CSP-initiated deploy or clean return — after this, system auto-recalls.',
+    steps: [{ num: 1, label: 'CUSTODIED · day 42', screen: 'dev-custodied',
+      note: 'Recall countdown shows 3 दिन बाकी. Banner softly urgent — encourages "clean return से पहले recall hota" path. CTA still active.' }]
+  },
+  DSC3: {
+    title: 'DS·C3 · CUSTODIED · recall in progress (day 47)',
+    purpose: 'System auto-recall fired at day 45. Wiom team coming. CSP just waits for handover. No fee, no liability, no action needed.',
+    steps: [{ num: 1, label: 'CUSTODIED · recall चालू', screen: 'dev-custodied',
+      note: 'Banner morphs to "Wiom team device वापस ले रही है". Recall status "चालू है". CTA reframed to passive "Wiom team के लिए details देखें". Exposure closes on handover.' }]
+  },
+
+  DSI1: {
+    title: 'DS·I1 · IDLE · day 1 (carry fee just started)',
+    purpose: 'Customer churned today. Device recovered to IDLE. Carry fee ₹5 starts accumulating. 44 दिन recall window. Wiom-way nudge: redeploy ASAP.',
+    steps: [{ num: 1, label: 'IDLE · day 1', screen: 'dev-idle',
+      note: 'Banner: "आज carry fee शुरू हुई". Days pill: 1 दिन. Carry fee: ₹5 daily / ₹5 total. Footnote signals fresh start of accumulation.' }]
+  },
+  DSI2: {
+    title: 'DS·I2 · IDLE · mid (day 22 — current default)',
+    purpose: 'Device sitting 22 days. ₹110 accumulated. 23 दिन recall window. Steady-state accumulation. Default IDLE view.',
+    steps: [{ num: 1, label: 'IDLE · day 22', screen: 'dev-idle',
+      note: 'Matches the original dev-idle copy. Days pill: 22 दिन. Carry fee: ₹5/day · ₹110 total. Standard action: redeploy or Wiom को वापस.' }]
+  },
+  DSI3: {
+    title: 'DS·I3 · IDLE · recall imminent (day 40)',
+    purpose: '5 दिन left in recall window. Carry fee ₹200 accumulated. System will auto-recall at day 45 and freeze the fee. Decision pressure peaks here.',
+    steps: [{ num: 1, label: 'IDLE · day 40', screen: 'dev-idle',
+      note: 'Banner: "जल्द decision लें · recall पास है". Days pill: 40 दिन. Footnote signals the next 5 days will add ₹25 more before recall freezes accumulation.' }]
+  },
+  DSI4: {
+    title: 'DS·I4 · IDLE · recall in progress (day 47, carry fee frozen)',
+    purpose: 'System auto-recall fired at day 45. Carry fee accumulation stopped at ₹225. Wiom team coming. Carry fee already accrued will settle at next cycle.',
+    steps: [{ num: 1, label: 'IDLE · recall चालू', screen: 'dev-idle',
+      note: 'Banner morphs to "Wiom team device वापस ले रही है". Days pill: "Recall चालू". Carry fee row shows ₹0/day with "रुक गई" label + ₹225 as final accumulation.' }]
+  },
+
   W12: {
     title: 'Late Recovery (After SLA Expiry)',
     purpose: 'Device marked LOST + ₹200 charged. CSP/Wiom recovers later. Exposure closes; charge stands.',

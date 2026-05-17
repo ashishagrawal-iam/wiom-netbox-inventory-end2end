@@ -306,6 +306,93 @@
         'sdt-context-title': 'Escalation हटाने के लिए top-up ज़रूरी',
         'sdt-context-sub': 'बकाया देय threshold से ऊपर — नई capacity अभी रुकी हुई'
       }
+    },
+
+    // v9.4 · Device-state sub-variants. CUSTODIED (3) and IDLE (4) variants
+    // morph the same dev-custodied / dev-idle screens to show different sub-
+    // states: fresh / mid / recall-imminent / recall-in-progress. CUSTODIED
+    // is always carry-fee-exempt (Decision 9). IDLE accumulates carry fee
+    // until system-recall freezes it at the threshold.
+    'DSC1': { // CUSTODIED · day 7 · fresh
+      'dev-custodied': {
+        'dc-banner-title': 'सेट-अप के लिए चुना गया',
+        'dc-banner-sub': 'कभी deploy नहीं हुआ · 45 दिन में setup या return करें',
+        'dc-recall-label': 'Recall की संभावना',
+        'dc-recall-value': '38 दिन बाकी',
+        'dc-recall-body': '45 दिन बाद system auto-recall करेगा — कोई carry fee नहीं लगेगा, exposure हटेगी।',
+        'dc-action-body': 'सेटअप पूरा करें और customer के पास लगाएं। यह device "कभी deployed नहीं" category में है, इसलिए carry fee नहीं लग रही।',
+        'dc-cta-primary': 'Wiom को वापस करना है'
+      }
+    },
+    'DSC2': { // CUSTODIED · day 42 · recall imminent
+      'dev-custodied': {
+        'dc-banner-title': 'जल्द decision लें',
+        'dc-banner-sub': '3 दिन में system auto-recall शुरू कर देगा',
+        'dc-recall-label': 'Recall की संभावना',
+        'dc-recall-value': '3 दिन बाकी',
+        'dc-recall-body': '45 दिन के बाद Wiom अपने आप device वापस ले लेगा। अब भी देरी नहीं — customer के पास लगा सकते हैं।',
+        'dc-action-body': 'अगर deploy नहीं कर पा रहे, अभी "Wiom को वापस करना है" दबाएं — recall से पहले clean return बेहतर है।',
+        'dc-cta-primary': 'Wiom को वापस करना है'
+      }
+    },
+    'DSC3': { // CUSTODIED · day 47 · recall in progress (system took over)
+      'dev-custodied': {
+        'dc-banner-title': 'Wiom team device वापस ले रही है',
+        'dc-banner-sub': 'System auto-recall शुरू हो गया · आपकी action ज़रूरी नहीं',
+        'dc-recall-label': 'Auto-recall status',
+        'dc-recall-value': 'चालू है',
+        'dc-recall-body': '45 दिन के बाद system ने recall initiate कर दिया। Wiom team पहुँचेगी। कोई carry fee नहीं, कोई liability नहीं — बस handover का इंतज़ार।',
+        'dc-action-body': 'Wiom team पहुँचने तक device सुरक्षित रखें। Handover पर exposure बंद हो जाएगी।',
+        'dc-cta-primary': 'Wiom team के लिए details देखें'
+      }
+    },
+    'DSI1': { // IDLE · day 1 · just started
+      'dev-idle': {
+        'di-banner-title': 'यह नेट बॉक्स अभी customer के पास नहीं है',
+        'di-banner-sub': 'आज carry fee शुरू हुई · जल्दी redeploy करें',
+        'di-days-pill': '1 दिन',
+        'di-action-body': 'Customer churn हुआ है। तुरंत किसी नए customer के पास लगाएं — हर दिन ₹5 carry fee समायोजित होती है।',
+        'di-fee-title': 'कैरी फ़ी',
+        'di-fee-daily': '₹5',
+        'di-fee-total': '₹5',
+        'di-fee-footnote': 'आज से ₹5 carry fee समायोजित होनी शुरू हुई'
+      }
+    },
+    'DSI2': { // IDLE · day 22 · mid (current default)
+      'dev-idle': {
+        'di-banner-title': 'यह नेट बॉक्स खाली पड़ा है',
+        'di-banner-sub': 'डिप्लॉय करें या Wiom को वापस करें — कैरी फ़ी लग रही है',
+        'di-days-pill': '22 दिन',
+        'di-action-body': 'इसे जल्दी ग्राहक के पास लगाएं या Wiom को वापस करें। जब तक खाली है, रोज़ कैरी फ़ी लग रही है।',
+        'di-fee-title': 'कैरी फ़ी',
+        'di-fee-daily': '₹5',
+        'di-fee-total': '₹110',
+        'di-fee-footnote': 'रोज़ ₹5 carry fee समायोजित हो रहा है'
+      }
+    },
+    'DSI3': { // IDLE · day 40 · recall imminent
+      'dev-idle': {
+        'di-banner-title': 'जल्द decision लें · recall पास है',
+        'di-banner-sub': '5 दिन में system auto-recall · carry fee तब रुक जाएगी',
+        'di-days-pill': '40 दिन',
+        'di-action-body': 'अब भी देरी नहीं — customer के पास लगा सकते हैं या Wiom को वापस कर सकते हैं। 45 दिन के बाद system अपने आप recall शुरू कर देगा।',
+        'di-fee-title': 'कैरी फ़ी',
+        'di-fee-daily': '₹5',
+        'di-fee-total': '₹200',
+        'di-fee-footnote': '5 दिन में ₹25 और जुड़ जाएगा — फिर system recall पर रुक जाएगी'
+      }
+    },
+    'DSI4': { // IDLE · day 47 · recall in progress (carry fee frozen)
+      'dev-idle': {
+        'di-banner-title': 'Wiom team device वापस ले रही है',
+        'di-banner-sub': 'Auto-recall चालू है · carry fee अब और नहीं जुड़ेगी',
+        'di-days-pill': 'Recall चालू',
+        'di-action-body': '45 दिन के बाद system ने recall initiate कर दिया। Wiom team पहुँचेगी। Carry fee अब रुक गई है — पिछली accumulation settle होगी।',
+        'di-fee-title': 'कैरी फ़ी (frozen)',
+        'di-fee-daily': '₹0 · रुक गई',
+        'di-fee-total': '₹225 (अंतिम)',
+        'di-fee-footnote': 'Recall trigger होने पर carry fee accumulation रुक गई'
+      }
     }
   };
 
@@ -552,7 +639,7 @@
 
   // Init
   const hash = window.location.hash.replace('#', '');
-  const wfMatch = hash.match(/^(W\d+|F\d+[A-Z])-(\d+)$/);
+  const wfMatch = hash.match(/^(W\d+|F\d+[A-Z]|DS[CI]\d+)-(\d+)$/);
   if (wfMatch && window.WORKFLOWS[wfMatch[1]]) {
     gotoWorkflowStep(wfMatch[1], parseInt(wfMatch[2], 10));
   } else if (hash && document.getElementById('screen-' + hash)) {

@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=9.3">
-  <link rel="stylesheet" href="assets/proto.css?v=9.3">
+  <link rel="stylesheet" href="assets/tokens.css?v=9.4">
+  <link rel="stylesheet" href="assets/proto.css?v=9.4">
 </head>
 <body class="show-amendments">
 
@@ -91,6 +91,15 @@
     <div class="item is-workflow is-new" data-workflow="F1C" style="border-left-color:var(--wc-state-info);"><span class="dot" style="background:var(--wc-state-info);"></span> F1·C · Wallet low (UPI) <span class="meta">9 steps</span></div>
     <div class="item is-workflow is-new" data-workflow="F1D" style="border-left-color:var(--wc-text-secondary);"><span class="dot" style="background:var(--wc-text-secondary);"></span> F1·D · No capacity in area <span class="meta">3 steps</span></div>
     <div class="item is-workflow is-new" data-workflow="F1E" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> F1·E · Blocked (deploy first) <span class="meta">3 steps</span></div>
+
+    <div class="group" style="background:linear-gradient(135deg,var(--wc-bg-warning),#FFF0C2);color:var(--wc-text-on-warning);font-weight:700;">📦 Device State Variants · CUSTODIED & IDLE sub-cases <span style="font-size:10px;font-weight:600;background:var(--wc-state-caution);color:white;padding:1px 6px;border-radius:4px;margin-left:6px;">v9.4</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSC1" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·C1 · CUSTODIED · fresh (day 7) <span class="meta">1 step</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSC2" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·C2 · CUSTODIED · recall imminent (day 42) <span class="meta">1 step</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSC3" style="border-left-color:var(--wc-text-secondary);"><span class="dot" style="background:var(--wc-text-secondary);"></span> DS·C3 · CUSTODIED · recall चालू (day 47) <span class="meta">1 step</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSI1" style="border-left-color:var(--wc-state-info);"><span class="dot" style="background:var(--wc-state-info);"></span> DS·I1 · IDLE · day 1 (fee just started) <span class="meta">1 step</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSI2" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·I2 · IDLE · day 22 (mid · default) <span class="meta">1 step</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSI3" style="border-left-color:var(--wc-state-negative);"><span class="dot" style="background:var(--wc-state-negative);"></span> DS·I3 · IDLE · recall imminent (day 40) <span class="meta">1 step</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSI4" style="border-left-color:var(--wc-text-secondary);"><span class="dot" style="background:var(--wc-text-secondary);"></span> DS·I4 · IDLE · recall चालू (day 47) <span class="meta">1 step</span></div>
 
     <div class="group">Workflows · Design Note 3</div>
     <div class="item is-workflow" data-workflow="W1"><span class="dot"></span> W1 · SD at Onboarding <span class="meta">5 steps</span></div>
@@ -564,6 +573,36 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Improvement v9.4 · 17 May 2026 — Device State Variants + spec-impossible nav fix -->
+              <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-warning),#FFF0C2);border:0;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-caution);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v9.4</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · Device State Variants</span>
+                </div>
+                <div class="t-titleSm mt-md">7 walkable sub-state variants for CUSTODIED + IDLE</div>
+                <div class="t-bodyMd text-secondary mt-sm">User pointed out: dev-custodied and dev-idle are static — but real-life they vary by recall countdown and carry-fee accumulation. Plus a bug: "सेटअप में नहीं लगाना" was wrongly routing to dev-idle (spec-impossible per INV-ACO-SD-06).</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Bug fix:</div>
+                <div class="t-bodySmall text-secondary mt-sm">dev-custodied CTA "सेटअप में नहीं लगाना" was routing to dev-idle — but CUSTODIED → IDLE is invalid per ACS spec (IDLE requires was_ever_deployed=true; CUSTODIED is exclusively never-deployed). Relabelled to <strong>"Wiom को वापस करना है"</strong> and routes to <code>dev-retrieval-pending</code> (the only valid CUSTODIED → next transition per ACS Patch 4).</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">7 sub-state variants now walkable (top of left rail · "Device State Variants" group):</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  <strong>CUSTODIED (3 — always carry-fee exempt per Decision 9):</strong><br>
+                  • <strong>DS·C1</strong> · day 7 · 38 दिन recall window · normal action<br>
+                  • <strong>DS·C2</strong> · day 42 · 3 दिन recall window · urgent — last chance for clean return<br>
+                  • <strong>DS·C3</strong> · day 47 · recall चालू · Wiom team coming · no action needed<br>
+                  <br>
+                  <strong>IDLE (4 — carry fee accumulating at ₹5/day):</strong><br>
+                  • <strong>DS·I1</strong> · day 1 · ₹5 today · 44 दिन recall window · "आज carry fee शुरू हुई"<br>
+                  • <strong>DS·I2</strong> · day 22 · ₹110 · 23 दिन recall window · current default<br>
+                  • <strong>DS·I3</strong> · day 40 · ₹200 · 5 दिन recall window · decision pressure peaks<br>
+                  • <strong>DS·I4</strong> · day 47 · ₹225 (frozen) · recall चालू · carry fee accumulation stopped
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">How the morph works:</div>
+                <div class="t-bodySmall text-secondary mt-sm">Same dev-custodied / dev-idle screens — extended <code>WORKFLOW_CONTENT</code> with 7 new keys (DSC1/C2/C3 + DSI1/I2/I3/I4). Each morphs banner / recall countdown / carry-fee row / footnote / CTA per sub-state. Hash-parser regex extended to accept <code>DSC\d</code> and <code>DSI\d</code> workflow IDs.</div>
+              </div>
+
               <!-- Fix v9.3 · 17 May 2026 — strip designer-invented form + age leaks -->
               <div class="card" style="background:#FFE0E0;border:0;border-left:4px solid var(--wc-state-negative);">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -1601,36 +1640,37 @@
               <div class="icon-btn"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-more"/></svg></div>
             </header>
             <div class="scrollable" style="padding:16px;">
-              <div class="banner banner-caution">
+              <!-- v9.4 · IDs added so device-state workflows (DS·I1..I4) can
+                   morph carry-fee accumulation + recall countdown + banner per
+                   sub-state (day 1 → day 22 → recall imminent → recalled). -->
+              <div class="banner banner-caution" id="di-banner">
                 <div class="icon-wrap"><svg class="mi"><use href="#i-warning"/></svg></div>
                 <div class="text">
-                  <div class="title">यह नेट बॉक्स खाली पड़ा है</div>
-                  <div class="sub">डिप्लॉय करें या वापस करें — कैरी फ़ी लग रही है</div>
+                  <div class="title" id="di-banner-title">यह नेट बॉक्स खाली पड़ा है</div>
+                  <div class="sub" id="di-banner-sub">डिप्लॉय करें या वापस करें — कैरी फ़ी लग रही है</div>
                 </div>
               </div>
               <div class="card mt-md">
                 <div class="row between">
                   <div class="t-titleSm">क्या करना है</div>
-                  <span class="t-bodySmall" style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);padding:2px 8px;border-radius:4px;font-weight:600;">22 दिन</span>
+                  <span class="t-bodySmall" id="di-days-pill" style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);padding:2px 8px;border-radius:4px;font-weight:600;">22 दिन</span>
                 </div>
-                <div class="t-body text-secondary mt-sm">इसे जल्दी ग्राहक के पास लगाएं या व्योम को वापस करें। जब तक खाली है, रोज़ कैरी फ़ी लग रही है।</div>
+                <div class="t-body text-secondary mt-sm" id="di-action-body">इसे जल्दी ग्राहक के पास लगाएं या व्योम को वापस करें। जब तक खाली है, रोज़ कैरी फ़ी लग रही है।</div>
               </div>
               <div class="card mt-md">
                 <div class="row" style="gap:10px;">
                   <svg class="mi" style="color:var(--wc-state-caution);"><use href="#i-dollar"/></svg>
-                  <div class="t-titleSm">कैरी फ़ी</div>
+                  <div class="t-titleSm" id="di-fee-title">कैरी फ़ी</div>
                 </div>
                 <div class="divider"></div>
-                <div class="row between"><span class="t-body text-secondary">रोज़ का</span><span class="t-body" style="font-weight:600;">₹5</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">अब तक</span><span class="t-body" style="font-weight:600;">₹110</span></div>
-                <!-- v9.2 spec-compliance (Must-Not-Do #3): "कट" → "समायोजित" -->
-                <div style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);border-radius:8px;padding:8px 12px;margin-top:12px;font-size:13px;font-weight:600;">रोज़ ₹5 carry fee समायोजित हो रहा है</div>
+                <div class="row between"><span class="t-body text-secondary" id="di-fee-daily-label">रोज़ का</span><span class="t-body" id="di-fee-daily" style="font-weight:600;">₹5</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary" id="di-fee-total-label">अब तक</span><span class="t-body" id="di-fee-total" style="font-weight:600;">₹110</span></div>
+                <div id="di-fee-footnote" style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);border-radius:8px;padding:8px 12px;margin-top:12px;font-size:13px;font-weight:600;">रोज़ ₹5 carry fee समायोजित हो रहा है</div>
               </div>
             </div>
             <div class="cta-bar">
-              <button data-tap="dev-retrieval-pending" class="cta cta-primary">वापस करें</button>
+              <button data-tap="dev-retrieval-pending" class="cta cta-primary" id="di-cta-primary">वापस करें</button>
               <button data-tap="dev-damaged" class="cta cta-tertiary">स्थिति बताएं</button>
-              <!-- v9.0 · W3 pre-step entry from IDLE state too -->
               <button data-tap="report-loss-sheet" class="cta cta-link" style="color:var(--wc-state-negative);margin:0 auto;">मुझे यह डिवाइस नहीं मिल रहा</button>
             </div>
           </div>
@@ -1646,6 +1686,12 @@
               <div class="spacer"></div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- v9.4 · IDs added to mutable elements so device-state workflows
+                   (DS·C1/C2/C3) can morph the recall countdown + body copy per
+                   sub-state. Bug fix: CTA was wrongly routing to dev-idle
+                   (spec-impossible per INV-ACO-SD-06: CUSTODIED → IDLE is not a
+                   valid transition because IDLE means was_ever_deployed=true).
+                   Now routes to dev-retrieval-pending (return-intent flow). -->
               <div class="banner banner-caution" id="dc-banner">
                 <div class="icon-wrap"><svg class="mi"><use href="#i-inventory"/></svg></div>
                 <div class="text">
@@ -1654,19 +1700,18 @@
                   <div class="sub amended-only" id="dc-banner-sub">कभी deploy नहीं हुआ — 45 दिन में setup या return</div>
                 </div>
               </div>
-              <div class="card mt-md amended-only" style="background:var(--wc-bg-warning);border-color:transparent;">
-                <div class="row between"><span class="t-body" style="color:var(--wc-text-on-warning);font-weight:600;">Recall की संभावना</span><span class="t-titleSm" style="color:var(--wc-text-on-warning);">38 दिन बाकी</span></div>
-                <div class="t-bodySmall mt-sm" style="color:var(--wc-text-on-warning);">45 दिन बाद system auto-recall करेगा — कोई carry fee नहीं लगेगा, exposure हटेगी।</div>
+              <div class="card mt-md amended-only" id="dc-recall-card" style="background:var(--wc-bg-warning);border-color:transparent;">
+                <div class="row between"><span class="t-body" id="dc-recall-label" style="color:var(--wc-text-on-warning);font-weight:600;">Recall की संभावना</span><span class="t-titleSm" id="dc-recall-value" style="color:var(--wc-text-on-warning);">38 दिन बाकी</span></div>
+                <div class="t-bodySmall mt-sm" id="dc-recall-body" style="color:var(--wc-text-on-warning);">45 दिन बाद system auto-recall करेगा — कोई carry fee नहीं लगेगा, exposure हटेगी।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">क्या करना है</div>
                 <div class="t-body text-secondary preamend-only">सेटअप पूरा करें और ग्राहक को कनेक्ट करें। वापस करने का विकल्प भी है।</div>
-                <div class="t-body text-secondary amended-only">सेटअप पूरा करें — यह device "kabhi deployed नहीं" category में है, इसलिए carry fee नहीं लग रही (deploy होने तक)।</div>
+                <div class="t-body text-secondary amended-only" id="dc-action-body">सेटअप पूरा करें — यह device "kabhi deployed नहीं" category में है, इसलिए carry fee नहीं लग रही (deploy होने तक)।</div>
               </div>
             </div>
             <div class="cta-bar">
-              <button data-tap="dev-idle" class="cta cta-tertiary">सेटअप में नहीं लगाना</button>
-              <!-- v9.0 · W3 pre-step entry. CTA visible always; W3 morph emphasizes it. -->
+              <button data-tap="dev-retrieval-pending" class="cta cta-tertiary" id="dc-cta-primary">Wiom को वापस करना है</button>
               <button data-tap="report-loss-sheet" class="cta cta-link" style="color:var(--wc-state-negative);margin:0 auto;">मुझे यह डिवाइस नहीं मिल रहा</button>
             </div>
           </div>
@@ -2844,9 +2889,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=9.3"></script>
-<script src="assets/annotations-new.js?v=9.3"></script>
-<script src="assets/workflows.js?v=9.3"></script>
-<script src="assets/app.js?v=9.3"></script>
+<script src="assets/annotations.js?v=9.4"></script>
+<script src="assets/annotations-new.js?v=9.4"></script>
+<script src="assets/workflows.js?v=9.4"></script>
+<script src="assets/app.js?v=9.4"></script>
 </body>
 </html>
