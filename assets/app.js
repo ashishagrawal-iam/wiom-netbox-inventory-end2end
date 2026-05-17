@@ -114,29 +114,22 @@
     });
   }
 
-  // v8.4 · Zone & Capacity chip on dashboard-home morphs per active flow.
-  // Three states matching the three drilldown variants. Default = opportunity.
+  // v9.x · काम की स्थिति chip on dashboard. Label + status ("सब ठीक") stay
+  // constant — only the F1 hint at the bottom morphs per active flow. The
+  // background stays neutral (chip looks like its siblings), the icon-+-text
+  // hint inherits the variant accent color.
   const CHIP_STATES = {
     opportunity: {
-      bg: 'var(--wc-bg-brand-tint)', stroke: 'var(--wc-brand-stroke)',
-      iconColor: 'var(--wc-brand-primary)', icon: '#i-trending-up',
-      labelColor: 'var(--wc-brand-primary)',
-      value: '25 खुले', valueColor: 'var(--wc-text-primary)',
-      cta: 'देखें ›', ctaColor: 'var(--wc-brand-primary)'
+      icon: '#i-trending-up', accent: 'var(--wc-brand-primary)',
+      hint: '+25 connections उपलब्ध · देखें ›'
     },
     'no-capacity': {
-      bg: 'var(--wc-bg-subtle)', stroke: 'var(--wc-stroke-primary)',
-      iconColor: 'var(--wc-text-secondary)', icon: '#i-clock',
-      labelColor: 'var(--wc-text-secondary)',
-      value: 'अभी इंतज़ार', valueColor: 'var(--wc-text-primary)',
-      cta: 'देखें ›', ctaColor: 'var(--wc-text-secondary)'
+      icon: '#i-clock', accent: 'var(--wc-text-secondary)',
+      hint: 'अभी इंतज़ार · और जानकारी ›'
     },
     blocked: {
-      bg: 'var(--wc-bg-caution)', stroke: 'var(--wc-state-caution)',
-      iconColor: 'var(--wc-state-caution)', icon: '#i-stop',
-      labelColor: 'var(--wc-state-caution)',
-      value: 'रुका हुआ', valueColor: 'var(--wc-text-primary)',
-      cta: '1 वजह · देखें ›', ctaColor: 'var(--wc-state-caution)'
+      icon: '#i-stop', accent: 'var(--wc-state-caution)',
+      hint: 'रुका हुआ · 1 वजह · देखें ›'
     }
   };
 
@@ -145,20 +138,20 @@
     if (!chip) return;
     const cfg = CHIP_STATES[state] || CHIP_STATES.opportunity;
     chip.dataset.chipState = state;
-    chip.style.background = cfg.bg;
-    chip.style.borderColor = cfg.stroke;
+    // Hint icon
     const iconEl = document.getElementById('zone-chip-icon');
     if (iconEl) {
-      iconEl.style.color = cfg.iconColor;
+      iconEl.style.color = cfg.accent;
       const useEl = iconEl.querySelector('use');
       if (useEl) useEl.setAttribute('href', cfg.icon);
     }
-    const labelEl = document.getElementById('zone-chip-label');
-    if (labelEl) labelEl.style.color = cfg.labelColor;
-    const valueEl = document.getElementById('zone-chip-value');
-    if (valueEl) { valueEl.textContent = cfg.value; valueEl.style.color = cfg.valueColor; }
+    // Hint footer (CTA line)
     const ctaEl = document.getElementById('zone-chip-cta');
-    if (ctaEl) { ctaEl.textContent = cfg.cta; ctaEl.style.color = cfg.ctaColor; }
+    if (ctaEl) {
+      ctaEl.style.color = cfg.accent;
+      const textSpan = ctaEl.querySelector('span');
+      if (textSpan) textSpan.textContent = cfg.hint;
+    }
   }
 
   function chipStateForFlow(wfId) {

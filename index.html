@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=9.9">
-  <link rel="stylesheet" href="assets/proto.css?v=9.9">
+  <link rel="stylesheet" href="assets/tokens.css?v=9.10">
+  <link rel="stylesheet" href="assets/proto.css?v=9.10">
   <style>
     /* v9.9 · collapsible rail groups */
     .group.collapsible { cursor: pointer; user-select: none; position: relative; padding-right: 28px; }
@@ -219,7 +219,11 @@
               <div class="icon-btn" style="position:relative;"><svg class="mi"><use href="#i-clock"/></svg><span style="position:absolute;top:6px;right:6px;background:var(--wc-state-negative);color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;">3</span></div>
             </header>
             <div class="scrollable" style="padding:12px;">
-              <!-- Assurance Strip — 2x2 grid of chips. 4th chip is the new Zone & Capacity. -->
+              <!-- Assurance Strip — 2x2 grid of chips. 4th chip is काम की स्थिति
+                   (work-status). v9.x align with native app — the chip stays
+                   "काम की स्थिति" (CSP eligibility) with the F1 opportunity
+                   surfacing as a small hint that prompts tapping into the
+                   नया काम drilldown where the full F1 card lives. -->
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                 <!-- Chip 1: कनेक्शन -->
                 <div class="card" style="padding:14px;">
@@ -236,20 +240,27 @@
                   <div class="t-bodySmall text-secondary">कमाई</div>
                   <div class="t-titleSm mt-sm">₹9,000</div>
                 </div>
-                <!-- Chip 4: Zone & Capacity — entry for the drilldown.
-                     v8.4: chip content morphs per active flow. Three variants:
-                       · opportunity (default / F1·A/B/C): pink, trending-up, "25 खुले"
-                       · no-capacity (F1·D): grey, clock, "अभी इंतज़ार"
-                       · blocked (F1·E): amber, stop, "रुका हुआ · 1 वजह"
-                     app.js updates the chip when workflow changes. -->
-                <div class="card" id="zone-capacity-chip" data-tap="zone-capacity" data-chip-state="opportunity" style="padding:14px;background:var(--wc-bg-brand-tint);border-color:var(--wc-brand-stroke);position:relative;">
+                <!-- Chip 4: काम की स्थिति · CSP eligibility + F1 hint. v9.x
+                     redesign (aligned with native). Three variants morphed by
+                     active flow via app.js setZoneChipState:
+                       · opportunity (default / F1·A/B/C): hint "+25 connections उपलब्ध"
+                       · no-capacity (F1·D): hint "अभी इंतज़ार · और जानकारी"
+                       · blocked (F1·E): hint "रुका हुआ · 1 वजह"
+                     Tap → opens नया काम drilldown which has the full F1
+                     opportunity card on top + the eligibility detail below. -->
+                <div class="card" id="zone-capacity-chip" data-tap="zone-capacity" data-chip-state="opportunity" style="padding:14px;position:relative;">
                   <div class="row" style="gap:6px;align-items:center;" id="zone-chip-eyebrow">
-                    <svg class="mi mi-sm" id="zone-chip-icon"><use href="#i-trending-up"/></svg>
-                    <span class="t-bodySmall" id="zone-chip-label" style="color:var(--wc-brand-primary);font-weight:600;">ज़ोन और क्षमता</span>
+                    <span class="t-bodySmall text-secondary" id="zone-chip-label">काम की स्थिति</span>
                   </div>
-                  <div class="t-titleSm mt-sm" id="zone-chip-value" style="color:var(--wc-text-primary);">25 खुले</div>
-                  <div class="t-bodySmall" id="zone-chip-cta" style="color:var(--wc-brand-primary);font-weight:600;margin-top:4px;">देखें ›</div>
-                  <span class="amendment-badge changed" style="top:-6px;right:-6px;">v5</span>
+                  <div class="row mt-sm" style="gap:6px;align-items:center;">
+                    <svg class="mi mi-sm" style="color:var(--wc-state-positive);"><use href="#i-check-circle"/></svg>
+                    <span class="t-body" id="zone-chip-value">सब ठीक</span>
+                  </div>
+                  <div class="t-bodySmall" id="zone-chip-cta" style="color:var(--wc-brand-primary);font-weight:600;margin-top:6px;display:flex;align-items:center;gap:4px;">
+                    <svg class="mi mi-xs" id="zone-chip-icon" style="color:var(--wc-brand-primary);"><use href="#i-trending-up"/></svg>
+                    <span>+25 connections उपलब्ध · देखें ›</span>
+                  </div>
+                  <span class="amendment-badge changed" style="top:-6px;right:-6px;">v9.x</span>
                 </div>
               </div>
 
@@ -633,6 +644,29 @@
                 <div class="divider"></div>
                 <div class="t-bodySmall" style="font-weight:600;">Open question / PC for dev-damaged:</div>
                 <div class="t-bodySmall text-secondary mt-sm">dev-damaged currently shows ₹600 liability + "Wiom warehouse में जाँच के बाद देय राशि तय होगी" — internally inconsistent (shows amount AND says amount not yet decided). Should probably split into two sub-states: <strong>"awaiting inspection"</strong> (no amount yet, just status) vs <strong>"inspection done"</strong> (amount + age-band drill-down). Worth a separate dev-damaged audit pass.</div>
+              </div>
+
+              <!-- Fix v9.10 · 18 May 2026 — chip 4 aligned with native app -->
+              <div class="card" style="background:#FFF8E1;border:0;border-left:4px solid var(--wc-state-caution);">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-caution);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">FIX v9.10</span>
+                  <span class="t-bodySmall text-secondary">18 May 2026 · chip 4 aligned with native</span>
+                </div>
+                <div class="t-titleSm mt-md">Chip 4 changed from "ज़ोन और क्षमता" → "काम की स्थिति" to match native app</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged that the 4th chip in the HTML prototype shouldn't be its own concept ("ज़ोन और क्षमता / 25 खुले"). It should be the existing native chip "काम की स्थिति" (CSP eligibility / work status). The F1 opportunity surfaces as a small hint below the main status, prompting the CSP to tap into the drilldown where the full F1 opportunity card lives.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Chip structure now:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • <strong>Label:</strong> "काम की स्थिति" (always — matches native)<br>
+                  • <strong>Status:</strong> ✓ "सब ठीक" (always — CSP is eligible)<br>
+                  • <strong>F1 hint (morphs per flow):</strong><br>
+                  &nbsp;&nbsp;– opportunity: "+25 connections उपलब्ध · देखें ›" (pink trending-up)<br>
+                  &nbsp;&nbsp;– no-capacity: "अभी इंतज़ार · और जानकारी ›" (grey clock)<br>
+                  &nbsp;&nbsp;– blocked: "रुका हुआ · 1 वजह · देखें ›" (amber stop)
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">app.js morph simplified:</div>
+                <div class="t-bodySmall text-secondary mt-sm">Old morph mutated bg, stroke, label, value, CTA. New morph only mutates the icon + hint text + accent color. Label "काम की स्थिति" and status "सब ठीक" stay static — chip is structurally identical to its siblings.</div>
               </div>
 
               <!-- Fix v9.7 · 17 May 2026 — param-key leak + state-code leak in DS·I0 -->
