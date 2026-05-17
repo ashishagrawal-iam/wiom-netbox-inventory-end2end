@@ -124,19 +124,26 @@ window.WORKFLOWS = {
     ]
   },
 
+  // v9.0 · W3 expanded with pre-steps. Spec Workflow 3 Step 1 begins with
+  // "CSP or system reports device missing" — but the prototype had no
+  // declaration UI. Now the walk covers the full arc: CSP finds device
+  // missing in their inventory → declares loss with liability disclosure
+  // → device flips to LOST → wallet card → settlement.
   W3: {
-    title: 'Device Loss — Custody Loss',
-    purpose: 'Device disappears from CSP\'s possession (office/transport/shelf). Age-band liability.',
+    title: 'W3 · Custody Loss (with declaration pre-step)',
+    purpose: 'Device disappears from CSP\'s possession (office/transport/shelf). CSP declares the loss in the app via an explicit liability-disclosure form. ACS then marks LOST with lost_reason=CSP_CUSTODY_LOST; age-band liability recorded; settled at next reconciliation.',
     steps: [
-      { num: 1, label: 'Device → LOST', screen: 'dev-lost',
-        note: 'ACS marks the device LOST with <code>lost_reason=CSP_CUSTODY_LOST</code>. Carries device_commissioned_at + loss_detected_at.' },
-      { num: 2, label: 'Age-band computed', screen: 'dev-lost',
-        note: 'Compensation OS: 28-month device → 40% × ₹1,500 = ₹600. CSP sees the amount, not the formula.' },
-      { num: 3, label: 'Wallet card appears', screen: 'loss-card-custody',
+      { num: 1, label: 'Device in custody · नहीं मिल रहा', screen: 'dev-custodied',
+        note: 'v9.0 pre-step. CSP opens the device record (NB-00123) — was CUSTODIED on shelf, now can\'t locate. Three CTAs visible: सेटअप में नहीं लगाना · वापस करें · "मुझे यह डिवाइस नहीं मिल रहा" (red link). Real-life triggers: office theft, transport loss, shelf audit mismatch, lost during installation.' },
+      { num: 2, label: 'गुम दर्ज करें · liability disclosure', screen: 'report-loss-sheet',
+        note: 'v9.0 pre-step. Form captures कहाँ last seen + कब noticed + optional photo. Critical red disclosure card shows the computed age-band liability up-front (₹600 for a 28-month device · 40% slab), the settlement-cycle date, and the late-recovery clause (Decision 12: charge stands even if found later). Trust line offers 7-day dispute window if CSP regrets the declaration. Primary CTA explicitly states the amount: "हाँ, गुम दर्ज करें · ₹600 liability जुड़ेगी".' },
+      { num: 3, label: 'Device → LOST', screen: 'dev-lost',
+        note: 'CSP confirmed → ACS marks the device LOST with <code>lost_reason=CSP_CUSTODY_LOST</code>. Carries device_commissioned_at + loss_detected_at. Liability sits as recoverable due (not deducted in real-time per SD-5).' },
+      { num: 4, label: 'Wallet card appears', screen: 'loss-card-custody',
         note: 'Wallet feed card: "NetBox custody loss · ₹600 · Device आपकी custody में था". Shown immediately; SD untouched.' },
-      { num: 4, label: 'Awaits reconciliation', screen: 'sd-profile',
+      { num: 5, label: 'Awaits reconciliation', screen: 'sd-profile',
         note: 'Liability sits in बकाया देय with next-settlement date. No real-time SD mutation.' },
-      { num: 5, label: 'Settled', screen: 'settlement-detail',
+      { num: 6, label: 'Settled', screen: 'settlement-detail',
         note: 'At reconciliation: wallet first → SD only if wallet insufficient → escalation if SD at minimum.' }
     ]
   },

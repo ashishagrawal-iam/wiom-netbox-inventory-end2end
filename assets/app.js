@@ -224,6 +224,13 @@
   // (workflow not present here) leaves the HTML's static copy untouched.
   const WORKFLOW_CONTENT = {
     'W3': { // Custody loss · lost_reason = CSP_CUSTODY_LOST · age-band ₹600
+      // v9.0 · W3 pre-step morph on dev-custodied: reframes the banner so the
+      // CSP understands they're here to investigate a missing device, not to
+      // routinely manage a CUSTODIED stock item.
+      'dev-custodied': {
+        'dc-banner-title': 'नहीं मिल रहा?',
+        'dc-banner-sub': 'अगर NB-00123 आपकी inventory में नहीं है, "मुझे यह डिवाइस नहीं मिल रहा" दबाएं'
+      },
       'dev-lost': {
         'dl-banner-title': 'गुम बताया गया है',
         'dl-banner-sub': 'Custody loss · age-band के हिसाब से देय',
