@@ -49,6 +49,30 @@ window.ANNOTATIONS = {
     ]
   },
 
+  'zone-capacity': {
+    title: 'Zone & Capacity · Drilldown',
+    sub: 'NEW v6 · 17 May 2026 · between chip and Capacity बढ़ाएं',
+    source: 'SDA',
+    sections: [
+      { crumb: 'Why this exists (v6)',
+        anchors: [
+          { kind: 'added', text: 'Assurance Strip chips are metric tiles. Like every other chip (connections, earnings, service status), the Zone & Capacity chip opens a <strong>drilldown</strong> first — not a flow action. The drilldown shows context, then has a CTA into Capacity बढ़ाएं. This matches the Dashboard\'s established pattern.' }
+        ]},
+      { crumb: 'Content',
+        anchors: [
+          { kind: 'added', text: '<strong>Hero</strong>: "आप अभी 25 और connections ले सकते हैं" + zone-demand context (Sector 8, growing).' },
+          { kind: 'added', text: '<strong>Zone status card</strong>: area, demand trend, Wiom partner count.' },
+          { kind: 'added', text: '<strong>Current capacity card</strong>: 51 lifetime → 45 active → 25 available headroom. Shows the math so the "25 खुले" chip number is grounded.' },
+          { kind: 'added', text: '<strong>"यह क्यों दिख रहा है" card</strong>: reinforces directive 10 — "Wiom infrastructure manage करता है। आप अपनी service capacity बढ़ाने का फैसला लेते हैं, अपने pace पर।"' },
+          { kind: 'added', text: '<strong>CTA</strong>: "Capacity बढ़ाइए" → opens State A (general capacity offer) → State B (final batch confirm) → home with order tracker. Same downstream chain as before.' }
+        ]},
+      { crumb: 'Where it sits in W2',
+        anchors: [
+          { kind: 'policy', text: 'W2 stepper now: Dashboard chip → <strong>drilldown (this)</strong> → State A → State B → home tracker. Inserts one read-and-confirm step before the action — partner sees context before committing intent.' }
+        ]}
+    ]
+  },
+
   'dashboard-home': {
     title: 'Dashboard · Home (Assurance Strip)',
     sub: 'NEW v5 · 17 May 2026 · Capacity entry now lives here',
