@@ -346,18 +346,21 @@
         'dc-cta-primary': 'Wiom team के लिए details देखें'
       }
     },
-    'DSI0': { // IDLE · within grace period (day 3 of P_CARRY_FEE_IDLE_DAYS = 7)
+    'DSI0': { // IDLE · within grace period (parameter value hidden from CSP)
+      // v9.7 spec-compliance: removed P_CARRY_FEE_IDLE_DAYS = 7 param leak
+      // (Must-Not-Do #10), replaced "Customer churn" + "redeploy" + "IDLE"
+      // with Hindi-first phrasing. CSP sees outcome, not codes/state names.
       'dev-idle': {
-        'di-banner-title': 'हाल ही में recover हुआ',
-        'di-banner-sub': 'Grace period चालू · carry fee अभी शुरू नहीं हुई',
-        'di-days-pill': 'Grace · 4 दिन बाकी',
-        'di-action-body': 'Customer churn के बाद आपको थोड़ा समय मिलता है redeploy करने का। 4 दिन में carry fee शुरू होगी (P_CARRY_FEE_IDLE_DAYS = 7) — तब तक redeploy कर लें तो कोई carry fee नहीं लगेगी।',
+        'di-banner-title': 'यह नेट बॉक्स अभी-अभी वापस आया है',
+        'di-banner-sub': 'थोड़ा समय है · carry fee अभी शुरू नहीं हुई',
+        'di-days-pill': '4 दिन बाकी',
+        'di-action-body': 'ग्राहक के जाने के बाद आपको थोड़ा समय मिलता है किसी और ग्राहक के पास लगाने का। अगले 4 दिन में लग गया तो कोई carry fee नहीं — उसके बाद रोज़ ₹5 जुड़ने लगेगा।',
         'di-fee-title': 'कैरी फ़ी',
         'di-fee-daily-label': 'अभी',
-        'di-fee-daily': '₹0 · grace में',
+        'di-fee-daily': '₹0',
         'di-fee-total-label': 'अब तक',
         'di-fee-total': '₹0',
-        'di-fee-footnote': 'Grace period के 4 दिन बाद ₹5/day शुरू होगी (अगर तब भी IDLE हो)'
+        'di-fee-footnote': '4 दिन बाद रोज़ ₹5 carry fee समायोजित होनी शुरू होगी (अगर तब भी खाली पड़ा हो)'
       }
     },
     'DSI1': { // IDLE · day 1 · just started
