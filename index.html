@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=9.1">
-  <link rel="stylesheet" href="assets/proto.css?v=9.1">
+  <link rel="stylesheet" href="assets/tokens.css?v=9.2">
+  <link rel="stylesheet" href="assets/proto.css?v=9.2">
 </head>
 <body class="show-amendments">
 
@@ -149,6 +149,7 @@
     <div class="item is-new" data-screen="legacy-below"><span class="dot"></span> SD Profile · Legacy (below) <span class="meta">NEW</span></div>
     <div class="item is-new" data-screen="sd-topup"><span class="dot"></span> SD Top-Up <span class="meta">NEW</span></div>
     <div class="item is-new" data-screen="report-loss-sheet" style="border-left-color:var(--wc-state-negative);"><span class="dot" style="background:var(--wc-state-negative);"></span> गुम दर्ज करें · W3 pre-step <span class="meta">v9.0</span></div>
+    <div class="item is-new" data-screen="liability-breakdown"><span class="dot"></span> राशि का विवरण · drill-down <span class="meta">v9.2</span></div>
     <div class="item is-new" data-screen="loss-card-custody"><span class="dot"></span> Wallet · Custody loss card <span class="meta">NEW</span></div>
     <div class="item is-new" data-screen="loss-card-norecovery"><span class="dot"></span> Wallet · Non-recovery card <span class="meta">NEW</span></div>
     <div class="item is-new" data-screen="recovery-success"><span class="dot"></span> Recovery success · +₹50 <span class="meta">NEW</span></div>
@@ -560,6 +561,43 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Critical fix v9.2 · 17 May 2026 — Must-Not-Do compliance sweep -->
+              <div class="card" style="background:#FFE0E0;border:0;border-left:4px solid var(--wc-state-negative);">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-negative);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">CRITICAL FIX v9.2</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · Must-Not-Do compliance sweep</span>
+                </div>
+                <div class="t-titleSm mt-md">Spec-violation sweep: age-band formula was leaking everywhere</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged that <code>report-loss-sheet</code> exposed "Device age: 28 months · 40% slab" — a direct violation of Design Note 3 <strong>Must-Not-Do #12</strong>: <em>"Never expose age-band formula or depreciation logic. Show computed amount only. If disputed, age/band breakdown available on drill-down."</em> Then swept all workflows for the same and related violations.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Violations found and fixed (across all workflows):</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  <strong>Must-Not-Do #12 (age-band formula exposure):</strong><br>
+                  • <code>report-loss-sheet</code> — "Device age · 28 months · 40% slab" row removed<br>
+                  • <code>dev-lost</code> — "Device age" row + "Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300" table removed<br>
+                  • <code>dev-damaged</code> — "Damage (24mo · 40% slab)" + "age-band के हिसाब से देय" banner sub + body line all reframed<br>
+                  • <code>loss-card-custody</code> — "Device age · 28 months · 40% slab" row removed<br>
+                  • <strong>WORKFLOW_CONTENT W3 dev-lost morph</strong> — <code>dl-meta-value</code> ("28 months · 40% slab") and <code>dl-formula</code> (full band table) rewritten to neutral copy<br>
+                  <br>
+                  <strong>Must-Not-Do #3 (no कट/punishment framing):</strong><br>
+                  • <code>dev-idle</code> — "रोज़ ₹5 कट रहे हैं" → "रोज़ ₹5 carry fee समायोजित हो रहा है"<br>
+                  <br>
+                  <strong>Must-Not-Do #10 (no ledger codes in user copy):</strong><br>
+                  • <code>loss-card-custody</code> wallet-feed entry — "WALLET_TOPUP" → "वॉलेट में पैसे जोड़े"
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">NEW screen: <code>liability-breakdown</code></div>
+                <div class="t-bodySmall text-secondary mt-sm">Spec explicitly permits the age-band breakdown <em>on drill-down for dispute context</em>. Built that drill-down: device identity + computed amount + age band slab the device falls into (highlighted with "← आपका device यहाँ") + full age-band table + "विवाद दर्ज करें" CTA bridging to W10. Linked from "राशि कैसे तय हुई · विवरण देखें" on dev-lost, dev-damaged, loss-card-custody, and report-loss-sheet.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">What stays unchanged (already compliant):</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • W4 dev-lost morph — uses "Flat · age-irrelevant" framing; no formula leak ✅<br>
+                  • W12 dev-lost morph — no formula text; just "late recovery context" ✅<br>
+                  • F1 surfaces (State A/B/C/D/Blocked) — no liability amounts exposed ✅<br>
+                  • SD-profile bucket cards — show computed amounts only, no slabs ✅
+                </div>
+              </div>
+
               <!-- Improvement v9.1 · 17 May 2026 — W3 navigation chain (full end-to-end) -->
               <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -1559,7 +1597,8 @@
                 <div class="divider"></div>
                 <div class="row between"><span class="t-body text-secondary">रोज़ का</span><span class="t-body" style="font-weight:600;">₹5</span></div>
                 <div class="row between mt-sm"><span class="t-body text-secondary">अब तक</span><span class="t-body" style="font-weight:600;">₹110</span></div>
-                <div style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);border-radius:8px;padding:8px 12px;margin-top:12px;font-size:13px;font-weight:600;">रोज़ ₹5 कट रहे हैं</div>
+                <!-- v9.2 spec-compliance (Must-Not-Do #3): "कट" → "समायोजित" -->
+                <div style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);border-radius:8px;padding:8px 12px;margin-top:12px;font-size:13px;font-weight:600;">रोज़ ₹5 carry fee समायोजित हो रहा है</div>
               </div>
             </div>
             <div class="cta-bar">
@@ -1732,21 +1771,27 @@
                 <div class="text">
                   <div class="title">खराब बताया गया है</div>
                   <div class="sub preamend-only">जाँच चल रही है — डैमेज क्लेम लग सकता है</div>
-                  <div class="sub amended-only">Age-band के हिसाब से देय — अगले settlement में</div>
+                  <div class="sub amended-only">अगले Settlement Cycle में समायोजित</div>
                 </div>
               </div>
+              <!-- v9.2 spec-compliance (Must-Not-Do #12 + #3):
+                   removed "age-band के हिसाब से" formula reference + "कट" framing.
+                   Primary view shows computed amount + settlement timing only.
+                   Formula breakdown moved to "विवरण देखें" drill-down. -->
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">क्या होगा</div>
                 <div class="t-body text-secondary preamend-only">व्योम जाँच के बाद फ़ैसला करेगा। डैमेज क्लेम आपके वॉलेट से कट सकता है।</div>
-                <div class="t-body text-secondary amended-only">Wiom warehouse में जाँच के बाद age-band के हिसाब से liability तय होगी। अगले Settlement Cycle में शामिल किया जाएगा।</div>
+                <div class="t-body text-secondary amended-only">Wiom warehouse में जाँच के बाद देय राशि तय होगी। अगले Settlement Cycle में शामिल की जाएगी।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm preamend-only">संभावित देय</div>
                 <div class="t-titleSm mb-sm amended-only">देय राशि</div>
                 <div class="row between preamend-only"><span class="t-body text-secondary">डैमेज क्लेम</span><span class="t-body text-negative" style="font-weight:700;">₹1,538</span></div>
-                <div class="row between amended-only"><span class="t-body text-secondary">Damage (24mo · 40% slab)</span><span class="t-body text-negative" style="font-weight:700;">₹600</span></div>
-                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">अगला settlement</span><span class="t-body">1 Jul 2026</span></div>
-                <div class="t-bodySmall text-secondary mt-sm">अगले settlement में शामिल होगा</div>
+                <div class="row between amended-only"><span class="t-body text-secondary">Damage देय</span><span class="t-body text-negative" style="font-weight:700;">−₹600</span></div>
+                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">अगला Settlement Cycle</span><span class="t-body">1 Jul 2026</span></div>
+                <div class="amended-only mt-md" style="padding-top:8px;border-top:1px solid var(--wc-stroke-primary);">
+                  <span data-tap="liability-breakdown" class="t-ctaSecondary" style="color:var(--wc-brand-primary);font-weight:600;cursor:pointer;">राशि कैसे तय हुई · विवरण देखें ›</span>
+                </div>
               </div>
               <div class="card mt-md amended-only row between" data-tap="dispute-form" style="cursor:pointer;">
                 <span class="t-body" style="color:var(--wc-brand-primary);font-weight:600;">विवाद दर्ज करें</span>
@@ -1754,6 +1799,54 @@
               </div>
             </div>
             <div class="cta-bar"><button data-tap="dev-retrieval-pending" class="cta cta-tertiary">नेट बॉक्स सही है</button></div>
+          </div>
+        </section>
+
+        <!-- v9.2 · LIABILITY BREAKDOWN · drill-down where the age-band formula
+             IS permitted per Design Note 3 Must-Not-Do #12: "CSP sees ₹600 देय.
+             If disputed, age/band breakdown available on drill-down." This is
+             that drill-down. Linked from "विवरण देखें" on dev-lost / dev-damaged
+             / report-loss-sheet primary views. -->
+        <section class="screen" id="screen-liability-breakdown">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body" style="background:white;">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">देय राशि का विवरण</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card">
+                <div class="t-bodySmall text-secondary">किस device के लिए</div>
+                <div class="t-titleSm mt-sm">NB-00567</div>
+                <div class="t-bodySmall text-secondary mt-sm">Custody loss · आपकी custody में था</div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">देय राशि कैसे तय हुई</div>
+                <div class="row between"><span class="t-body text-secondary">Device की मूल कीमत</span><span class="t-body">₹1,500</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Device की उम्र (commissioned से loss तक)</span><span class="t-body" style="font-weight:600;">28 महीने</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Age-band slab</span><span class="t-body">40%</span></div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">देय राशि (40% × ₹1,500)</span><span class="t-titleSm text-negative" style="font-weight:700;">−₹600</span></div>
+              </div>
+
+              <div class="card mt-md">
+                <div class="t-titleSm mb-sm">Age-band table</div>
+                <div class="row between"><span class="t-body text-secondary">0–12 महीने</span><span class="t-body">100% (पूरी कीमत)</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">12–24 महीने</span><span class="t-body">70%</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">24–36 महीने</span><span class="t-body" style="font-weight:600;color:var(--wc-brand-primary);">40% ← आपका device यहाँ</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">36+ महीने</span><span class="t-body">न्यूनतम ₹300</span></div>
+              </div>
+
+              <div class="card mt-md" style="background:var(--wc-bg-info);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-state-info);"><svg class="mi mi-sm"><use href="#i-info"/></svg><span class="t-titleSm" style="color:var(--wc-state-info);">यह विवरण क्यों दिखता है</span></div>
+                <div class="t-bodyMd mt-sm">सामान्य view में आपको सिर्फ अंतिम राशि (₹600) दिखती है — formula नहीं। यह विवरण सिर्फ तब उपयोगी है जब आप राशि से सहमत न हों।</div>
+              </div>
+            </div>
+            <div class="cta-bar">
+              <button data-tap="dispute-form" class="cta cta-tertiary">विवाद दर्ज करें</button>
+              <button data-tap="__back" class="cta cta-link" style="margin:0 auto;">ठीक है</button>
+            </div>
           </div>
         </section>
 
@@ -1800,7 +1893,9 @@
                 </div>
               </div>
 
-              <!-- Liability disclosure (critical — prevents surprise) -->
+              <!-- Liability disclosure · v9.2 spec-compliance (Must-Not-Do #12):
+                   shows computed amount only — age-band breakdown moved to
+                   "विवरण देखें" drill-down per Design Note 3 §Part C. -->
               <div class="card mt-md" style="background:#FFE0E0;border:0;border-left:4px solid var(--wc-state-negative);position:relative;">
                 <div class="row" style="gap:8px;color:var(--wc-state-negative);align-items:center;">
                   <svg class="mi mi-sm"><use href="#i-warning"/></svg>
@@ -1808,12 +1903,14 @@
                 </div>
                 <div class="divider"></div>
                 <div class="row between"><span class="t-body">Custody loss देय</span><span class="t-body text-negative" id="rls-amount" style="font-weight:700;">−₹600</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">Device age</span><span class="t-body" id="rls-age">28 months · 40% slab</span></div>
                 <div class="row between mt-sm"><span class="t-body text-secondary">अगला Settlement Cycle</span><span class="t-body">1 Jul 2026</span></div>
                 <div class="divider"></div>
-                <div class="t-bodyMd">यह liability अभी ही दर्ज हो जाएगी। अगले Settlement पर wallet से समायोजित होगी।</div>
-                <div class="t-bodySmall text-secondary mt-sm"><strong>अगर बाद में मिल जाए:</strong> वापस कर सकते हैं — exposure बंद होगा, लेकिन ₹600 charge बना रहेगा (Decision 12 · late recovery)। ₹50 reward window सिर्फ SLA के अंदर recovery पर मिलता है।</div>
-                <span class="amendment-badge changed" style="top:8px;right:8px;background:var(--wc-state-negative);color:white;">v9.0</span>
+                <div class="t-bodyMd">यह liability अभी ही दर्ज हो जाएगी। अगले Settlement Cycle पर wallet से समायोजित होगी।</div>
+                <div class="t-bodySmall text-secondary mt-sm"><strong>अगर बाद में मिल जाए:</strong> वापस कर सकते हैं — exposure बंद होगा, लेकिन ₹600 charge बना रहेगा (Decision 12 · late recovery)।</div>
+                <div class="mt-md" style="padding-top:8px;border-top:1px solid rgba(0,0,0,0.06);">
+                  <span data-tap="liability-breakdown" class="t-ctaSecondary" style="color:var(--wc-brand-primary);font-weight:600;cursor:pointer;">राशि कैसे तय हुई · विवरण देखें ›</span>
+                </div>
+                <span class="amendment-badge changed" style="top:8px;right:8px;background:var(--wc-state-negative);color:white;">v9.2</span>
               </div>
 
               <!-- Trust line -->
@@ -1851,13 +1948,21 @@
                 <div class="t-body text-secondary preamend-only">रिकवरी राशि आपके वॉलेट से कटेगी। अगर मिल जाए तो तुरंत व्योम को बताएं।</div>
                 <div class="t-body text-secondary amended-only" id="dl-body">Device आपकी custody में था — आपकी ज़िम्मेदारी। अगले Settlement Cycle में शामिल किया जाएगा।</div>
               </div>
+              <!-- v9.2 spec-compliance (Must-Not-Do #12): primary view shows
+                   computed amount only. Age-band breakdown moved to "विवरण देखें"
+                   drill-down. dl-meta-* and dl-formula IDs retained so workflow
+                   morphs (W3/W4/W12) can still inject context-specific microcopy
+                   (e.g., W4 "Flat · age-irrelevant"), but they no longer carry
+                   formula text by default. -->
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">देय राशि</div>
                 <div class="row between preamend-only"><span class="t-body text-secondary">नुकसान वसूली</span><span class="t-body text-negative" style="font-weight:700;">₹3,000</span></div>
                 <div class="row between amended-only"><span class="t-body text-secondary" id="dl-amount-label">Custody loss देय</span><span class="t-body text-negative" id="dl-amount" style="font-weight:700;">−₹600</span></div>
-                <div class="row between mt-sm amended-only"><span class="t-body text-secondary" id="dl-meta-label">Device age</span><span class="t-body" id="dl-meta-value">28 months · 40% slab</span></div>
-                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">अगला settlement</span><span class="t-body">1 Jul 2026</span></div>
-                <div class="amended-only t-bodySmall text-secondary mt-sm" id="dl-formula">Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300</div>
+                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">अगला Settlement Cycle</span><span class="t-body">1 Jul 2026</span></div>
+                <div class="amended-only t-bodySmall text-secondary mt-sm" id="dl-meta-line"><span id="dl-meta-label">यह राशि</span> · <span id="dl-meta-value">अगले Settlement Cycle में wallet से समायोजित</span></div>
+                <div class="amended-only mt-md" style="padding-top:8px;border-top:1px solid var(--wc-stroke-primary);">
+                  <span data-tap="liability-breakdown" class="t-ctaSecondary" id="dl-formula" style="color:var(--wc-brand-primary);font-weight:600;cursor:pointer;">राशि कैसे तय हुई · विवरण देखें ›</span>
+                </div>
               </div>
             </div>
             <!-- v8.9 · CTA grammar fix + workflow-aware label. Old "नेट बॉक्स खोज गया"
@@ -2477,6 +2582,11 @@
             </header>
             <div class="scrollable" style="padding:16px;">
               <div class="t-bodySmall text-secondary mb-sm" style="text-transform:uppercase;letter-spacing:0.5px;">आज</div>
+              <!-- v9.2 spec-compliance:
+                   · Removed "28 months · 40% slab" formula leak (Must-Not-Do #12)
+                   · Replaced ledger code "WALLET_TOPUP" with user-readable label (Must-Not-Do #10)
+                   · "अगले settlement" → "अगले Settlement Cycle" (terminology lock)
+                   Formula breakdown reachable via "राशि कैसे तय हुई · विवरण देखें". -->
               <div class="card" style="border-left:4px solid var(--wc-state-negative);">
                 <div class="row" style="gap:8px;color:var(--wc-state-negative);">
                   <svg class="mi mi-sm"><use href="#i-warning"/></svg>
@@ -2484,11 +2594,14 @@
                 </div>
                 <div class="divider"></div>
                 <div class="row between"><span class="t-body text-secondary">Device</span><span class="t-body" style="font-weight:600;">NB-00472</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">देय राशि</span><span class="t-titleSm text-negative">₹600</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">Device age</span><span class="t-body">28 months · 40% slab</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">देय राशि</span><span class="t-titleSm text-negative">−₹600</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">अगला Settlement Cycle</span><span class="t-body">1 Jul 2026</span></div>
                 <div class="divider"></div>
                 <div class="t-bodyMd">Device आपकी custody में था — आपकी ज़िम्मेदारी।</div>
-                <div class="t-bodyMd text-secondary mt-sm">अगले settlement में शामिल होगा।</div>
+                <div class="t-bodyMd text-secondary mt-sm">अगले Settlement Cycle में wallet से समायोजित होगा।</div>
+                <div class="mt-md" style="padding-top:8px;border-top:1px solid var(--wc-stroke-primary);">
+                  <span data-tap="liability-breakdown" class="t-ctaSecondary" style="color:var(--wc-brand-primary);font-weight:600;cursor:pointer;">राशि कैसे तय हुई · विवरण देखें ›</span>
+                </div>
               </div>
               <div class="card mt-md row between" data-tap="dispute-form" style="cursor:pointer;">
                 <span class="t-body">विवाद दर्ज करें</span>
@@ -2496,7 +2609,7 @@
               </div>
               <div class="t-bodySmall text-secondary mt-md" style="text-transform:uppercase;letter-spacing:0.5px;">कल</div>
               <div class="card mt-sm">
-                <div class="row between"><span class="t-body">WALLET_TOPUP</span><span class="t-body text-positive">+ ₹2,000</span></div>
+                <div class="row between"><span class="t-body">वॉलेट में पैसे जोड़े</span><span class="t-body text-positive">+ ₹2,000</span></div>
                 <div class="t-bodySmall text-secondary">UPI · 14 May 11:30 AM</div>
               </div>
             </div>
@@ -2715,9 +2828,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=9.1"></script>
-<script src="assets/annotations-new.js?v=9.1"></script>
-<script src="assets/workflows.js?v=9.1"></script>
-<script src="assets/app.js?v=9.1"></script>
+<script src="assets/annotations.js?v=9.2"></script>
+<script src="assets/annotations-new.js?v=9.2"></script>
+<script src="assets/workflows.js?v=9.2"></script>
+<script src="assets/app.js?v=9.2"></script>
 </body>
 </html>

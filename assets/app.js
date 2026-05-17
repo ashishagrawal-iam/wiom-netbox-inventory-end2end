@@ -231,15 +231,18 @@
         'dc-banner-title': 'नहीं मिल रहा?',
         'dc-banner-sub': 'अगर NB-00123 आपकी inventory में नहीं है, "मुझे यह डिवाइस नहीं मिल रहा" दबाएं'
       },
+      // v9.2 spec-compliance · removed age-band/slab strings from dl-meta-*.
+      // Primary view now shows computed amount + settlement timing only.
+      // Formula breakdown lives behind the "विवरण देखें" drill-down (Must-Not-Do #12).
       'dev-lost': {
         'dl-banner-title': 'गुम बताया गया है',
-        'dl-banner-sub': 'Custody loss · age-band के हिसाब से देय',
+        'dl-banner-sub': 'Custody loss · अगले Settlement Cycle में समायोजित',
         'dl-body': 'Device आपकी custody में था — आपकी ज़िम्मेदारी। अगले Settlement Cycle में शामिल किया जाएगा।',
         'dl-amount-label': 'Custody loss देय',
         'dl-amount': '−₹600',
-        'dl-meta-label': 'Device age',
-        'dl-meta-value': '28 months · 40% slab',
-        'dl-formula': 'Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300',
+        'dl-meta-label': 'यह राशि',
+        'dl-meta-value': 'अगले Settlement Cycle में wallet से समायोजित',
+        'dl-formula': 'राशि कैसे तय हुई · विवरण देखें ›',
         'dl-cta': 'डिवाइस मिल गया · वापस करूंगा',
         'dl-cta-hint': '₹600 की liability बनी रहेगी · सिर्फ exposure बंद होगा (late recovery)'
       }
@@ -247,27 +250,27 @@
     'W4': { // Customer Non-Recovery · ₹200 flat · partial responsibility
       'dev-lost': {
         'dl-banner-title': 'ग्राहक से वापस नहीं आया',
-        'dl-banner-sub': 'Recovery SLA खत्म · ₹200 flat',
-        'dl-body': '30 दिन की recovery SLA खत्म हो गई और customer ने NetBox वापस नहीं किया। आंशिक ज़िम्मेदारी — flat amount, device age से नहीं।',
+        'dl-banner-sub': 'Recovery SLA खत्म · आंशिक देय',
+        'dl-body': '30 दिन की recovery SLA खत्म हो गई और customer ने NetBox वापस नहीं किया। आंशिक ज़िम्मेदारी।',
         'dl-amount-label': 'Non-recovery देय',
         'dl-amount': '−₹200',
-        'dl-meta-label': 'Liability type',
-        'dl-meta-value': 'Flat · age-irrelevant',
-        'dl-formula': 'Non-recovery: सभी devices पर ₹200 flat। ₹50 reward window SLA के साथ खत्म।',
+        'dl-meta-label': 'यह राशि',
+        'dl-meta-value': 'अगले Settlement Cycle में SD से सीधे समायोजित',
+        'dl-formula': 'राशि कैसे तय हुई · विवरण देखें ›',
         'dl-cta': 'Customer ने वापस किया · आगे Wiom को दूंगा',
-        'dl-cta-hint': '₹200 की liability बनी रहेगी · ₹50 reward window पहले ही expire हो गई'
+        'dl-cta-hint': '₹200 की liability बनी रहेगी · ₹50 reward window expire हो चुका'
       }
     },
     'W12': { // Late Recovery · prior LOST · charge stands
       'dev-lost': {
         'dl-banner-title': 'पहले LOST मार्क हुआ था',
         'dl-banner-sub': '₹200 पहले ही दर्ज · late recovery context',
-        'dl-body': 'यह device 1 May को LOST mark हुआ था (non-recovery, ₹200 चार्ज हो चुका)। अब late में मिल गया — exposure बंद होगा पर charge बना रहेगा। ₹50 reward window पहले ही expire हो गई।',
+        'dl-body': 'यह device पहले LOST mark हुआ था और ₹200 charge हो चुका है। अब late में मिल गया — exposure बंद होगा पर charge बना रहेगा।',
         'dl-amount-label': 'पहले से दर्ज (बना रहेगा)',
         'dl-amount': '−₹200',
-        'dl-meta-label': 'Status',
-        'dl-meta-value': 'पहले LOST · अब late recovery',
-        'dl-formula': 'Late recovery: exposure closes, charge stands, no reward. Decision 12 के अनुसार।',
+        'dl-meta-label': 'स्थिति',
+        'dl-meta-value': 'पहले LOST · अब late recovery (Decision 12)',
+        'dl-formula': 'राशि कैसे तय हुई · विवरण देखें ›',
         'dl-cta': 'डिवाइस मिल गया · वापस करूंगा',
         'dl-cta-hint': 'पहले की ₹200 liability नहीं हटेगी'
       },
