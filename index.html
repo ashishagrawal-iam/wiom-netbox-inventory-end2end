@@ -101,7 +101,7 @@
 
     <div class="group">Order side · Pre-amendment</div>
     <div class="item is-new active" data-screen="dashboard-home"><span class="dot"></span> Dashboard · Home <span class="meta">NEW v5</span></div>
-    <div class="item is-new" data-screen="zone-capacity"><span class="dot"></span> Zone & Capacity drilldown <span class="meta">NEW v6</span></div>
+    <div class="item is-new" data-screen="zone-capacity"><span class="dot"></span> नया काम drilldown <span class="meta">v7</span></div>
     <div class="item" data-screen="nb-home"><span class="dot"></span> NetBox Home</div>
     <div class="item has-change" data-screen="request-sheet"><span class="dot"></span> Request New <span class="meta">changed</span></div>
     <div class="item has-change" data-screen="low-balance"><span class="dot"></span> Low Balance <span class="meta">changed</span></div>
@@ -222,54 +222,58 @@
         </section>
 
         <!-- ============================================================
-             ZONE & CAPACITY DRILLDOWN — Improvement v6 (17 May 2026)
-             Drilldown opened by tapping the Assurance Strip chip. Shows
-             zone demand context + current capacity breakdown, ending in
-             a "Capacity बढ़ाइए" CTA that enters the State A → B → home chain.
+             नया काम DRILLDOWN — v7 (17 May 2026)
+             Existing app drilldown pattern (matching the "नया काम" surface
+             already used elsewhere). Capacity opportunity is surfaced as
+             a SECTION/CARD inside this drilldown — not a separate screen.
+             Tap the card → enters the Capacity बढ़ाएं (State A → B → home) chain.
              ============================================================ -->
         <section class="screen" id="screen-zone-capacity">
           <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
-          <div class="screen-body">
+          <div class="screen-body" style="background:white;">
             <header class="app-bar light">
               <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
-              <div class="title">Zone & Capacity</div>
             </header>
             <div class="scrollable" style="padding:16px;">
-              <!-- Hero: capacity headroom in CSP's zone -->
-              <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;position:relative;">
-                <div class="row" style="gap:8px;color:var(--wc-brand-primary);"><svg class="mi mi-sm"><use href="#i-trending-up"/></svg><span class="t-titleSm" style="color:var(--wc-brand-primary);">आपके area में मौका</span></div>
-                <div class="t-headingLg mt-sm">आप अभी <span class="text-brand">25 और</span><br>connections ले सकते हैं</div>
-                <div class="t-bodyMd text-secondary mt-sm">Sector 8 में customer demand growing है।</div>
-                <span class="amendment-badge changed" style="top:8px;right:8px;">v6</span>
+              <!-- Drilldown header — matches existing pattern (wireless icon + title) -->
+              <div class="row" style="gap:10px;align-items:center;">
+                <svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-router"/></svg>
+                <h2 style="margin:0;font-size:22px;font-weight:700;">नया काम</h2>
+              </div>
+              <div class="t-body text-secondary mt-md">अभी कनेक्शन सेट हो रहे हैं — जल्द अपडेट मिलेगा</div>
+
+              <!-- ✨ NEW v7 · Capacity opportunity card · this is the new section
+                   inside the existing drilldown. Surfaces when system detects
+                   demand opportunity. Tap → opens Capacity बढ़ाएं (State A). -->
+              <div class="card mt-lg" data-tap="growth-intent" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;position:relative;cursor:pointer;">
+                <div class="row" style="gap:8px;align-items:center;color:var(--wc-brand-primary);">
+                  <svg class="mi mi-sm"><use href="#i-trending-up"/></svg>
+                  <span class="t-titleSm" style="color:var(--wc-brand-primary);">आपके area में मौका</span>
+                  <span class="amendment-badge changed" style="position:static;margin-left:auto;background:var(--wc-brand-primary);color:white;">v7</span>
+                </div>
+                <div class="t-titleSm mt-sm" style="font-size:18px;">आप अभी 25 और connections ले सकते हैं</div>
+                <div class="t-bodyMd text-secondary mt-sm">Sector 8 में customer demand growing है। Wiom आपको offer कर रहा है।</div>
+                <div class="row between mt-md">
+                  <span class="t-bodySmall text-secondary">Capacity बढ़ाने के लिए</span>
+                  <span class="t-ctaSecondary" style="color:var(--wc-brand-primary);">देखें ›</span>
+                </div>
               </div>
 
-              <!-- Zone status -->
+              <!-- Existing "और कनेक्शन कैसे मिलते हैं?" card — matches the image -->
               <div class="card mt-md">
-                <div class="t-titleSm mb-sm">आपका zone</div>
-                <div class="row between"><span class="t-body text-secondary">Area</span><span class="t-body" style="font-weight:600;">Sector 8</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">Demand status</span><span class="t-body text-positive" style="font-weight:600;">Growing ↑</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">Zone में Wiom partners</span><span class="t-body">3 (आप + 2)</span></div>
+                <div class="row between">
+                  <div class="t-titleSm" style="font-size:18px;">और कनेक्शन कैसे मिलते हैं?</div>
+                  <div style="width:40px;height:40px;border-radius:50%;background:var(--wc-bg-subtle);display:grid;place-items:center;"><svg class="mi mi-sm text-secondary"><use href="#i-up"/></svg></div>
+                </div>
+                <div class="t-body mt-md">Wiom आपको कनेक्शन तब भेजता है जब:</div>
+                <div class="t-body mt-sm">· आपकी क्वालिटी अच्छी हो</div>
+                <div class="t-body">· कनेक्शन की मांग हो</div>
+                <div class="t-body">· नेटवर्क में जगह हो</div>
+                <div class="t-body mt-md">तीनों सही हों तो कनेक्शन अपने आप बढ़ते हैं।<br>कुछ नहीं करना पड़ता।</div>
+                <div class="mt-md">
+                  <span class="t-ctaSecondary" style="color:var(--wc-brand-primary);">क्वालिटी कैसी है → देखें</span>
+                </div>
               </div>
-
-              <!-- Current capacity breakdown -->
-              <div class="card mt-md">
-                <div class="t-titleSm mb-sm">अभी की capacity</div>
-                <div class="row between"><span class="t-body text-secondary">कुल लगाए connections</span><span class="t-body" style="font-weight:600;">51</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">अभी सक्रिय</span><span class="t-body" style="font-weight:600;">45</span></div>
-                <div class="divider"></div>
-                <div class="row between"><span class="t-body">और ले सकते हैं</span><span class="t-titleSm" style="color:var(--wc-brand-primary);">25 connections</span></div>
-                <div class="t-bodySmall text-secondary mt-sm">System ने आपके zone की demand देखकर ये opportunity surface की है।</div>
-              </div>
-
-              <!-- Why this matters -->
-              <div class="card mt-md" style="background:var(--wc-bg-info);border-color:transparent;">
-                <div class="row" style="gap:8px;color:var(--wc-state-info);"><svg class="mi mi-sm"><use href="#i-info"/></svg><span class="t-titleSm" style="color:var(--wc-state-info);">यह क्यों दिख रहा है</span></div>
-                <div class="t-bodyMd mt-sm">Wiom infrastructure manage करता है — connections, devices, routing सब system-managed। आप अपनी service capacity बढ़ाने का फैसला लेते हैं, अपने pace पर।</div>
-              </div>
-            </div>
-            <div class="cta-bar">
-              <button data-tap="growth-intent" class="cta cta-primary">Capacity बढ़ाइए</button>
-              <button data-tap="__back" class="cta cta-link" style="margin:0 auto;">अभी नहीं</button>
             </div>
           </div>
         </section>
@@ -286,15 +290,25 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
-              <!-- Improvement v6 · 17 May 2026 — Zone & Capacity drilldown -->
-              <div class="card" style="background:var(--wc-bg-info);border:0;">
+              <!-- Improvement v7 · 17 May 2026 — supersedes v6 -->
+              <div class="card" style="background:var(--wc-bg-positive);border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
-                  <span style="background:var(--wc-state-info);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v6</span>
+                  <span style="background:var(--wc-state-positive);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v7</span>
                   <span class="t-bodySmall text-secondary">17 May 2026</span>
                 </div>
-                <div class="t-titleSm mt-md">Zone & Capacity chip → drilldown (not direct action)</div>
-                <div class="t-bodyMd text-secondary mt-sm">Assurance Strip chips are metric tiles. Like every other chip, "Zone & Capacity" now opens a drilldown first — showing zone demand context, current capacity breakdown, and a "Capacity बढ़ाइए" CTA that enters the State A → B → home chain. Matches the Dashboard's established drilldown pattern.</div>
-                <div class="t-bodySmall text-secondary mt-sm">W2 stepper now: Dashboard chip → drilldown → State A → State B → home tracker.</div>
+                <div class="t-titleSm mt-md">Reuse existing "नया काम" drilldown — don't invent a new screen</div>
+                <div class="t-bodyMd text-secondary mt-sm">v6 built a brand-new Zone & Capacity drilldown. That was wrong — the existing app already has a "नया काम" drilldown pattern (header + wireless icon + status line + "और कनेक्शन कैसे मिलते हैं?" card). The capacity opportunity should be a CARD inside that drilldown, not a separate screen.</div>
+                <div class="t-bodySmall text-secondary mt-sm">v7 reshapes the screen to the existing pattern and adds a pink brand-tint card surfacing the opportunity. Tap the card → Capacity बढ़ाएं (State A → B → home tracker). Existing "और कनेक्शन कैसे मिलते हैं?" card kept intact.</div>
+              </div>
+
+              <!-- Improvement v6 · superseded -->
+              <div class="card mt-md" style="background:var(--wc-bg-info);border:0;opacity:0.6;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-info);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v6</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · superseded by v7</span>
+                </div>
+                <div class="t-titleSm mt-md">Standalone Zone & Capacity drilldown</div>
+                <div class="t-bodyMd text-secondary mt-sm">Created a new screen with hero/zone/capacity cards. Replaced in v7 with the existing-drilldown pattern.</div>
               </div>
 
               <!-- Improvement v5 · 17 May 2026 — 10-directive design sweep -->

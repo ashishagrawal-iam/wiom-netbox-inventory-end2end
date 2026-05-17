@@ -26,8 +26,8 @@ window.WORKFLOWS = {
     steps: [
       { num: 1, label: 'Zone & Capacity chip on Home', screen: 'dashboard-home',
         note: 'v5 entry. Assurance Strip 4th chip ("Zone & Capacity · 25 खुले") is the natural entry — Growth ≠ NetBox ordering (directive 1). Tap chip → drilldown.' },
-      { num: 2, label: 'Zone & Capacity drilldown', screen: 'zone-capacity',
-        note: 'v6 step. Detail page showing zone demand context (Sector 8 · Growing ↑), current capacity breakdown (45 active of 51 total → 25 available), and "यह क्यों दिख रहा है" explainer. CTA "Capacity बढ़ाइए" enters the State A → B → home chain.' },
+      { num: 2, label: 'नया काम drilldown', screen: 'zone-capacity',
+        note: 'v7 step. Tap chip → opens the EXISTING "नया काम" drilldown (matches the app pattern: header + wireless icon + status line + "और कनेक्शन कैसे मिलते हैं?" expandable card). The new piece is a CARD inside this drilldown — "आपके area में मौका · 25 connections" → tap → opens Capacity बढ़ाएं.' },
       { num: 3, label: 'State A · capacity offer', screen: 'growth-intent',
         note: 'Happy-path Step 1. System surfaces "you can take 25 more connections" and asks for general intent. CSP confirms by tapping "हाँ, capacity बढ़ाइए" → chains forward to State B (specific batch).' },
       { num: 4, label: 'State B · final confirm', screen: 'growth-intent-B',

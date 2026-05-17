@@ -50,25 +50,24 @@ window.ANNOTATIONS = {
   },
 
   'zone-capacity': {
-    title: 'Zone & Capacity · Drilldown',
-    sub: 'NEW v6 · 17 May 2026 · between chip and Capacity बढ़ाएं',
+    title: 'नया काम · Drilldown (existing pattern)',
+    sub: 'v7 · 17 May 2026 · capacity card lives inside the existing drilldown',
     source: 'SDA',
     sections: [
-      { crumb: 'Why this exists (v6)',
+      { crumb: 'Why this exists (v7 correction)',
         anchors: [
-          { kind: 'added', text: 'Assurance Strip chips are metric tiles. Like every other chip (connections, earnings, service status), the Zone & Capacity chip opens a <strong>drilldown</strong> first — not a flow action. The drilldown shows context, then has a CTA into Capacity बढ़ाएं. This matches the Dashboard\'s established pattern.' }
+          { kind: 'changed', text: '<strong>Use the existing "नया काम" drilldown — do not invent a new screen.</strong> Tap the Assurance Strip chip on Dashboard → opens this drilldown (matches the app\'s established pattern, header "नया काम" with wireless icon, default "अभी कनेक्शन सेट हो रहे हैं" status line). The <strong>capacity opportunity is a card INSIDE this drilldown</strong>, not a standalone screen.' },
+          { kind: 'removed', text: 'My v6 zone-capacity standalone screen with hero/zone status/breakdown cards has been deleted — that was a brand-new layout. The correct approach reuses what already ships.' }
         ]},
-      { crumb: 'Content',
+      { crumb: 'What\'s on this screen',
         anchors: [
-          { kind: 'added', text: '<strong>Hero</strong>: "आप अभी 25 और connections ले सकते हैं" + zone-demand context (Sector 8, growing).' },
-          { kind: 'added', text: '<strong>Zone status card</strong>: area, demand trend, Wiom partner count.' },
-          { kind: 'added', text: '<strong>Current capacity card</strong>: 51 lifetime → 45 active → 25 available headroom. Shows the math so the "25 खुले" chip number is grounded.' },
-          { kind: 'added', text: '<strong>"यह क्यों दिख रहा है" card</strong>: reinforces directive 10 — "Wiom infrastructure manage करता है। आप अपनी service capacity बढ़ाने का फैसला लेते हैं, अपने pace पर।"' },
-          { kind: 'added', text: '<strong>CTA</strong>: "Capacity बढ़ाइए" → opens State A (general capacity offer) → State B (final batch confirm) → home with order tracker. Same downstream chain as before.' }
+          { kind: 'unchanged', text: '<strong>Header</strong>: "नया काम" + wireless icon + sub "अभी कनेक्शन सेट हो रहे हैं — जल्द अपडेट मिलेगा". Existing.' },
+          { kind: 'added', text: '<strong>Capacity opportunity card (NEW · v7)</strong>: pink brand-tint card with eyebrow "आपके area में मौका" + "आप अभी 25 और connections ले सकते हैं" + "Sector 8 में customer demand growing है। Wiom आपको offer कर रहा है।" + "देखें ›" tap target. <strong>Tap → opens Capacity बढ़ाएं (State A)</strong>.' },
+          { kind: 'unchanged', text: '<strong>"और कनेक्शन कैसे मिलते हैं?" card</strong>: existing expandable card explaining the 3-criteria system (quality + demand + network space). Drops a link "क्वालिटी कैसी है → देखें".' }
         ]},
       { crumb: 'Where it sits in W2',
         anchors: [
-          { kind: 'policy', text: 'W2 stepper now: Dashboard chip → <strong>drilldown (this)</strong> → State A → State B → home tracker. Inserts one read-and-confirm step before the action — partner sees context before committing intent.' }
+          { kind: 'policy', text: 'W2 stepper: Dashboard chip → <strong>नया काम drilldown (this)</strong> → tap capacity card → State A → State B → home tracker. The capacity card only appears when system has surfaced an opportunity; the empty case (image) is the default.' }
         ]}
     ]
   },
