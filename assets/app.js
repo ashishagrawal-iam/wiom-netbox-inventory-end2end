@@ -232,7 +232,9 @@
         'dl-amount': '−₹600',
         'dl-meta-label': 'Device age',
         'dl-meta-value': '28 months · 40% slab',
-        'dl-formula': 'Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300'
+        'dl-formula': 'Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300',
+        'dl-cta': 'डिवाइस मिल गया · वापस करूंगा',
+        'dl-cta-hint': '₹600 की liability बनी रहेगी · सिर्फ exposure बंद होगा (late recovery)'
       }
     },
     'W4': { // Customer Non-Recovery · ₹200 flat · partial responsibility
@@ -244,7 +246,9 @@
         'dl-amount': '−₹200',
         'dl-meta-label': 'Liability type',
         'dl-meta-value': 'Flat · age-irrelevant',
-        'dl-formula': 'Non-recovery: सभी devices पर ₹200 flat। ₹50 reward window SLA के साथ खत्म।'
+        'dl-formula': 'Non-recovery: सभी devices पर ₹200 flat। ₹50 reward window SLA के साथ खत्म।',
+        'dl-cta': 'Customer ने वापस किया · आगे Wiom को दूंगा',
+        'dl-cta-hint': '₹200 की liability बनी रहेगी · ₹50 reward window पहले ही expire हो गई'
       }
     },
     'W12': { // Late Recovery · prior LOST · charge stands
@@ -256,7 +260,9 @@
         'dl-amount': '−₹200',
         'dl-meta-label': 'Status',
         'dl-meta-value': 'पहले LOST · अब late recovery',
-        'dl-formula': 'Late recovery: exposure closes, charge stands, no reward. Decision 12 के अनुसार।'
+        'dl-formula': 'Late recovery: exposure closes, charge stands, no reward. Decision 12 के अनुसार।',
+        'dl-cta': 'डिवाइस मिल गया · वापस करूंगा',
+        'dl-cta-hint': 'पहले की ₹200 liability नहीं हटेगी'
       },
       'dev-returned': {
         'dr-banner-title': 'Late recovery · वापस आ गया',

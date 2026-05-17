@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=8.8">
-  <link rel="stylesheet" href="assets/proto.css?v=8.8">
+  <link rel="stylesheet" href="assets/tokens.css?v=8.9">
+  <link rel="stylesheet" href="assets/proto.css?v=8.9">
 </head>
 <body class="show-amendments">
 
@@ -404,6 +404,29 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Fix v8.9 · 17 May 2026 — dev-lost CTA grammar + workflow-aware label -->
+              <div class="card" style="background:#FFF8E1;border:0;border-left:4px solid var(--wc-state-caution);">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-caution);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">FIX v8.9</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · dev-lost CTA semantics</span>
+                </div>
+                <div class="t-titleSm mt-md">dev-lost CTA "नेट बॉक्स खोज गया" — broken Hindi + unclear action</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged that the W3 CTA was meaningless. Two issues: (1) grammar — "खोज गया" is a noun-as-verb construction that doesn't work in Hindi; correct is "मिल गया" or "खोज लिया". (2) action ambiguous — CSP couldn't tell whether the button disputes the charge, erases it, or triggers a search.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">What this CTA actually does:</div>
+                <div class="t-bodySmall text-secondary mt-sm">Triggers the <strong>late-recovery declaration</strong>: device flips to <code>RETRIEVAL_PENDING</code> → eventually <code>RETURNED</code>. Per Decision 12: exposure closes, but the prior charge (₹600 custody / ₹200 non-recovery) <strong>stands</strong>. No reward — ₹50 window expired with SLA.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">New default + workflow-aware morphs:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • Default: <strong>"डिवाइस मिल गया · वापस करूंगा"</strong> + microhint "पहले की liability बनी रहेगी · सिर्फ exposure बंद होगा"<br>
+                  • <strong>W3</strong>: hint reads "₹600 की liability बनी रहेगी · सिर्फ exposure बंद होगा (late recovery)"<br>
+                  • <strong>W4</strong>: label reframes to "Customer ने वापस किया · आगे Wiom को दूंगा" + hint "₹200 की liability बनी रहेगी · ₹50 reward window पहले ही expire हो गई"<br>
+                  • <strong>W12</strong>: label "डिवाइस मिल गया · वापस करूंगा" + hint "पहले की ₹200 liability नहीं हटेगी"
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall text-secondary"><strong>WORKFLOW_CONTENT</strong> extended with <code>dl-cta</code> and <code>dl-cta-hint</code> fields. CTA now reads its label and microhint from the active workflow's content map — same architecture as the rest of the dev-lost morph.</div>
+              </div>
+
               <!-- Critical fix v8.8 · 17 May 2026 — sticky workflow + screen-level tap remap -->
               <div class="card" style="background:#FFE0E0;border:0;border-left:4px solid var(--wc-state-negative);">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -1531,7 +1554,14 @@
                 <div class="amended-only t-bodySmall text-secondary mt-sm" id="dl-formula">Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300</div>
               </div>
             </div>
-            <div class="cta-bar"><button data-tap="dev-retrieval-pending" class="cta cta-tertiary">नेट बॉक्स खोज गया</button></div>
+            <!-- v8.9 · CTA grammar fix + workflow-aware label. Old "नेट बॉक्स खोज गया"
+                 was broken Hindi (noun-as-verb construction) and didn't convey the
+                 action. New default conveys: device found → trigger late-recovery
+                 return flow. Workflow morph adds a charge-stands hint per W3/W4. -->
+            <div class="cta-bar">
+              <button data-tap="dev-retrieval-pending" class="cta cta-tertiary" id="dl-cta">डिवाइस मिल गया · वापस करूंगा</button>
+              <div class="t-bodySmall text-secondary" id="dl-cta-hint" style="text-align:center;margin-top:6px;">पहले की liability बनी रहेगी · सिर्फ exposure बंद होगा</div>
+            </div>
           </div>
         </section>
 
@@ -2379,9 +2409,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=8.8"></script>
-<script src="assets/annotations-new.js?v=8.8"></script>
-<script src="assets/workflows.js?v=8.8"></script>
-<script src="assets/app.js?v=8.8"></script>
+<script src="assets/annotations.js?v=8.9"></script>
+<script src="assets/annotations-new.js?v=8.9"></script>
+<script src="assets/workflows.js?v=8.9"></script>
+<script src="assets/app.js?v=8.9"></script>
 </body>
 </html>
