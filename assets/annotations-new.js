@@ -59,17 +59,29 @@ Object.assign(window.ANNOTATIONS, {
   },
 
   'growth-intent-C': {
-    title: 'Capacity · State C (SD top-up needed)',
-    sub: 'NEW · Growth Intent variant',
+    title: 'Capacity · State C (batch + inline top-up)',
+    sub: 'UPDATED v8.2 · combined State-B-style batch + State-C top-up',
     source: 'SDA',
     sections: [
-      { crumb: 'What this state says',
+      { crumb: 'Why this shape (v8.2)',
         anchors: [
-          { kind: 'added', text: '"और connections लेने के लिए सुरक्षा राशि में ₹2,000 top-up ज़रूरी" — proposed exposure exceeds current SD headroom. Inline top-up, no flow break. <span class="src">Note 3 §Surface 2 · State C + Workflow 2 step 5b</span>' }
+          { kind: 'added', text: '<strong>v8.2: Batch breakdown added inside State C.</strong> Previously F1·B/C jumped from "25 capacity offered" to "₹2,000 top-up" without showing how many connections the ₹2,000 actually buys. Now the screen mirrors State B at the top: "System आपको ये भेजेगा · 5 नए connections" + Devices breakdown (custody 82 / deploy-ready 7), THEN pivots to top-up math. CSP perceives a concrete value exchange, not an abstract toll booth.' }
         ]},
-      { crumb: 'Reassurance line',
+      { crumb: 'Section order',
         anchors: [
-          { kind: 'policy', text: '<strong>Always include:</strong> "मौजूदा devices और connections पर कोई असर नहीं।" Prevents panic — top-up is only for new capacity. <span class="src">Note 3 §Must Do #8</span>' }
+          { kind: 'added', text: '1. <strong>Batch hero (NEW v8.2)</strong>: green "अंतिम पुष्टि · 5 नए connections" — same as State B.' },
+          { kind: 'added', text: '2. <strong>Devices card (NEW v8.2)</strong>: custody 82 / deploy-ready 7 — same as State B.' },
+          { kind: 'unchanged', text: '3. <strong>Top-up banner</strong>: "इस capacity के लिए ₹2,000 top-up ज़रूरी" — bridges batch to cost.' },
+          { kind: 'unchanged', text: '4. <strong>Top-up math card</strong>: current ₹20k + needed ₹2k = top-up ₹2k.' },
+          { kind: 'unchanged', text: '5. <strong>Reassurance</strong>: "मौजूदा connections और custody पर कोई असर नहीं।"' }
+        ]},
+      { crumb: 'CTA semantics',
+        anchors: [
+          { kind: 'changed', text: '<strong>v8.2: CTA reframed</strong> from "₹2,000 जमा करें" → "हाँ, ₹2,000 जमा करें" + secondary "अभी नहीं". The "हाँ" matches State A\'s acknowledgment pattern, conveying both batch consent and payment in a single tap. Direct to payment method picker per Design Note 3 Must-Do #8 ("Inline SD top-up. Don\'t break flow.").' }
+        ]},
+      { crumb: 'Spec citation',
+        anchors: [
+          { kind: 'policy', text: '<strong>Reassurance line is mandatory:</strong> "मौजूदा devices और connections पर कोई असर नहीं।" Prevents panic — top-up is only for new capacity. <span class="src">Note 3 §Must Do #8 + Surface 2 State C + Workflow 2 step 5b</span>' }
         ]}
     ]
   },
