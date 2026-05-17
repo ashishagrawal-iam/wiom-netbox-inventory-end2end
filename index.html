@@ -201,15 +201,19 @@
                   <div class="t-bodySmall text-secondary">कमाई</div>
                   <div class="t-titleSm mt-sm">₹9,000</div>
                 </div>
-                <!-- Chip 4: Zone & Capacity — entry for the drilldown (v6).
-                     Chip → drilldown → CTA "Capacity बढ़ाइए" → State A chain. -->
-                <div class="card" data-tap="zone-capacity" style="padding:14px;background:var(--wc-bg-brand-tint);border-color:var(--wc-brand-stroke);position:relative;">
-                  <div class="row" style="gap:6px;align-items:center;color:var(--wc-brand-primary);">
-                    <svg class="mi mi-sm"><use href="#i-trending-up"/></svg>
-                    <span class="t-bodySmall" style="color:var(--wc-brand-primary);font-weight:600;">Zone & Capacity</span>
+                <!-- Chip 4: Zone & Capacity — entry for the drilldown.
+                     v8.4: chip content morphs per active flow. Three variants:
+                       · opportunity (default / F1·A/B/C): pink, trending-up, "25 खुले"
+                       · no-capacity (F1·D): grey, clock, "अभी इंतज़ार"
+                       · blocked (F1·E): amber, stop, "रुका हुआ · 1 वजह"
+                     app.js updates the chip when workflow changes. -->
+                <div class="card" id="zone-capacity-chip" data-tap="zone-capacity" data-chip-state="opportunity" style="padding:14px;background:var(--wc-bg-brand-tint);border-color:var(--wc-brand-stroke);position:relative;">
+                  <div class="row" style="gap:6px;align-items:center;" id="zone-chip-eyebrow">
+                    <svg class="mi mi-sm" id="zone-chip-icon"><use href="#i-trending-up"/></svg>
+                    <span class="t-bodySmall" id="zone-chip-label" style="color:var(--wc-brand-primary);font-weight:600;">Zone & Capacity</span>
                   </div>
-                  <div class="t-titleSm mt-sm" style="color:var(--wc-text-primary);">25 खुले</div>
-                  <div class="t-bodySmall" style="color:var(--wc-brand-primary);font-weight:600;margin-top:4px;">देखें ›</div>
+                  <div class="t-titleSm mt-sm" id="zone-chip-value" style="color:var(--wc-text-primary);">25 खुले</div>
+                  <div class="t-bodySmall" id="zone-chip-cta" style="color:var(--wc-brand-primary);font-weight:600;margin-top:4px;">देखें ›</div>
                   <span class="amendment-badge changed" style="top:-6px;right:-6px;">v5</span>
                 </div>
               </div>
@@ -400,6 +404,26 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Fix v8.4 · 17 May 2026 — flow-aware Dashboard chip morph -->
+              <div class="card" style="background:#FFF8E1;border:0;border-left:4px solid var(--wc-state-caution);">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-caution);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">FIX v8.4</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · Dashboard chip preview consistency</span>
+                </div>
+                <div class="t-titleSm mt-md">Zone & Capacity chip now reflects flow state (not always "25 खुले")</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged: in F1·D (no capacity) and F1·E (blocked), the Dashboard chip still showed the opportunity copy "25 खुले · देखें ›" — but the drilldown the user is about to open says the opposite. The chip should preview the state it's leading to.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Three chip variants:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • <strong>Opportunity</strong> (F1·A / B / C): pink brand-tint · trending-up icon · "25 खुले · देखें ›"<br>
+                  • <strong>No capacity</strong> (F1·D): neutral grey · clock icon · "अभी इंतज़ार · देखें ›"<br>
+                  • <strong>Blocked</strong> (F1·E): amber caution · stop icon · "रुका हुआ · 1 वजह · देखें ›"
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">How it works:</div>
+                <div class="t-bodySmall text-secondary mt-sm">app.js morphs the chip on workflow entry by mutating background/stroke/icon/label/value/CTA in one routine. Chip resets to opportunity on workflow clear or default navigation. The drilldown variant the chip routes to (already remapped per flow) and the chip preview now stay in sync.</div>
+              </div>
+
               <!-- Fix v8.3 · 17 May 2026 — shipping-not-stock math in State C -->
               <div class="card" style="background:#FFF8E1;border:0;border-left:4px solid var(--wc-state-caution);">
                 <div class="row" style="gap:8px;align-items:center;">

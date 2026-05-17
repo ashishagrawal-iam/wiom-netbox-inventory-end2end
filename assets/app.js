@@ -114,11 +114,65 @@
     });
   }
 
+  // v8.4 · Zone & Capacity chip on dashboard-home morphs per active flow.
+  // Three states matching the three drilldown variants. Default = opportunity.
+  const CHIP_STATES = {
+    opportunity: {
+      bg: 'var(--wc-bg-brand-tint)', stroke: 'var(--wc-brand-stroke)',
+      iconColor: 'var(--wc-brand-primary)', icon: '#i-trending-up',
+      labelColor: 'var(--wc-brand-primary)',
+      value: '25 खुले', valueColor: 'var(--wc-text-primary)',
+      cta: 'देखें ›', ctaColor: 'var(--wc-brand-primary)'
+    },
+    'no-capacity': {
+      bg: 'var(--wc-bg-subtle)', stroke: 'var(--wc-stroke-primary)',
+      iconColor: 'var(--wc-text-secondary)', icon: '#i-clock',
+      labelColor: 'var(--wc-text-secondary)',
+      value: 'अभी इंतज़ार', valueColor: 'var(--wc-text-primary)',
+      cta: 'देखें ›', ctaColor: 'var(--wc-text-secondary)'
+    },
+    blocked: {
+      bg: 'var(--wc-bg-caution)', stroke: 'var(--wc-state-caution)',
+      iconColor: 'var(--wc-state-caution)', icon: '#i-stop',
+      labelColor: 'var(--wc-state-caution)',
+      value: 'रुका हुआ', valueColor: 'var(--wc-text-primary)',
+      cta: '1 वजह · देखें ›', ctaColor: 'var(--wc-state-caution)'
+    }
+  };
+
+  function setZoneChipState(state) {
+    const chip = document.getElementById('zone-capacity-chip');
+    if (!chip) return;
+    const cfg = CHIP_STATES[state] || CHIP_STATES.opportunity;
+    chip.dataset.chipState = state;
+    chip.style.background = cfg.bg;
+    chip.style.borderColor = cfg.stroke;
+    const iconEl = document.getElementById('zone-chip-icon');
+    if (iconEl) {
+      iconEl.style.color = cfg.iconColor;
+      const useEl = iconEl.querySelector('use');
+      if (useEl) useEl.setAttribute('href', cfg.icon);
+    }
+    const labelEl = document.getElementById('zone-chip-label');
+    if (labelEl) labelEl.style.color = cfg.labelColor;
+    const valueEl = document.getElementById('zone-chip-value');
+    if (valueEl) { valueEl.textContent = cfg.value; valueEl.style.color = cfg.valueColor; }
+    const ctaEl = document.getElementById('zone-chip-cta');
+    if (ctaEl) { ctaEl.textContent = cfg.cta; ctaEl.style.color = cfg.ctaColor; }
+  }
+
+  function chipStateForFlow(wfId) {
+    if (wfId === 'F1D') return 'no-capacity';
+    if (wfId === 'F1E') return 'blocked';
+    return 'opportunity';
+  }
+
   function showScreen(id, opts) {
     opts = opts || {};
     if (currentScreen && currentScreen !== id && !opts.fromBack) backStack.push(currentScreen);
     if (backStack.length > 30) backStack.shift();
     currentScreen = id;
+    setZoneChipState(chipStateForFlow(currentWorkflow));
 
     document.querySelectorAll('.screen').forEach(s => {
       s.classList.toggle('active', s.id === 'screen-' + id);
@@ -170,6 +224,7 @@
     currentStepIndex = -1;
     wfStepper.style.display = 'none';
     wfStepper.innerHTML = '';
+    setZoneChipState('opportunity');
   }
 
   function maybeAdvanceWorkflow(targetScreen) {
