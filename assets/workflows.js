@@ -20,26 +20,106 @@ window.WORKFLOWS = {
     ]
   },
 
-  W2: {
-    title: 'System-Led Device Provisioning (Growth Intent)',
-    purpose: 'CSP wants to serve more customers. System surfaces capacity, CSP confirms in two steps (general intent → specific batch), then system manages provisioning. CSP never picks device count and never feels they\'re buying routers.',
+  // v8 (17 May 2026) — F1 split into FIVE end-to-end walkable flows.
+  // Each flow starts at dashboard-home and walks a single linear chain.
+  // `tapRemap` lets a step override the in-phone CTA's hardcoded target so
+  // the same screen behaves differently depending on which flow is active
+  // (e.g. State A's "हाँ" goes to State B in F1A but to State C in F1B/F1C).
+
+  F1A: {
+    title: 'F1·A · Happy case (SD funded, devices ready)',
+    purpose: 'CSP triggered on Assurance Strip → opens drilldown → sees 25-capacity opportunity → acknowledges intent → system confirms 5 new connections → CSP confirms → inventory starts provisioning. SD is already funded; no top-up needed.',
     steps: [
-      { num: 1, label: 'Zone & Capacity chip on Home', screen: 'dashboard-home',
-        note: 'v5 entry. Assurance Strip 4th chip ("Zone & Capacity · 25 खुले") is the natural entry — Growth ≠ NetBox ordering (directive 1). Tap chip → drilldown.' },
-      { num: 2, label: 'नया काम drilldown', screen: 'zone-capacity',
-        note: 'v7 step. Tap chip → opens the EXISTING "नया काम" drilldown (matches the app pattern: header + wireless icon + status line + "और कनेक्शन कैसे मिलते हैं?" expandable card). The new piece is a CARD inside this drilldown — "आपके area में मौका · 25 connections" → tap → opens Capacity बढ़ाएं.' },
+      { num: 1, label: 'Trigger on Dashboard', screen: 'dashboard-home',
+        note: 'Entry: Assurance Strip 4th chip ("Zone & Capacity · 25 खुले") on Dashboard home. CSP taps the chip → opens नया काम drilldown.' },
+      { num: 2, label: 'नया काम · opportunity card', screen: 'zone-capacity',
+        note: 'Drilldown opens. Inside, the pink opportunity card surfaces "आपके area में मौका · 25 connections". CSP taps the card → opens Capacity बढ़ाएं (State A).' },
       { num: 3, label: 'State A · capacity offer', screen: 'growth-intent',
-        note: 'Happy-path Step 1. System surfaces "you can take 25 more connections" and asks for general intent. CSP confirms by tapping "हाँ, capacity बढ़ाइए" → chains forward to State B (specific batch).' },
-      { num: 4, label: 'State B · final confirm', screen: 'growth-intent-B',
-        note: 'Happy-path Step 2 (Improvement v4 · 17 May). Specific batch confirmation — "System आपको ये भेजेगा: 5 नए connections". Inventory math card shows where the devices come from (7 deployable in hand → 0 to ship). CSP taps "हाँ, पुष्टि करें" → order placed → home with tracker.' },
+        note: 'System asks general intent: "आप अभी 25 और connections ले सकते हैं". CSP taps "हाँ, capacity बढ़ाइए" → chains to State B.' },
+      { num: 4, label: 'State B · 5-connection confirm', screen: 'growth-intent-B',
+        note: 'Specific batch confirmation. System says: "5 नए connections भेजेगा — आपकी custody में 7 devices deploy के लिए तैयार हैं, system इन्हें route करेगा". CSP taps "हाँ, पुष्टि करें".' },
       { num: 5, label: 'Provisioning in progress', screen: 'nb-home-tracking',
-        note: 'Order tracker appears at top of NetBox home. Inventory dispatches → ACS creates PENDING_CSP_RECEIPT (when shipping is needed) or routing starts immediately (when devices are already on hand).' },
-      { num: 6, label: 'Alt · State C SD top-up', screen: 'growth-intent-C',
-        note: 'Alternate path if SD insufficient for the proposed exposure. Inline top-up flow, framed as capacity expansion cost — partner pays ₹2,000 then re-enters State A.' },
-      { num: 7, label: 'Alt · State D no capacity', screen: 'growth-intent-D',
-        note: 'Alternate path if zone is at capacity. Info-only — CSP waits, system notifies when demand opens. No CTA.' },
-      { num: 8, label: 'Alt · Blocked one-reason', screen: 'growth-intent-blocked',
-        note: 'Alternate path if a constraint fails (deployment efficiency, enforcement, etc.). System surfaces ONE highest-priority reason — never the 5-constraint formula.' }
+        note: 'Order tracker appears on NetBox home. Inventory dispatch begins. Devices already on-hand → routing starts immediately, no shipping needed.' }
+    ]
+  },
+
+  F1B: {
+    title: 'F1·B · SD top-up needed · wallet covers',
+    purpose: 'Same opportunity but SD short of required exposure for new capacity. CSP routed to State C → SD top-up flow. Wallet has enough balance to fund the SD top-up directly. No UPI required.',
+    steps: [
+      { num: 1, label: 'Trigger on Dashboard', screen: 'dashboard-home',
+        note: 'Entry: Zone & Capacity chip on Dashboard. Identical entry to F1·A — the divergence happens at State A based on SD balance.' },
+      { num: 2, label: 'नया काम · opportunity card', screen: 'zone-capacity',
+        note: 'Drilldown surfaces the same opportunity card. The fact that SD is insufficient is not pre-disclosed at drilldown — drilldown represents demand, SD check happens at State A.' },
+      { num: 3, label: 'State A · capacity offer', screen: 'growth-intent',
+        tapRemap: { 'growth-intent-B': 'growth-intent-C' },
+        note: 'System surfaces "25 connections available". CSP taps "हाँ, capacity बढ़ाइए" — but since SD < required exposure for new capacity, the system routes to State C instead of State B. (Tap remap: same button, different next screen depending on SD state.)' },
+      { num: 4, label: 'State C · SD top-up needed', screen: 'growth-intent-C',
+        note: 'Inline State C: "और connections लेने के लिए सुरक्षा राशि में ₹2,000 top-up ज़रूरी". CSP taps "₹2,000 जमा करें" → opens SD top-up screen.' },
+      { num: 5, label: 'SD top-up screen', screen: 'sd-topup',
+        tapRemap: { 'add-funds-method': 'add-funds-success' },
+        note: 'SD top-up form. CSP taps "top-up करें". Wallet has enough balance to cover the SD top-up → system pulls from wallet directly (no UPI re-fill needed) → straight to success. (Tap remap skips the UPI method screen.)' },
+      { num: 6, label: 'Top-up success', screen: 'add-funds-success',
+        note: 'SD top-up succeeded. SD now meets the new minimum. Capacity provisioning was already intended at State A → system continues to provisioning. CSP taps "ठीक है" → goes to NetBox home with order tracker live.' },
+      { num: 7, label: 'Provisioning in progress', screen: 'nb-home-tracking',
+        note: 'Order tracker visible. The SD top-up was framed as capacity-expansion cost (not a fee). Mental model: "I funded the capacity, system is sending the devices".' }
+    ]
+  },
+
+  F1C: {
+    title: 'F1·C · Wallet low · UPI re-fill required',
+    purpose: 'SD top-up needed AND wallet doesn\'t have enough to cover it. CSP redirected to UPI to add money — first the money lands in wallet, then automatically flows to SD top-up, then provisioning continues.',
+    steps: [
+      { num: 1, label: 'Trigger on Dashboard', screen: 'dashboard-home',
+        note: 'Same entry: Zone & Capacity chip. Divergence from F1·B happens at the SD top-up step when wallet check fails.' },
+      { num: 2, label: 'नया काम · opportunity card', screen: 'zone-capacity',
+        note: 'Drilldown opportunity card. Same as F1·A and F1·B.' },
+      { num: 3, label: 'State A · capacity offer', screen: 'growth-intent',
+        tapRemap: { 'growth-intent-B': 'growth-intent-C' },
+        note: 'SD insufficient → routes to State C (same remap as F1·B).' },
+      { num: 4, label: 'State C · SD top-up needed', screen: 'growth-intent-C',
+        note: 'CSP taps "₹2,000 जमा करें" → SD top-up screen.' },
+      { num: 5, label: 'SD top-up · wallet empty', screen: 'sd-topup',
+        tapRemap: { 'add-funds-method': 'add-funds-input' },
+        note: 'CSP taps top-up. Wallet has insufficient balance → system redirects to UPI amount entry. (Tap remap: instead of going to method picker with wallet pre-selected, opens UPI input.)' },
+      { num: 6, label: 'UPI · amount entry', screen: 'add-funds-input',
+        note: 'CSP enters amount (defaults to top-up amount). Wiom\'s framing: money is added to wallet, then auto-flows to SD top-up. Single UPI transaction, no double-pay.' },
+      { num: 7, label: 'UPI · method picker', screen: 'add-funds-method',
+        note: 'UPI method confirmation. Standard UPI flow.' },
+      { num: 8, label: 'Processing', screen: 'add-funds-processing',
+        note: 'UPI processing — money lands in wallet, then auto-transfers to SD. CSP sees one combined confirmation, not two.' },
+      { num: 9, label: 'Success → provisioning', screen: 'add-funds-success',
+        note: 'Money added → SD topped up → capacity provisioning continues. CSP taps "ठीक है" → NetBox home with order tracker.' },
+      { num: 10, label: 'Provisioning in progress', screen: 'nb-home-tracking',
+        note: 'Order tracker live on NetBox home. Single combined transaction: UPI → wallet → SD → capacity provisioning. CSP perceives one journey, not three.' }
+    ]
+  },
+
+  F1D: {
+    title: 'F1·D · No capacity in area · system waits',
+    purpose: 'CSP opens drilldown but system has no demand to allocate in this area. Drilldown shows a "अभी इंतज़ार" status card. CSP can tap it for details. Info-only — no action available.',
+    steps: [
+      { num: 1, label: 'Trigger on Dashboard', screen: 'dashboard-home',
+        tapRemap: { 'zone-capacity': 'drilldown-no-capacity' },
+        note: 'CSP taps Zone & Capacity chip. System has no demand in area right now → drilldown opens in NO-CAPACITY variant. (Tap remap: same chip, different drilldown based on system state.)' },
+      { num: 2, label: 'नया काम · no capacity card', screen: 'drilldown-no-capacity',
+        note: 'Drilldown shows "अभी इंतज़ार · आपके area में अभी और connections उपलब्ध नहीं" as the status card. CSP taps the card → opens State D for full info.' },
+      { num: 3, label: 'State D · waiting info', screen: 'growth-intent-D',
+        note: 'Info-only screen. "ज़रूरत होने पर system आपको बताएगा। मौजूदा connections पर कोई असर नहीं।" No CTA. CSP returns to Dashboard when ready.' }
+    ]
+  },
+
+  F1E: {
+    title: 'F1·E · Blocked · deploy existing first',
+    purpose: 'CSP has demand opportunity BUT a precondition isn\'t met (e.g., 7 devices CUSTODIED but not deployed). Drilldown surfaces the BLOCKED status card with the one-reason rule. CSP taps to see the full blocked screen with the unblock action.',
+    steps: [
+      { num: 1, label: 'Trigger on Dashboard', screen: 'dashboard-home',
+        tapRemap: { 'zone-capacity': 'drilldown-blocked' },
+        note: 'CSP taps Zone & Capacity chip. System detected demand BUT a blocker exists → drilldown opens in BLOCKED variant. (Tap remap: same chip, blocked drilldown based on system state.)' },
+      { num: 2, label: 'नया काम · blocked card', screen: 'drilldown-blocked',
+        note: 'Drilldown shows the caution-tinted card: "अभी capacity नहीं बढ़ा सकते · 7 devices CUSTODIED हैं जो customer के पास नहीं लगाए". One reason only — Wiom\'s rule of surfacing the highest-priority blocker. CSP taps → State Blocked.' },
+      { num: 3, label: 'State Blocked · one reason', screen: 'growth-intent-blocked',
+        note: 'Full blocked screen with the "क्यों" explanation card + "7 devices · deploy होने बाकी · देखें" linkable card. CSP can navigate to fix the blocker. Once deployed, F1·A/B/C unlocks.' }
     ]
   },
 

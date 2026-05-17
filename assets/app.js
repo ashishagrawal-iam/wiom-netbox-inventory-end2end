@@ -193,6 +193,17 @@
 
   function navigate(targetScreen) {
     if (!targetScreen) return;
+    // v8 · workflow-aware tap remap. The same in-phone CTA can route
+    // differently depending on which flow is active (e.g. State A's "हाँ"
+    // → State B in F1·A but → State C in F1·B/C). Per-step tapRemap on the
+    // workflow definition overrides the hardcoded data-tap target.
+    if (currentWorkflow) {
+      const wf = window.WORKFLOWS[currentWorkflow];
+      const currentStep = wf && wf.steps[currentStepIndex];
+      if (currentStep && currentStep.tapRemap && currentStep.tapRemap[targetScreen]) {
+        targetScreen = currentStep.tapRemap[targetScreen];
+      }
+    }
     if (maybeAdvanceWorkflow(targetScreen)) return;
     // If navigation leaves the workflow's known path, clear workflow
     if (currentWorkflow) {
@@ -279,7 +290,7 @@
 
   // Init
   const hash = window.location.hash.replace('#', '');
-  const wfMatch = hash.match(/^(W\d+)-(\d+)$/);
+  const wfMatch = hash.match(/^(W\d+|F\d+[A-Z])-(\d+)$/);
   if (wfMatch && window.WORKFLOWS[wfMatch[1]]) {
     gotoWorkflowStep(wfMatch[1], parseInt(wfMatch[2], 10));
   } else if (hash && document.getElementById('screen-' + hash)) {

@@ -72,6 +72,46 @@ window.ANNOTATIONS = {
     ]
   },
 
+  'drilldown-no-capacity': {
+    title: 'नया काम · No-capacity variant',
+    sub: 'NEW v8 · 17 May 2026 · F1·D entry surface',
+    source: 'SDA',
+    sections: [
+      { crumb: 'Why this exists (v8)',
+        anchors: [
+          { kind: 'added', text: '<strong>F1·D entry.</strong> Drilldown shell stays identical to the opportunity variant — but the system has no demand to allocate in this area right now. The status card is replaced from the pink opportunity card to a grey "अभी इंतज़ार" card. Tap the card → State D info screen.' }
+        ]},
+      { crumb: 'What\'s on this screen',
+        anchors: [
+          { kind: 'unchanged', text: '<strong>Header</strong>: "नया काम" + wireless icon + sub "अभी कनेक्शन सेट हो रहे हैं — जल्द अपडेट मिलेगा". Same as opportunity variant.' },
+          { kind: 'added', text: '<strong>No-capacity status card (NEW · v8)</strong>: grey neutral card with clock icon + "अभी इंतज़ार · आपके area में अभी और connections उपलब्ध नहीं · ज़रूरत होने पर system आपको बताएगा। मौजूदा connections पर कोई असर नहीं।" Tap → State D.' },
+          { kind: 'unchanged', text: 'Existing "और कनेक्शन कैसे मिलते हैं?" card retained — explains the 3-criteria system regardless of current state.' }
+        ]},
+      { crumb: 'Where it sits in F1·D',
+        anchors: [
+          { kind: 'policy', text: 'F1·D stepper: Dashboard chip → <strong>this drilldown (no-cap variant)</strong> → tap status card → State D. The chip\'s tap target on Dashboard is remapped per workflow — same chip, different drilldown depending on system state.' }
+        ]}
+    ]
+  },
+
+  'drilldown-blocked': {
+    title: 'नया काम · Blocked variant',
+    sub: 'NEW v8 · 17 May 2026 · F1·E entry surface',
+    source: 'SDA',
+    sections: [
+      { crumb: 'Why this exists (v8)',
+        anchors: [
+          { kind: 'added', text: '<strong>F1·E entry.</strong> Drilldown surfaces a BLOCKED status card when CSP has unresolved precondition (e.g., undeployed CUSTODIED devices). Mirrors the existing Blocked-state pattern from the user-shared screenshot. Tap → State Blocked full screen.' }
+        ]},
+      { crumb: 'What\'s on this screen',
+        anchors: [
+          { kind: 'unchanged', text: '<strong>Header</strong>: same नया काम pattern.' },
+          { kind: 'added', text: '<strong>Blocked status card (NEW · v8)</strong>: caution-tinted card with stop icon + "अभी रुका हुआ · अभी capacity नहीं बढ़ा सकते · 7 devices CUSTODIED हैं जो customer के पास नहीं लगाए। पहले इन्हें deploy करें". Tap → State Blocked.' },
+          { kind: 'policy', text: 'One-reason rule applies — Wiom surfaces only the highest-priority blocker, never a multi-reason list. The Blocked state-card and the State Blocked screen show the SAME reason.' }
+        ]}
+    ]
+  },
+
   'dashboard-home': {
     title: 'Dashboard · Home (Assurance Strip)',
     sub: 'NEW v5 · 17 May 2026 · Capacity entry now lives here',
