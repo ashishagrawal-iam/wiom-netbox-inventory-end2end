@@ -5,33 +5,35 @@ Object.assign(window.ANNOTATIONS, {
 
   'onboarding-prompt': {
     title: 'SD at Onboarding · Prompt',
-    sub: 'NEW · Workflow 1 step 2',
+    sub: 'UPDATED v8.6 · W1 steps 1+2',
     source: 'SDA',
     sections: [
       { crumb: 'Why this exists',
         anchors: [
-          { kind: 'added', text: 'CSP_REGISTERED fires → system asks for ₹20,000 (P_SD_ABSOLUTE_MINIMUM). One-time partnership deposit, not per-device. <span class="src">SDA · Workflow 1</span>' }
+          { kind: 'added', text: 'Backend event CSP_REGISTERED fires after onboarding. Next time the CSP opens the app this screen is the blocker — system asks for ₹20,000 (P_SD_ABSOLUTE_MINIMUM). One-time साझेदारी deposit, never per-device. <span class="src">SDA · Workflow 1</span>' }
         ]},
       { crumb: 'Copy rules',
         anchors: [
-          { kind: 'policy', text: '<strong>Required line:</strong> "Wiom partnership शुरू करने के लिए ₹20,000 सुरक्षा राशि जमा करें". No per-device language anywhere. <span class="src">Note 3 §W1</span>' },
-          { kind: 'policy', text: 'Three bullets explain what happens next — settlement cadence, partnership safety, capacity unlock. Framed as <em>onboarding to the partnership</em>, not a transaction fee.' }
+          { kind: 'policy', text: '<strong>Required spec line:</strong> "Wiom साझेदारी शुरू करने के लिए ₹20,000 सुरक्षा राशि जमा करें · एक बार जमा करनी है". No per-device language anywhere. <span class="src">Note 3 §W1</span>' },
+          { kind: 'policy', text: 'Three reassurance bullets explain what happens next — SD safe & returnable, Settlement Cycle pe transparent हिसाब, क्षमता बढ़ाने का अनुरोध unlocked. Framed as <em>साझेदारी onboarding</em>, not a transaction fee.' },
+          { kind: 'changed', text: '<strong>v8.6 Hindi-first sweep:</strong> Latin → Devanagari · partnership → <strong>साझेदारी</strong>, devices → <strong>डिवाइस</strong>, Capacity बढ़ाने की request → <strong>क्षमता बढ़ाने का अनुरोध</strong>, "Settlement पर settlement" → "Settlement Cycle पर हिसाब".' }
         ]}
     ]
   },
 
   'onboarding-success': {
     title: 'SD at Onboarding · Success',
-    sub: 'NEW · Workflow 1 step 4',
+    sub: 'UPDATED v8.6 · W1 step 4',
     source: 'SDA',
     sections: [
       { crumb: 'Why this exists',
         anchors: [
-          { kind: 'added', text: 'Confirmation that SECURITY_PAID is recorded. Sets next-step expectation: "अब आप capacity बढ़ाने की request कर सकते हैं".' }
+          { kind: 'added', text: 'Confirmation that SECURITY_PAID is recorded in Payment OS. Sets next-step expectation: "अब आप अपनी सेवा क्षमता बढ़ाने का अनुरोध कर सकते हैं" → bridges into F1 State A.' }
         ]},
       { crumb: 'Tone',
         anchors: [
-          { kind: 'policy', text: 'Quiet ceremony — Wiom-way doesn\'t over-celebrate financial events. Shield icon (not party emoji), pink balance pill, single forward CTA into Capacity बढ़ाएं.' }
+          { kind: 'policy', text: 'Quiet ceremony — Wiom-way doesn\'t over-celebrate financial events. Shield icon (not party emoji), pink balance pill ₹20,000, single forward CTA "क्षमता बढ़ाएं".' },
+          { kind: 'changed', text: '<strong>v8.6 Hindi-first sweep:</strong> "अपनी service capacity बढ़ाने के लिए कह सकते हैं" → "अपनी सेवा क्षमता बढ़ाने का अनुरोध कर सकते हैं". CTA "Capacity बढ़ाएं" → "क्षमता बढ़ाएं".' }
         ]}
     ]
   },

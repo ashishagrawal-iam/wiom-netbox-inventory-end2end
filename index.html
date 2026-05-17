@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=8.5">
-  <link rel="stylesheet" href="assets/proto.css?v=8.5">
+  <link rel="stylesheet" href="assets/tokens.css?v=8.6">
+  <link rel="stylesheet" href="assets/proto.css?v=8.6">
 </head>
 <body class="show-amendments">
 
@@ -404,6 +404,35 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Improvement v8.6 · 17 May 2026 — W1 audit + Hindi-first sweep -->
+              <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-positive),#E0F2E9);border:0;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-positive);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v8.6</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · W1 polish</span>
+                </div>
+                <div class="t-titleSm mt-md">W1 (SD at Onboarding) audited + Hindi-first sweep</div>
+                <div class="t-bodyMd text-secondary mt-sm">First workflow in the W1–W12 walk. Audited the existing W1 against Design Note 3 — <strong>no logic bugs found</strong>. Single linear flow, ₹20,000 spec correct, framed as one-time partnership, capacity-unlock CTA wired. Only copy/consistency issues.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Copy sweep applied:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • partnership → <strong>साझेदारी</strong> (title + body + bullets)<br>
+                  • devices → <strong>डिवाइस</strong><br>
+                  • Capacity बढ़ाने की request → <strong>क्षमता बढ़ाने का अनुरोध</strong><br>
+                  • "Settlement Cycle पर settlement" → <strong>"Settlement Cycle पर हिसाब"</strong><br>
+                  • Success subtitle "service capacity" → <strong>"सेवा क्षमता"</strong><br>
+                  • Success CTA "Capacity बढ़ाएं" → <strong>"क्षमता बढ़ाएं"</strong>
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Workflow stepper tightened:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • Step labels relabelled in Hindi (स्वीकृति → SD दिखती है · "क्या होगा" समझें · UPI से जमा करें · SD active · क्षमता बढ़ाएं unlocked)<br>
+                  • Step 1 label moved from backend event ("CSP approved") to user-visible action<br>
+                  • Step notes expanded with spec citations + v8.6 copy callouts
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall text-secondary"><strong>Spec verdict:</strong> ✅ All Design Note 3 §W1 requirements met. ₹20,000 = P_SD_ABSOLUTE_MINIMUM, no per-device math anywhere, "हर डिवाइस पर नहीं, पूरी साझेदारी पर एक बार" rationale preserved, success → growth-intent bridge intact.</div>
+              </div>
+
               <!-- Improvement v8.5 · 17 May 2026 — Hindi-first copy sweep -->
               <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -1811,32 +1840,32 @@
           <div class="screen-body">
             <header class="app-bar light">
               <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
-              <div class="title">Wiom partnership शुरू</div>
+              <div class="title">Wiom साझेदारी शुरू</div>
             </header>
             <div class="scrollable" style="padding:16px;">
               <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;">
                 <div class="row" style="gap:8px;color:var(--wc-brand-primary);"><svg class="mi mi-sm"><use href="#i-shield-check"/></svg><span class="t-titleSm">सुरक्षा राशि</span></div>
-                <div class="t-headingLg mt-sm">Wiom partnership शुरू करने के लिए</div>
+                <div class="t-headingLg mt-sm">Wiom साझेदारी शुरू करने के लिए</div>
                 <div class="t-heroAmount text-brand" style="margin-top:8px;">₹20,000</div>
                 <div class="t-bodyMd text-secondary mt-sm">एक बार जमा करनी है</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">यह क्यों</div>
-                <div class="t-body text-secondary">Wiom के devices आपकी custody में आएंगे। यह सुरक्षा राशि उस custody risk के लिए है — हर device पर नहीं, पूरी partnership पर एक बार।</div>
+                <div class="t-body text-secondary">Wiom के डिवाइस आपकी custody में आएंगे। यह सुरक्षा राशि उस custody risk के लिए है — हर डिवाइस पर नहीं, पूरी साझेदारी पर एक बार।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-md">क्या होगा</div>
                 <div class="row" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
-                  <div class="t-body" style="flex:1;">सुरक्षा राशि सुरक्षित रखी जाएगी — partnership बंद होने पर वापस</div>
+                  <div class="t-body" style="flex:1;">सुरक्षा राशि सुरक्षित रखी जाएगी — साझेदारी बंद होने पर वापस</div>
                 </div>
                 <div class="row mt-md" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
-                  <div class="t-body" style="flex:1;">Settlement Cycle पर settlement — पारदर्शी, पूर्व-निर्धारित</div>
+                  <div class="t-body" style="flex:1;">हर Settlement Cycle पर हिसाब — पारदर्शी, पूर्व-निर्धारित</div>
                 </div>
                 <div class="row mt-md" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
-                  <div class="t-body" style="flex:1;">Capacity बढ़ाने की request कर सकेंगे</div>
+                  <div class="t-body" style="flex:1;">क्षमता बढ़ाने का अनुरोध कर सकेंगे</div>
                 </div>
               </div>
             </div>
@@ -1852,13 +1881,13 @@
             <div class="scrollable" style="display:flex;flex-direction:column;align-items:center;padding:32px 24px;text-align:center;gap:16px;">
               <div style="width:96px;height:96px;border-radius:50%;background:var(--wc-state-positive);display:grid;place-items:center;color:white;margin-top:16px;"><svg style="width:56px;height:56px;"><use href="#i-shield-check"/></svg></div>
               <div class="t-headingLg">सुरक्षा राशि जमा हो गई</div>
-              <div class="t-bodyLg text-secondary">अब आप अपनी service capacity बढ़ाने के लिए कह सकते हैं</div>
+              <div class="t-bodyLg text-secondary">अब आप अपनी सेवा क्षमता बढ़ाने का अनुरोध कर सकते हैं</div>
               <div style="background:var(--wc-bg-brand-tint);border-radius:16px;padding:16px 20px;width:100%;margin-top:8px;">
                 <div class="t-bodySmall text-secondary">वर्तमान सुरक्षा राशि</div>
                 <div class="t-heroAmount text-brand" style="margin-top:4px;">₹20,000</div>
               </div>
             </div>
-            <div class="cta-bar"><button data-tap="growth-intent" class="cta cta-primary">Capacity बढ़ाएं</button></div>
+            <div class="cta-bar"><button data-tap="growth-intent" class="cta cta-primary">क्षमता बढ़ाएं</button></div>
           </div>
         </section>
 
@@ -2274,9 +2303,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=8.5"></script>
-<script src="assets/annotations-new.js?v=8.5"></script>
-<script src="assets/workflows.js?v=8.5"></script>
-<script src="assets/app.js?v=8.5"></script>
+<script src="assets/annotations.js?v=8.6"></script>
+<script src="assets/annotations-new.js?v=8.6"></script>
+<script src="assets/workflows.js?v=8.6"></script>
+<script src="assets/app.js?v=8.6"></script>
 </body>
 </html>

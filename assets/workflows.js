@@ -4,19 +4,19 @@
 window.WORKFLOWS = {
 
   W1: {
-    title: 'SD at Onboarding',
-    purpose: 'CSP completes onboarding → pays ₹20,000 → SD active → capacity expansion eligible.',
+    title: 'W1 · SD at Onboarding',
+    purpose: 'CSP completes onboarding → sees the one-time ₹20,000 सुरक्षा राशि requirement → pays via UPI → SD active → क्षमता बढ़ाएं unlocked. Single linear flow, no branches. Framed as partnership-level, never per-device.',
     steps: [
-      { num: 1, label: 'CSP approved', screen: 'onboarding-prompt',
-        note: 'CSP_REGISTERED fires. System shows the ₹20,000 (P_SD_ABSOLUTE_MINIMUM) requirement. Framed as one-time, partnership-level — no per-device math.' },
-      { num: 2, label: 'See requirement', screen: 'onboarding-prompt',
-        note: '"Wiom partnership शुरू करने के लिए ₹20,000 सुरक्षा राशि जमा करें" — single CTA, no tier choice.' },
-      { num: 3, label: 'Pay UPI', screen: 'add-funds-method',
-        note: 'Reuse existing UPI method screen — SECURITY_PAID is recorded in Payment OS.' },
+      { num: 1, label: 'स्वीकृति → SD दिखती है', screen: 'onboarding-prompt',
+        note: 'Backend event CSP_REGISTERED fires after onboarding. Next time CSP opens the app, this screen is the blocker — hero shows ₹20,000 (P_SD_ABSOLUTE_MINIMUM) as a one-time partnership amount. v8.6 copy: "Wiom साझेदारी शुरू करने के लिए ₹20,000 · एक बार जमा करनी है". The "हर डिवाइस पर नहीं, पूरी साझेदारी पर एक बार" rationale prevents per-device escrow framing.' },
+      { num: 2, label: '"क्या होगा" समझें', screen: 'onboarding-prompt',
+        note: 'Same screen — CSP reads the 3 reassurance bullets: SD safe & returnable, Settlement Cycle pe transparent हिसाब, क्षमता बढ़ाने का अनुरोध unlocked. No tier choice, single CTA. v8.6 swept Latin → Devanagari (साझेदारी, डिवाइस, क्षमता, अनुरोध).' },
+      { num: 3, label: 'UPI से जमा करें', screen: 'add-funds-method',
+        note: 'Tap CTA "₹20,000 UPI से जमा करें" → standard UPI method picker (shared screen). Backend records SECURITY_PAID event in Payment OS.' },
       { num: 4, label: 'SD active', screen: 'onboarding-success',
-        note: 'Confirmation: "सुरक्षा राशि जमा हो गई। अब आप capacity बढ़ाने की request कर सकते हैं।" Balance now ₹20,000.' },
-      { num: 5, label: 'Capacity unlocked', screen: 'growth-intent',
-        note: 'Capacity expansion eligibility becomes active. CSP can now express growth intent.' }
+        note: 'Big checkmark + spec confirmation line "सुरक्षा राशि जमा हो गई · अब आप अपनी सेवा क्षमता बढ़ाने का अनुरोध कर सकते हैं" + balance card ₹20,000. Status: active.' },
+      { num: 5, label: 'क्षमता बढ़ाएं unlocked', screen: 'growth-intent',
+        note: 'CTA "क्षमता बढ़ाएं" routes to growth-intent (F1 State A) — CSP is now eligible for the full F1 family of flows. Bridge from W1 → F1.' }
     ]
   },
 
