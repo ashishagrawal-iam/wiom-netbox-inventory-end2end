@@ -49,6 +49,27 @@ window.ANNOTATIONS = {
     ]
   },
 
+  'dashboard-home': {
+    title: 'Dashboard · Home (Assurance Strip)',
+    sub: 'NEW v5 · 17 May 2026 · Capacity entry now lives here',
+    source: 'SDA',
+    sections: [
+      { crumb: 'Why this exists (v5)',
+        anchors: [
+          { kind: 'added', text: '<strong>Directive 1: Growth ≠ NetBox ordering.</strong> Capacity expansion was previously a tile under NetBox quick-actions, which mentally tied it to hardware ownership. Moved to a 4th "Zone & Capacity" chip in the Assurance Strip — alongside connections / service status / earnings — so the CSP asks to grow <em>business capacity</em>, not buy routers. <span class="src">design review · 17 May 2026</span>' }
+        ]},
+      { crumb: 'What changed',
+        anchors: [
+          { kind: 'changed', text: 'Assurance Strip now has 4 chips (was 3): कनेक्शन · सेवा स्थिति · कमाई · <strong>Zone & Capacity</strong>. Tapping the new chip opens "Capacity बढ़ाएं" (State A).' },
+          { kind: 'removed', text: 'NetBox home quick-action tile "नया ऑर्डर / Capacity बढ़ाएं" — removed. NetBox is operational-only now (custody · returns · recovery · liabilities · settlement · carry fee).' }
+        ]},
+      { crumb: 'Mental model the CSP should leave with',
+        anchors: [
+          { kind: 'policy', text: '"Wiom manages infrastructure. I manage customer service capacity. Security amount maintains operational trust. Settlement happens periodically and predictably." (Directive 10 — the architectural soul of the SD amendment.)' }
+        ]}
+    ]
+  },
+
   /* ============================================================
      ORDER-SIDE
      ============================================================ */

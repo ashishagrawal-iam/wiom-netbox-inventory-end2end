@@ -100,7 +100,8 @@
     <div class="item is-workflow" data-workflow="W12"><span class="dot"></span> W12 · Late Recovery <span class="meta">3 steps</span></div>
 
     <div class="group">Order side · Pre-amendment</div>
-    <div class="item active" data-screen="nb-home"><span class="dot"></span> NetBox Home</div>
+    <div class="item is-new active" data-screen="dashboard-home"><span class="dot"></span> Dashboard · Home <span class="meta">NEW v5</span></div>
+    <div class="item" data-screen="nb-home"><span class="dot"></span> NetBox Home</div>
     <div class="item has-change" data-screen="request-sheet"><span class="dot"></span> Request New <span class="meta">changed</span></div>
     <div class="item has-change" data-screen="low-balance"><span class="dot"></span> Low Balance <span class="meta">changed</span></div>
     <div class="item" data-screen="add-funds-input"><span class="dot"></span> Add Funds · Input</div>
@@ -159,6 +160,66 @@
       <div class="phone-screen" id="screen-container">
 
         <!-- ============================================================
+             DASHBOARD HOME — Improvement v5 (17 May 2026)
+             Per directive 1: Capacity ≠ NetBox ordering. Entry point for
+             "Capacity बढ़ाएं" is now a 4th chip in the Assurance Strip on
+             the main Dashboard, NOT under NetBox/inventory.
+             ============================================================ -->
+        <section class="screen" id="screen-dashboard-home">
+          <div class="status-bar dark"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar">
+              <div class="icon-btn" data-tap="__back"><svg class="mi"><use href="#i-menu"/></svg></div>
+              <div class="title" style="flex:1;">Rajesh Kumar <span class="t-bodySmall" style="opacity:0.85;font-weight:400;"> · एडमिन</span></div>
+              <div class="icon-btn"><svg class="mi"><use href="#i-bug"/></svg></div>
+              <div class="icon-btn" style="position:relative;"><svg class="mi"><use href="#i-clock"/></svg><span style="position:absolute;top:6px;right:6px;background:var(--wc-state-negative);color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;">3</span></div>
+            </header>
+            <div class="scrollable" style="padding:12px;">
+              <!-- Assurance Strip — 2x2 grid of chips. 4th chip is the new Zone & Capacity. -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <!-- Chip 1: कनेक्शन -->
+                <div class="card" style="padding:14px;">
+                  <div class="t-bodySmall text-secondary">कनेक्शन</div>
+                  <div class="t-titleSm mt-sm">45 <span class="t-bodySmall text-secondary"> (51)</span></div>
+                </div>
+                <!-- Chip 2: सेवा स्थिति -->
+                <div class="card" style="padding:14px;">
+                  <div class="t-bodySmall text-secondary">सेवा स्थिति</div>
+                  <div class="row mt-sm" style="gap:6px;align-items:center;"><svg class="mi mi-sm" style="color:var(--wc-state-positive);"><use href="#i-check-circle"/></svg><span class="t-body">सब ठीक</span></div>
+                </div>
+                <!-- Chip 3: कमाई -->
+                <div class="card" style="padding:14px;">
+                  <div class="t-bodySmall text-secondary">कमाई</div>
+                  <div class="t-titleSm mt-sm">₹9,000</div>
+                </div>
+                <!-- Chip 4: Zone & Capacity — NEW entry for Capacity बढ़ाएं (Improvement v5) -->
+                <div class="card" data-tap="growth-intent" style="padding:14px;background:var(--wc-bg-brand-tint);border-color:var(--wc-brand-stroke);position:relative;">
+                  <div class="row" style="gap:6px;align-items:center;color:var(--wc-brand-primary);">
+                    <svg class="mi mi-sm"><use href="#i-trending-up"/></svg>
+                    <span class="t-bodySmall" style="color:var(--wc-brand-primary);font-weight:600;">Zone & Capacity</span>
+                  </div>
+                  <div class="t-titleSm mt-sm" style="color:var(--wc-text-primary);">25 खुले</div>
+                  <div class="t-bodySmall" style="color:var(--wc-brand-primary);font-weight:600;margin-top:4px;">देखें ›</div>
+                  <span class="amendment-badge changed" style="top:-6px;right:-6px;">v5</span>
+                </div>
+              </div>
+
+              <!-- Task feed mock -->
+              <div class="t-bodySmall text-secondary mt-lg mb-sm" style="text-transform:uppercase;letter-spacing:0.5px;">आज के काम</div>
+              <div class="card mt-sm">
+                <div class="row between"><div><div class="t-body" style="font-weight:600;">इंस्टॉल · #1100</div><div class="t-bodySmall text-secondary">Sector 8 · समय का प्रस्ताव दें · 3 दिन बाकी</div></div></div>
+              </div>
+              <div class="card mt-sm">
+                <div class="row between"><div><div class="t-body" style="font-weight:600;">सर्विस · #2001</div><div class="t-bodySmall text-secondary">Sector 8 · ग्राहक का इंटरनेट बंद · 2 घंटे बाकी</div></div></div>
+              </div>
+              <div class="card mt-sm" data-tap="nb-home">
+                <div class="row between"><div><div class="t-body" style="font-weight:600;">नेट बॉक्स पिकअप · #3001</div><div class="t-bodySmall text-secondary">Sector 14 · नेटबॉक्स लेने जाएं · आज शाम तक</div></div><svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
              ORDER-SIDE SCREENS
              ============================================================ -->
 
@@ -170,8 +231,36 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Improvement v5 · 17 May 2026 — 10-directive design sweep -->
+              <div class="card" style="background:var(--wc-bg-caution);border:0;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-caution);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v5</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026</span>
+                </div>
+                <div class="t-titleSm mt-md">10-directive design correction sweep · architecture lock</div>
+                <div class="t-bodyMd text-secondary mt-sm"><strong>Growth ≠ NetBox ordering.</strong> Capacity entry moved out of NetBox into Assurance Strip (new 4th "Zone & Capacity" chip on Dashboard home). NetBox is operational-only (custody / returns / recovery / liabilities). CSP feels they ask to grow business, not buy routers.</div>
+                <div class="t-bodyMd text-secondary mt-sm">Plus 9 more directives: bucket separation in dues (Operational vs Security settlement), no source-reveal at liability stage, "उपलब्ध अतिरिक्त सीमा" instead of cushion, "Settlement Cycle" instead of "हर 3 महीने", "system manages capacity" framing, late recovery "back in process", dispute pause clarity.</div>
+                <div class="t-bodySmall text-secondary mt-sm">Source: design review · 17 May 2026 (full directive list below)</div>
+
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Screens touched:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • <strong>NEW</strong> Dashboard · Home (Assurance Strip + Zone & Capacity chip)<br>
+                  • <strong>REMOVED</strong> "नया ऑर्डर / Capacity" tile from NetBox home<br>
+                  • <strong>SPLIT</strong> SD Profile dues → Operational + Security settlement cards<br>
+                  • <strong>COPY</strong> Loss cards: removed "wallet/SD से समायोजित" at liability stage → "अगले Settlement Cycle में शामिल किया गया है"<br>
+                  • <strong>COPY</strong> dev-damaged + dev-lost amended footers — same neutralization<br>
+                  • <strong>COPY</strong> State A: "system devices भेजेगा" → "system capacity बढ़ाने की व्यवस्था करेगा"<br>
+                  • <strong>COPY</strong> State B math: reframed to system-managed routing<br>
+                  • <strong>COPY</strong> SD Profile: "कुशन" → "उपलब्ध अतिरिक्त सीमा"<br>
+                  • <strong>COPY</strong> Onboarding + SD Profile: "हर 3 महीने" → "Settlement Cycle"<br>
+                  • <strong>COPY</strong> Late recovery: stronger "back in process" framing<br>
+                  • <strong>COPY</strong> Dispute pending: clearer "only this item paused, rest of settlement continues"
+                </div>
+              </div>
+
               <!-- Improvement v4 · 17 May 2026 -->
-              <div class="card" style="background:var(--wc-brand-tint);border:0;">
+              <div class="card mt-md" style="background:var(--wc-brand-tint);border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
                   <span style="background:var(--wc-brand-primary);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v4</span>
                   <span class="t-bodySmall text-secondary">17 May 2026</span>
@@ -317,12 +406,13 @@
                   <div class="icon-circle" style="background:var(--wc-bg-info);color:var(--wc-state-info);"><svg class="mi"><use href="#i-assignment-return"/></svg></div>
                   <div class="label">वापसी स्वीकार करें</div>
                 </div>
-                <div class="qa-tile" style="position:relative;" data-tap-pre="request-sheet" data-tap-post="growth-intent">
-                  <div class="icon-circle preamend-only" style="background:var(--wc-bg-positive);color:var(--wc-state-positive);"><svg class="mi"><use href="#i-add"/></svg></div>
-                  <div class="icon-circle amended-only" style="background:var(--wc-bg-brand-tint);color:var(--wc-brand-primary);"><svg class="mi"><use href="#i-trending-up"/></svg></div>
-                  <div class="label preamend-only">नया ऑर्डर करें</div>
-                  <div class="label amended-only">Capacity बढ़ाएं</div>
-                  <span class="amendment-badge changed" style="top:-6px;right:-6px;">CHANGED</span>
+                <!-- Improvement v5 · amended-only: Capacity tile REMOVED from NetBox.
+                     Growth ≠ NetBox ordering (directive 1). Entry now lives in
+                     Assurance Strip on Dashboard. Pre-amendment tile preserved. -->
+                <div class="qa-tile preamend-only" style="position:relative;" data-tap-pre="request-sheet">
+                  <div class="icon-circle" style="background:var(--wc-bg-positive);color:var(--wc-state-positive);"><svg class="mi"><use href="#i-add"/></svg></div>
+                  <div class="label">नया ऑर्डर करें</div>
+                  <span class="amendment-badge removed" style="top:-6px;right:-6px;">REMOVED v5</span>
                 </div>
                 <div class="qa-tile">
                   <div class="icon-circle" style="background:var(--wc-bg-brand-tint);color:var(--wc-brand-primary);"><svg class="mi"><use href="#i-checklist"/></svg></div>
@@ -932,7 +1022,7 @@
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">क्या होगा</div>
                 <div class="t-body text-secondary preamend-only">व्योम जाँच के बाद फ़ैसला करेगा। डैमेज क्लेम आपके वॉलेट से कट सकता है।</div>
-                <div class="t-body text-secondary amended-only">Wiom warehouse में जाँच के बाद age-band के हिसाब से liability तय होगी। अगले settlement में wallet से समायोजित।</div>
+                <div class="t-body text-secondary amended-only">Wiom warehouse में जाँच के बाद age-band के हिसाब से liability तय होगी। अगले Settlement Cycle में शामिल किया जाएगा।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm preamend-only">संभावित देय</div>
@@ -972,7 +1062,7 @@
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">क्या होगा</div>
                 <div class="t-body text-secondary preamend-only">रिकवरी राशि आपके वॉलेट से कटेगी। अगर मिल जाए तो तुरंत व्योम को बताएं।</div>
-                <div class="t-body text-secondary amended-only">Device आपकी custody में था — आपकी ज़िम्मेदारी। अगले settlement में wallet से समायोजित होगा।</div>
+                <div class="t-body text-secondary amended-only">Device आपकी custody में था — आपकी ज़िम्मेदारी। अगले Settlement Cycle में शामिल किया जाएगा।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">देय राशि</div>
@@ -1040,7 +1130,7 @@
                 <div class="t-titleSm mb-md">क्या होगा</div>
                 <div class="row" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
-                  <div class="t-body" style="flex:1;">System आपको ज़रूरी devices भेजेगा</div>
+                  <div class="t-body" style="flex:1;">System आपकी capacity बढ़ाने की व्यवस्था करेगा</div>
                 </div>
                 <div class="row mt-md" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
@@ -1083,28 +1173,48 @@
                   <div style="height:100%;width:83%;background:#FF7AC9;"></div>
                 </div>
                 <div class="row between mt-sm" style="color:white;opacity:0.85;">
-                  <span class="t-bodySmall" style="color:white;">कुशन: ₹4,000 ऊपर</span>
+                  <span class="t-bodySmall" style="color:white;">उपलब्ध अतिरिक्त सीमा · ₹4,000</span>
                   <span class="t-bodySmall" style="color:white;">100 devices custody में</span>
                 </div>
               </div>
 
-              <div class="card mt-md">
-                <div class="row between">
-                  <div class="t-titleSm">बकाया देय</div>
-                  <span class="t-bodySmall text-secondary">अगला settlement · 1 Jul 2026</span>
-                </div>
+              <!-- Improvement v5 · bucket separation (directive 3):
+                   Operational dues (wallet-first) and Security settlement
+                   adjustments (SD direct) live in SEPARATE cards. No combined
+                   "कुल" — these are different psychological buckets. -->
+              <div class="row between mt-md" style="padding:0 4px;">
+                <span class="t-bodySmall text-secondary" style="text-transform:uppercase;letter-spacing:0.5px;">बकाया · अगला Settlement Cycle</span>
+                <span class="t-bodySmall text-secondary">1 Jul 2026</span>
+              </div>
+
+              <!-- Bucket 1: Operational dues (custody loss + damage + carry fee) -->
+              <div class="card mt-sm" style="position:relative;">
+                <div class="t-titleSm">Operational dues</div>
+                <div class="t-bodySmall text-secondary">Custody loss · damage · carry fee</div>
                 <div class="divider"></div>
-                <div class="row between"><span class="t-body">NetBox not recovered (×2)</span><span class="t-body text-negative">₹400</span></div>
-                <div class="row between mt-sm"><span class="t-body">Damage claim (×1)</span><span class="t-body text-negative">₹200</span></div>
+                <div class="row between"><span class="t-body">Custody loss (×1)</span><span class="t-body text-negative">−₹600</span></div>
+                <div class="row between mt-sm"><span class="t-body">Damage claim (×1)</span><span class="t-body text-negative">−₹200</span></div>
                 <div class="divider"></div>
-                <div class="row between"><span class="t-body" style="font-weight:700;">कुल</span><span class="t-body" style="font-weight:700;">₹600</span></div>
-                <!-- Amendment v2 · split waterfall -->
-                <div class="t-bodySmall text-secondary mt-sm">Custody/damage → wallet से। Non-recovery → SD से सीधे।</div>
+                <div class="row between"><span class="t-body" style="font-weight:600;">Subtotal</span><span class="t-body" style="font-weight:700;">−₹800</span></div>
+                <div class="t-bodySmall text-secondary mt-sm">Settlement Cycle पर wallet-first path से.</div>
+                <span class="amendment-badge changed" style="top:8px;right:8px;">v5</span>
+              </div>
+
+              <!-- Bucket 2: Security settlement adjustments (non-recovery) -->
+              <div class="card mt-md" style="position:relative;">
+                <div class="t-titleSm">Security settlement adjustments</div>
+                <div class="t-bodySmall text-secondary">Customer non-recovery</div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body">Non-recovery (×2)</span><span class="t-body text-negative">−₹400</span></div>
+                <div class="divider"></div>
+                <div class="row between"><span class="t-body" style="font-weight:600;">Subtotal</span><span class="t-body" style="font-weight:700;">−₹400</span></div>
+                <div class="t-bodySmall text-secondary mt-sm">Settlement Cycle पर सुरक्षा राशि से सीधे adjust.</div>
+                <span class="amendment-badge changed" style="top:8px;right:8px;">v5</span>
               </div>
 
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">यह क्या है</div>
-                <div class="t-bodyMd text-secondary">यह सुरक्षा राशि Wiom के devices की custody risk के लिए रखी जाती है। Settlement तय cycle (हर 3 महीने) या partnership बंद होने पर होता है।</div>
+                <div class="t-bodyMd text-secondary">यह सुरक्षा राशि Wiom के devices की custody risk के लिए रखी जाती है। Settlement Cycle पर या partnership बंद होने पर settle होता है।</div>
               </div>
             </div>
             <div class="cta-bar"><button data-tap="sd-topup" class="cta cta-tertiary">सुरक्षा राशि में top-up करें</button></div>
@@ -1352,7 +1462,7 @@
                 </div>
                 <div class="row mt-md" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
-                  <div class="t-body" style="flex:1;">हर 3 महीने settlement — पारदर्शी, पूर्व-निर्धारित</div>
+                  <div class="t-body" style="flex:1;">Settlement Cycle पर settlement — पारदर्शी, पूर्व-निर्धारित</div>
                 </div>
                 <div class="row mt-md" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
@@ -1372,7 +1482,7 @@
             <div class="scrollable" style="display:flex;flex-direction:column;align-items:center;padding:32px 24px;text-align:center;gap:16px;">
               <div style="width:96px;height:96px;border-radius:50%;background:var(--wc-state-positive);display:grid;place-items:center;color:white;margin-top:16px;"><svg style="width:56px;height:56px;"><use href="#i-shield-check"/></svg></div>
               <div class="t-headingLg">सुरक्षा राशि जमा हो गई</div>
-              <div class="t-bodyLg text-secondary">अब आप capacity बढ़ाने की request कर सकते हैं</div>
+              <div class="t-bodyLg text-secondary">अब आप अपनी service capacity बढ़ाने के लिए कह सकते हैं</div>
               <div style="background:var(--wc-bg-brand-tint);border-radius:16px;padding:16px 20px;width:100%;margin-top:8px;">
                 <div class="t-bodySmall text-secondary">वर्तमान सुरक्षा राशि</div>
                 <div class="t-heroAmount text-brand" style="margin-top:4px;">₹20,000</div>
@@ -1406,7 +1516,7 @@
                 <div class="row between"><span class="t-body text-secondary">आपकी custody में</span><span class="t-body" style="font-weight:600;">82</span></div>
                 <div class="row between mt-sm"><span class="t-body text-secondary">Deploy के लिए तैयार</span><span class="t-body text-positive" style="font-weight:600;">7</span></div>
                 <div class="divider"></div>
-                <div class="t-bodyMd">5 नए connections के लिए 5 devices चाहिए। आपके पास 7 तैयार हैं — System इन्हें route करेगा। नए NetBox shipping की ज़रूरत नहीं।</div>
+                <div class="t-bodyMd">आपकी custody में 7 devices deploy के लिए तैयार हैं। System इन्हें नए connections के लिए route करेगा।</div>
               </div>
             </div>
             <div class="cta-bar">
@@ -1443,7 +1553,7 @@
                 <div class="row between"><span class="t-body" style="font-weight:700;">Top-up</span><span class="t-titleSm" style="color:var(--wc-brand-primary);">₹2,000</span></div>
               </div>
               <div style="background:var(--wc-bg-subtle);border-radius:12px;padding:12px 14px;margin-top:12px;">
-                <span class="t-bodyMd text-secondary">मौजूदा devices और connections पर कोई असर नहीं।</span>
+                <span class="t-bodyMd text-secondary">मौजूदा connections और custody पर कोई असर नहीं।</span>
               </div>
             </div>
             <div class="cta-bar"><button data-tap="sd-topup" class="cta cta-primary">₹2,000 जमा करें</button></div>
@@ -1468,7 +1578,7 @@
                 <div class="t-titleSm mb-sm">अभी क्या चालू है</div>
                 <div class="row" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
-                  <div class="t-body" style="flex:1;">मौजूदा 82 connections पर कोई असर नहीं</div>
+                  <div class="t-body" style="flex:1;">मौजूदा connections और infrastructure पर कोई असर नहीं</div>
                 </div>
                 <div class="row mt-md" style="gap:10px;align-items:flex-start;">
                   <div style="width:24px;height:24px;border-radius:50%;background:var(--wc-bg-positive);color:var(--wc-state-positive);display:grid;place-items:center;margin-top:2px;"><svg class="mi mi-xs"><use href="#i-check"/></svg></div>
@@ -1567,7 +1677,7 @@
                 <div class="divider"></div>
                 <div class="t-bodyMd">ग्राहक ने NetBox recovery SLA में वापस नहीं किया। आंशिक देय।</div>
                 <!-- Amendment v2 · non-recovery → SD direct, never wallet -->
-                <div class="t-bodyMd text-secondary mt-sm">अगले settlement में <strong>SD से सीधे</strong> समायोजित — wallet पर असर नहीं।</div>
+                <div class="t-bodyMd text-secondary mt-sm">अगले Settlement Cycle में शामिल किया गया है।</div>
                 <span class="amendment-badge changed" style="top:8px;right:8px;">Amendment v2</span>
               </div>
               <div class="card mt-md row between" data-tap="dispute-form" style="cursor:pointer;">
@@ -1621,8 +1731,10 @@
                 <div class="row between mt-sm"><span class="t-body text-secondary">वजह</span><span class="t-body">Device वापस मिल गया</span></div>
                 <div class="row between mt-sm"><span class="t-body text-secondary">दर्ज</span><span class="t-body">15 May 2026</span></div>
                 <div class="divider"></div>
-                <div class="t-bodyMd">Settlement में शामिल नहीं होगा जब तक समीक्षा पूरी न हो।</div>
-                <div class="t-bodyMd text-secondary mt-sm">7 दिन में decision मिलेगा।</div>
+                <!-- Improvement v5 · directive 8: clearer ambiguity-free messaging.
+                     Baki settlement continues; only this item is paused. -->
+                <div class="t-bodyMd"><strong>यह एक item paused है।</strong> बाकी Settlement Cycle सामान्य चलेगा — सिर्फ इस amount पर decision आने तक रुका हुआ है।</div>
+                <div class="t-bodyMd text-secondary mt-sm">अगला कदम: 7 दिन में decision मिलेगा। आपको कुछ और नहीं करना — review पूरा होते ही notify होगा।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-md">अब तक</div>
@@ -1695,7 +1807,7 @@
               </div>
               <div class="card mt-md" style="background:var(--wc-bg-warning);border-color:transparent;">
                 <div class="row" style="gap:8px;color:var(--wc-text-on-warning);"><svg class="mi mi-sm"><use href="#i-warning"/></svg><span class="t-titleSm" style="color:var(--wc-text-on-warning);">Capacity बढ़ाने के लिए top-up ज़रूरी</span></div>
-                <div class="t-bodyMd mt-sm" style="color:var(--wc-text-on-warning);">मौजूदा devices और connections पर कोई असर नहीं। सिर्फ नई capacity के लिए top-up चाहिए।</div>
+                <div class="t-bodyMd mt-sm" style="color:var(--wc-text-on-warning);">मौजूदा connections और custody पर कोई असर नहीं। सिर्फ नई capacity के लिए top-up चाहिए।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">Device status</div>
@@ -1728,14 +1840,14 @@
                 </div>
                 <div class="divider"></div>
                 <div class="row between"><span class="t-body text-secondary">Device</span><span class="t-body" style="font-weight:600;">NB-00891</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">Status</span><span class="t-body">Wiom को वापस · exposure कम हुआ</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Status</span><span class="t-body">Wiom को वापस · ACS process में</span></div>
                 <div class="divider"></div>
                 <div class="t-bodyMd">₹200 non-recovery charge यथावत — recovery SLA समाप्त हो चुकी थी।</div>
                 <div class="t-bodyMd text-secondary mt-sm">₹50 recovery reward नहीं मिलेगा (समय निकल चुका)।</div>
               </div>
               <div style="background:var(--wc-bg-info);border-radius:12px;padding:12px 14px;margin-top:12px;display:flex;gap:10px;">
                 <svg class="mi mi-sm" style="color:var(--wc-state-info);flex-shrink:0;margin-top:2px;"><use href="#i-info"/></svg>
-                <div class="t-bodyMd">यह device अभी redeploy नहीं हो सकता — पहले ACS reassign करेगा।</div>
+                <div class="t-bodyMd">Device वापस process में है। ACS reconciliation पूरा होने के बाद ही system इसे आगे assign कर सकेगा।</div>
               </div>
             </div>
           </div>

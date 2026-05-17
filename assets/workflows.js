@@ -22,10 +22,10 @@ window.WORKFLOWS = {
 
   W2: {
     title: 'System-Led Device Provisioning (Growth Intent)',
-    purpose: 'CSP wants to serve more customers. System surfaces capacity, CSP confirms in two steps (general intent → specific batch), then system ships / routes. CSP never picks device count.',
+    purpose: 'CSP wants to serve more customers. System surfaces capacity, CSP confirms in two steps (general intent → specific batch), then system manages provisioning. CSP never picks device count and never feels they\'re buying routers.',
     steps: [
-      { num: 1, label: 'Tap "Capacity बढ़ाएं"', screen: 'nb-home',
-        note: 'Entry from NetBox home — the renamed quick-action tile when amendment overlay is ON.' },
+      { num: 1, label: 'Zone & Capacity chip on Home', screen: 'dashboard-home',
+        note: 'v5 entry. Assurance Strip 4th chip ("Zone & Capacity · 25 खुले") is the natural entry — Growth ≠ NetBox ordering (directive 1). Tap chip → Capacity बढ़ाएं (State A).' },
       { num: 2, label: 'State A · capacity offer', screen: 'growth-intent',
         note: 'Happy-path Step 1. System surfaces "you can take 25 more connections" and asks for general intent. CSP confirms by tapping "हाँ, capacity बढ़ाइए" → chains forward to State B (specific batch).' },
       { num: 3, label: 'State B · final confirm', screen: 'growth-intent-B',
