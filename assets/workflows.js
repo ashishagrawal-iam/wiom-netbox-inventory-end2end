@@ -43,9 +43,14 @@ window.WORKFLOWS = {
     ]
   },
 
+  // v8.1 fix · State C IS the inline top-up screen per Design Note 3
+  // Must-Do #8 ("Inline SD top-up in growth intent flow"). Removed the
+  // redundant sd-topup intermediate step from F1·B and F1·C. sd-topup
+  // is now reserved for W9 (standalone top-up from SD Profile).
+
   F1B: {
     title: 'F1·B · SD top-up needed · wallet covers',
-    purpose: 'Same opportunity but SD short of required exposure for new capacity. CSP routed to State C → SD top-up flow. Wallet has enough balance to fund the SD top-up directly. No UPI required.',
+    purpose: 'Same opportunity but SD short of exposure required for new capacity. CSP routed to State C inline top-up. Wallet has enough balance to fund the ₹2,000 directly — no UPI re-fill needed. Single top-up confirmation, then provisioning continues.',
     steps: [
       { num: 1, label: 'Trigger on Dashboard', screen: 'dashboard-home',
         note: 'Entry: Zone & Capacity chip on Dashboard. Identical entry to F1·A — the divergence happens at State A based on SD balance.' },
@@ -53,45 +58,41 @@ window.WORKFLOWS = {
         note: 'Drilldown surfaces the same opportunity card. The fact that SD is insufficient is not pre-disclosed at drilldown — drilldown represents demand, SD check happens at State A.' },
       { num: 3, label: 'State A · capacity offer', screen: 'growth-intent',
         tapRemap: { 'growth-intent-B': 'growth-intent-C' },
-        note: 'System surfaces "25 connections available". CSP taps "हाँ, capacity बढ़ाइए" — but since SD < required exposure for new capacity, the system routes to State C instead of State B. (Tap remap: same button, different next screen depending on SD state.)' },
-      { num: 4, label: 'State C · SD top-up needed', screen: 'growth-intent-C',
-        note: 'Inline State C: "और connections लेने के लिए सुरक्षा राशि में ₹2,000 top-up ज़रूरी". CSP taps "₹2,000 जमा करें" → opens SD top-up screen.' },
-      { num: 5, label: 'SD top-up screen', screen: 'sd-topup',
+        note: 'System surfaces "25 connections available". CSP taps "हाँ, capacity बढ़ाइए" — but since SD < required exposure for new capacity, system routes to State C instead of State B. (Tap remap: same button, different next screen depending on SD state.)' },
+      { num: 4, label: 'State C · inline top-up', screen: 'growth-intent-C',
         tapRemap: { 'add-funds-method': 'add-funds-success' },
-        note: 'SD top-up form. CSP taps "top-up करें". Wallet has enough balance to cover the SD top-up → system pulls from wallet directly (no UPI re-fill needed) → straight to success. (Tap remap skips the UPI method screen.)' },
-      { num: 6, label: 'Top-up success', screen: 'add-funds-success',
-        note: 'SD top-up succeeded. SD now meets the new minimum. Capacity provisioning was already intended at State A → system continues to provisioning. CSP taps "ठीक है" → goes to NetBox home with order tracker live.' },
-      { num: 7, label: 'Provisioning in progress', screen: 'nb-home-tracking',
-        note: 'Order tracker visible. The SD top-up was framed as capacity-expansion cost (not a fee). Mental model: "I funded the capacity, system is sending the devices".' }
+        note: 'State C IS the top-up surface per Design Note 3 (Surface 2 spec + Must-Do #8 "Inline SD top-up. Don\'t break flow."). Shows current SD ₹20,000 + ₹2,000 needed + ₹2,000 Top-up. CSP taps "₹2,000 जमा करें". Wallet has enough → system pulls from wallet directly → straight to success. (Tap remap skips the UPI method screen.)' },
+      { num: 5, label: 'Top-up success', screen: 'add-funds-success',
+        note: '₹2,000 moved from wallet to SD. SD now ₹22,000 — meets new exposure threshold. Capacity provisioning was already intended at State A → continues automatically. CSP taps "ठीक है" → NetBox home with order tracker live.' },
+      { num: 6, label: 'Provisioning in progress', screen: 'nb-home-tracking',
+        note: 'Order tracker visible. Single linear flow: intent → exposure check → inline top-up → provisioning. Mental model: "I funded the capacity, system is sending the devices."' }
     ]
   },
 
   F1C: {
     title: 'F1·C · Wallet low · UPI re-fill required',
-    purpose: 'SD top-up needed AND wallet doesn\'t have enough to cover it. CSP redirected to UPI to add money — first the money lands in wallet, then automatically flows to SD top-up, then provisioning continues.',
+    purpose: 'SD top-up needed AND wallet doesn\'t have enough to cover ₹2,000. CSP redirected from State C inline top-up to UPI to add money — money lands in wallet, auto-flows to SD top-up, provisioning continues. Single UPI transaction, no double-pay.',
     steps: [
       { num: 1, label: 'Trigger on Dashboard', screen: 'dashboard-home',
-        note: 'Same entry: Zone & Capacity chip. Divergence from F1·B happens at the SD top-up step when wallet check fails.' },
+        note: 'Same entry: Zone & Capacity chip. Divergence from F1·B happens at State C when wallet check fails.' },
       { num: 2, label: 'नया काम · opportunity card', screen: 'zone-capacity',
         note: 'Drilldown opportunity card. Same as F1·A and F1·B.' },
       { num: 3, label: 'State A · capacity offer', screen: 'growth-intent',
         tapRemap: { 'growth-intent-B': 'growth-intent-C' },
         note: 'SD insufficient → routes to State C (same remap as F1·B).' },
-      { num: 4, label: 'State C · SD top-up needed', screen: 'growth-intent-C',
-        note: 'CSP taps "₹2,000 जमा करें" → SD top-up screen.' },
-      { num: 5, label: 'SD top-up · wallet empty', screen: 'sd-topup',
+      { num: 4, label: 'State C · inline top-up', screen: 'growth-intent-C',
         tapRemap: { 'add-funds-method': 'add-funds-input' },
-        note: 'CSP taps top-up. Wallet has insufficient balance → system redirects to UPI amount entry. (Tap remap: instead of going to method picker with wallet pre-selected, opens UPI input.)' },
-      { num: 6, label: 'UPI · amount entry', screen: 'add-funds-input',
-        note: 'CSP enters amount (defaults to top-up amount). Wiom\'s framing: money is added to wallet, then auto-flows to SD top-up. Single UPI transaction, no double-pay.' },
-      { num: 7, label: 'UPI · method picker', screen: 'add-funds-method',
+        note: 'State C inline top-up. CSP taps "₹2,000 जमा करें". Wallet balance < ₹2,000 → system redirects to UPI amount entry. (Tap remap: instead of pulling from wallet, opens UPI input.)' },
+      { num: 5, label: 'UPI · amount entry', screen: 'add-funds-input',
+        note: 'CSP enters amount (defaults to ₹2,000 top-up amount). Wiom framing: money is added to wallet, then auto-flows to SD top-up. Single UPI transaction, no double-pay.' },
+      { num: 6, label: 'UPI · method picker', screen: 'add-funds-method',
         note: 'UPI method confirmation. Standard UPI flow.' },
-      { num: 8, label: 'Processing', screen: 'add-funds-processing',
+      { num: 7, label: 'Processing', screen: 'add-funds-processing',
         note: 'UPI processing — money lands in wallet, then auto-transfers to SD. CSP sees one combined confirmation, not two.' },
-      { num: 9, label: 'Success → provisioning', screen: 'add-funds-success',
-        note: 'Money added → SD topped up → capacity provisioning continues. CSP taps "ठीक है" → NetBox home with order tracker.' },
-      { num: 10, label: 'Provisioning in progress', screen: 'nb-home-tracking',
-        note: 'Order tracker live on NetBox home. Single combined transaction: UPI → wallet → SD → capacity provisioning. CSP perceives one journey, not three.' }
+      { num: 8, label: 'Success → provisioning', screen: 'add-funds-success',
+        note: 'Money added → SD topped up to ₹22,000 → capacity provisioning continues. CSP taps "ठीक है" → NetBox home with order tracker.' },
+      { num: 9, label: 'Provisioning in progress', screen: 'nb-home-tracking',
+        note: 'Order tracker live. Single combined journey: UPI → wallet → SD → capacity provisioning. CSP perceives one decision (fund capacity), not three transactions.' }
     ]
   },
 

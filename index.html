@@ -87,8 +87,8 @@
 
     <div class="group" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));color:var(--wc-brand-primary);font-weight:700;">✨ F1 · Capacity बढ़ाएं · five end-to-end flows <span style="font-size:10px;font-weight:600;background:var(--wc-brand-primary);color:white;padding:1px 6px;border-radius:4px;margin-left:6px;">v8</span></div>
     <div class="item is-workflow is-new" data-workflow="F1A" style="border-left-color:var(--wc-state-positive);"><span class="dot" style="background:var(--wc-state-positive);"></span> F1·A · Happy (SD funded) <span class="meta">5 steps</span></div>
-    <div class="item is-workflow is-new" data-workflow="F1B" style="border-left-color:var(--wc-state-info);"><span class="dot" style="background:var(--wc-state-info);"></span> F1·B · SD low (wallet covers) <span class="meta">7 steps</span></div>
-    <div class="item is-workflow is-new" data-workflow="F1C" style="border-left-color:var(--wc-state-info);"><span class="dot" style="background:var(--wc-state-info);"></span> F1·C · Wallet low (UPI) <span class="meta">10 steps</span></div>
+    <div class="item is-workflow is-new" data-workflow="F1B" style="border-left-color:var(--wc-state-info);"><span class="dot" style="background:var(--wc-state-info);"></span> F1·B · SD low (wallet covers) <span class="meta">6 steps</span></div>
+    <div class="item is-workflow is-new" data-workflow="F1C" style="border-left-color:var(--wc-state-info);"><span class="dot" style="background:var(--wc-state-info);"></span> F1·C · Wallet low (UPI) <span class="meta">9 steps</span></div>
     <div class="item is-workflow is-new" data-workflow="F1D" style="border-left-color:var(--wc-text-secondary);"><span class="dot" style="background:var(--wc-text-secondary);"></span> F1·D · No capacity in area <span class="meta">3 steps</span></div>
     <div class="item is-workflow is-new" data-workflow="F1E" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> F1·E · Blocked (deploy first) <span class="meta">3 steps</span></div>
 
@@ -400,6 +400,32 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Fix v8.1 · 17 May 2026 — inline top-up per Design Note 3 -->
+              <div class="card" style="background:#FFF8E1;border:0;border-left:4px solid var(--wc-state-caution);">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-caution);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">FIX v8.1</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · Design Note 3 conformance</span>
+                </div>
+                <div class="t-titleSm mt-md">Removed redundant sd-topup step from F1·B / F1·C + fixed number mismatch</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged that F1·B and F1·C were showing TWO consecutive top-up screens (State C "₹2,000 जमा करें" → sd-topup "₹5,000 top-up करें") with mismatched numbers. Audit against Design Note 3 confirmed both are bugs.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">What the amendment actually says:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • <strong>Must Do #8:</strong> "Inline SD top-up in growth intent flow. Don't break flow. Pay and proceed."<br>
+                  • <strong>Surface 2 rule:</strong> "Top-up flow inline — don't break flow to pay."<br>
+                  • <strong>State C spec:</strong> shows <code>[₹2,000 जमा करें]</code> as the terminal CTA, not a "next step" button.<br>
+                  • <strong>Surface 5 (sd-topup):</strong> is for <em>Workflow 9</em> (standalone top-up from SD Profile), NOT for growth intent.
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">What was fixed:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • State C's CTA now routes <strong>directly to payment method picker</strong> (wallet or UPI), skipping the redundant sd-topup intermediate.<br>
+                  • sd-topup screen <strong>reframed as standalone</strong> (W9 entry): removed "Capacity बढ़ाने के लिए" wording, added amount-selector pills, generic "यह राशि क्या है" rationale. Numbers no longer fake-specific to the F1 batch.<br>
+                  • F1·B reduced from 7 → <strong>6 steps</strong>; F1·C reduced from 10 → <strong>9 steps</strong>.<br>
+                  • Mental model preserved: single inline top-up decision, single payment, then provisioning continues.
+                </div>
+              </div>
+
               <!-- Improvement v8 · 17 May 2026 — five end-to-end flows -->
               <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -1449,11 +1475,15 @@
               <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
               <div class="title">सुरक्षा राशि में top-up</div>
             </header>
+            <!-- v8.1 fix · sd-topup is now STANDALONE only (Workflow 9 entry from
+                 SD Profile). Removed "Capacity बढ़ाने के लिए" framing — that's
+                 State C's job per Design Note 3 (top-up flow inline in growth
+                 intent). Generalized to a partner-initiated top-up. -->
             <div class="scrollable" style="padding:16px;">
               <div class="banner banner-info">
                 <div class="icon-wrap"><svg class="mi"><use href="#i-shield-check"/></svg></div>
                 <div class="text">
-                  <div class="title">Capacity बढ़ाने के लिए ₹5,000 top-up ज़रूरी है</div>
+                  <div class="title">सुरक्षा राशि में और जोड़ें</div>
                   <div class="sub">मौजूदा devices और connections पर कोई असर नहीं</div>
                 </div>
               </div>
@@ -1462,18 +1492,23 @@
                 <div class="t-bodyMd text-secondary">मौजूदा सुरक्षा राशि</div>
                 <div class="t-titleSm">₹20,000</div>
                 <div class="divider"></div>
-                <div class="row between"><span class="t-body">ज़रूरी न्यूनतम</span><span class="t-body">₹20,000</span></div>
-                <div class="row between mt-sm"><span class="t-body">नई capacity के लिए चाहिए</span><span class="t-body">₹5,000</span></div>
+                <div class="t-bodyMd text-secondary">कितना जोड़ना है</div>
+                <div class="row mt-sm" style="gap:8px;flex-wrap:wrap;">
+                  <div class="card" style="padding:8px 16px;border-color:var(--wc-brand-primary);background:var(--wc-bg-brand-tint);"><span class="t-titleSm" style="color:var(--wc-brand-primary);">₹2,000</span></div>
+                  <div class="card" style="padding:8px 16px;"><span class="t-titleSm">₹5,000</span></div>
+                  <div class="card" style="padding:8px 16px;"><span class="t-titleSm">₹10,000</span></div>
+                  <div class="card" style="padding:8px 16px;"><span class="t-titleSm">और</span></div>
+                </div>
                 <div class="divider"></div>
-                <div class="row between"><span class="t-body" style="font-weight:700;">Top-up राशि</span><span class="t-titleSm" style="color:var(--wc-brand-primary);">₹5,000</span></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">Top-up राशि</span><span class="t-titleSm" style="color:var(--wc-brand-primary);">₹2,000</span></div>
               </div>
 
               <div class="card mt-md" style="background:var(--wc-bg-info);border-color:transparent;">
-                <div class="row" style="gap:8px;color:var(--wc-state-info);"><svg class="mi mi-sm"><use href="#i-info"/></svg><span class="t-titleSm" style="color:var(--wc-state-info);">यह राशि क्यों</span></div>
-                <div class="t-bodyMd mt-sm">हर नया device जो आपकी custody में आता है, उसका custody risk सुरक्षा राशि से जुड़ा है। Top-up होने के बाद capacity बढ़ाने की व्यवस्था आगे बढ़ेगी।</div>
+                <div class="row" style="gap:8px;color:var(--wc-state-info);"><svg class="mi mi-sm"><use href="#i-info"/></svg><span class="t-titleSm" style="color:var(--wc-state-info);">यह राशि क्या है</span></div>
+                <div class="t-bodyMd mt-sm">सुरक्षा राशि Wiom के devices की custody risk के लिए रखी जाती है। आगे और capacity या नई exposure आने पर यह काम आती है। Settlement Cycle पर adjust होती है।</div>
               </div>
             </div>
-            <div class="cta-bar"><button data-tap="add-funds-method" class="cta cta-primary">₹5,000 top-up करें</button></div>
+            <div class="cta-bar"><button data-tap="add-funds-method" class="cta cta-primary">₹2,000 जमा करें</button></div>
           </div>
         </section>
 
@@ -1776,7 +1811,10 @@
                 <span class="t-bodyMd text-secondary">मौजूदा connections और custody पर कोई असर नहीं।</span>
               </div>
             </div>
-            <div class="cta-bar"><button data-tap="sd-topup" class="cta cta-primary">₹2,000 जमा करें</button></div>
+            <!-- v8.1 fix · State C IS the inline top-up per Design Note 3 Must-Do #8
+                 ("Inline SD top-up in growth intent flow. Don't break flow.").
+                 CTA goes DIRECTLY to payment method picker, not to sd-topup intermediate. -->
+            <div class="cta-bar"><button data-tap="add-funds-method" class="cta cta-primary">₹2,000 जमा करें</button></div>
           </div>
         </section>
 
