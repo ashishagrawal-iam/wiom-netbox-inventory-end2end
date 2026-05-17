@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=9.4">
-  <link rel="stylesheet" href="assets/proto.css?v=9.4">
+  <link rel="stylesheet" href="assets/tokens.css?v=9.5">
+  <link rel="stylesheet" href="assets/proto.css?v=9.5">
 </head>
 <body class="show-amendments">
 
@@ -93,13 +93,13 @@
     <div class="item is-workflow is-new" data-workflow="F1E" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> F1·E · Blocked (deploy first) <span class="meta">3 steps</span></div>
 
     <div class="group" style="background:linear-gradient(135deg,var(--wc-bg-warning),#FFF0C2);color:var(--wc-text-on-warning);font-weight:700;">📦 Device State Variants · CUSTODIED & IDLE sub-cases <span style="font-size:10px;font-weight:600;background:var(--wc-state-caution);color:white;padding:1px 6px;border-radius:4px;margin-left:6px;">v9.4</span></div>
-    <div class="item is-workflow is-new" data-workflow="DSC1" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·C1 · CUSTODIED · fresh (day 7) <span class="meta">1 step</span></div>
-    <div class="item is-workflow is-new" data-workflow="DSC2" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·C2 · CUSTODIED · recall imminent (day 42) <span class="meta">1 step</span></div>
-    <div class="item is-workflow is-new" data-workflow="DSC3" style="border-left-color:var(--wc-text-secondary);"><span class="dot" style="background:var(--wc-text-secondary);"></span> DS·C3 · CUSTODIED · recall चालू (day 47) <span class="meta">1 step</span></div>
-    <div class="item is-workflow is-new" data-workflow="DSI1" style="border-left-color:var(--wc-state-info);"><span class="dot" style="background:var(--wc-state-info);"></span> DS·I1 · IDLE · day 1 (fee just started) <span class="meta">1 step</span></div>
-    <div class="item is-workflow is-new" data-workflow="DSI2" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·I2 · IDLE · day 22 (mid · default) <span class="meta">1 step</span></div>
-    <div class="item is-workflow is-new" data-workflow="DSI3" style="border-left-color:var(--wc-state-negative);"><span class="dot" style="background:var(--wc-state-negative);"></span> DS·I3 · IDLE · recall imminent (day 40) <span class="meta">1 step</span></div>
-    <div class="item is-workflow is-new" data-workflow="DSI4" style="border-left-color:var(--wc-text-secondary);"><span class="dot" style="background:var(--wc-text-secondary);"></span> DS·I4 · IDLE · recall चालू (day 47) <span class="meta">1 step</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSC1" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·C1 · CUSTODIED · fresh (day 7) <span class="meta">5 steps</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSC2" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·C2 · CUSTODIED · recall imminent (day 42) <span class="meta">5 steps</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSC3" style="border-left-color:var(--wc-text-secondary);"><span class="dot" style="background:var(--wc-text-secondary);"></span> DS·C3 · CUSTODIED · recall चालू (day 47) <span class="meta">5 steps</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSI1" style="border-left-color:var(--wc-state-info);"><span class="dot" style="background:var(--wc-state-info);"></span> DS·I1 · IDLE · day 1 (fee just started) <span class="meta">5 steps</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSI2" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> DS·I2 · IDLE · day 22 (mid · default) <span class="meta">5 steps</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSI3" style="border-left-color:var(--wc-state-negative);"><span class="dot" style="background:var(--wc-state-negative);"></span> DS·I3 · IDLE · recall imminent (day 40) <span class="meta">5 steps</span></div>
+    <div class="item is-workflow is-new" data-workflow="DSI4" style="border-left-color:var(--wc-text-secondary);"><span class="dot" style="background:var(--wc-text-secondary);"></span> DS·I4 · IDLE · recall चालू (day 47) <span class="meta">5 steps</span></div>
 
     <div class="group">Workflows · Design Note 3</div>
     <div class="item is-workflow" data-workflow="W1"><span class="dot"></span> W1 · SD at Onboarding <span class="meta">5 steps</span></div>
@@ -549,11 +549,25 @@
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
-              <div class="row" style="padding:16px;gap:12px;cursor:pointer;">
+              <div class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
                 <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
                 <div style="flex:1;">
                   <div class="t-body" style="font-weight:600;">NB-00129</div>
                   <div class="t-bodySmall text-secondary">custody 16 May से · 45 दिन recall window</div>
+                </div>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <!-- v9.5 · IDLE devices appear here too (would be on IDLE tab in
+                   the real app — flat-listed in prototype for tap reachability). -->
+              <div style="padding:12px 16px;background:var(--wc-bg-subtle);border-top:1px solid var(--wc-stroke-primary);border-bottom:1px solid var(--wc-stroke-primary);display:flex;gap:8px;align-items:center;">
+                <svg class="mi mi-sm" style="color:var(--wc-text-secondary);"><use href="#i-info"/></svg>
+                <span class="t-bodySmall text-secondary">IDLE = पहले deploy हुए, अब वापस आपके पास — carry fee लगती है</span>
+              </div>
+              <div data-tap="dev-idle" class="row" style="padding:16px;gap:12px;cursor:pointer;">
+                <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-warning);display:grid;place-items:center;color:var(--wc-text-on-warning);"><svg class="mi mi-sm"><use href="#i-warning"/></svg></div>
+                <div style="flex:1;">
+                  <div class="t-body" style="font-weight:600;">NB-00472 <span class="t-bodySmall" style="background:var(--wc-bg-warning);color:var(--wc-text-on-warning);padding:2px 6px;border-radius:4px;font-weight:600;margin-left:6px;">IDLE</span></div>
+                  <div class="t-bodySmall text-secondary">पहले deployed · अभी आपके पास · carry fee चल रही है</div>
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
@@ -573,6 +587,45 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Improvement v9.5 · 17 May 2026 — DS·* nav chain + logic audit -->
+              <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-warning),#FFF0C2);border:0;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-caution);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v9.5</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · DS·* navigation chain + logic audit</span>
+                </div>
+                <div class="t-titleSm mt-md">DS·* workflows now walk the full app journey (1 step → 5 steps each)</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged that the 7 DS·* variants were single-step (just landed on the device-detail screen). Added the same nav chain as W3: dashboard → menu → NetBox → inventory → device-detail. Plus full logic/conceptual audit against spec.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Each DS·* now has 5 steps:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  <strong>1.</strong> dashboard-home · CSP opens app<br>
+                  <strong>2.</strong> app-menu · taps hamburger, selects नेट बॉक्स<br>
+                  <strong>3.</strong> nb-home · fleet view<br>
+                  <strong>4.</strong> device-inventory · taps the right device row<br>
+                  <strong>5.</strong> dev-custodied / dev-idle · with sub-state morph applied
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Inventory updated: IDLE row added</div>
+                <div class="t-bodySmall text-secondary mt-sm">device-inventory previously only showed 7 CUSTODIED rows. Added NB-00472 as an IDLE row at the bottom with an IDLE badge (would be on a separate IDLE tab in the real app — flat-listed in prototype for tap reachability). All DS·I·* flows route through this.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Logic audit — math sanity check:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • <strong>CUSTODIED recall window</strong> = 45 − days · DS·C1: 45−7=38 ✓ · DS·C2: 45−42=3 ✓ · DS·C3: 47&gt;45 → recall fired ✓<br>
+                  • <strong>IDLE carry fee</strong> = days × ₹5 · DS·I1: 1×5=5 ✓ · DS·I2: 22×5=110 ✓ · DS·I3: 40×5=200 ✓ · DS·I4: 45×5=225 frozen ✓<br>
+                  • <strong>"5 दिन में ₹25 और"</strong> on DS·I3: 5×5=25 ✓<br>
+                  • <strong>P_CUSTODIED_RECALL_DAYS = 45</strong> + <strong>P_CARRY_FEE_RATE = ₹5/day</strong> per Amendment 1 + Decision 9
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Conceptual audit — DS·C3 + DS·I4 PC raised:</div>
+                <div class="t-bodySmall text-secondary mt-sm">Per ACS Patch 4 + Patch 5, when system-recall fires, the device transitions <code>CUSTODIED/IDLE → RETRIEVAL_PENDING</code> via <code>T_RECALL_CUSTODIED</code> / <code>T_RECALL_REQUESTED</code>. So in DS·C3 and DS·I4 the device is technically not in CUSTODIED/IDLE anymore. Prototype morphs the original screen with a "recall चालू" banner for simplicity — <strong>real app should route to dev-retrieval-pending with a "system-initiated recall" banner</strong>. Noted as a PC in the workflow notes.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Other findings (deferred, separate pass):</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • No <strong>"Customer के पास लगाएं"</strong> (deploy) CTA on dev-custodied or dev-idle — only "Wiom को वापस" and "मुझे यह डिवाइस नहीं मिल रहा" exist. Deploy is the most common action; should be primary. Worth adding.<br>
+                  • device-inventory tabs are static — clicking different tabs doesn't actually switch the visible list. Would need tab-switching JS in a future pass.
+                </div>
+              </div>
+
               <!-- Improvement v9.4 · 17 May 2026 — Device State Variants + spec-impossible nav fix -->
               <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-warning),#FFF0C2);border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -2889,9 +2942,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=9.4"></script>
-<script src="assets/annotations-new.js?v=9.4"></script>
-<script src="assets/workflows.js?v=9.4"></script>
-<script src="assets/app.js?v=9.4"></script>
+<script src="assets/annotations.js?v=9.5"></script>
+<script src="assets/annotations-new.js?v=9.5"></script>
+<script src="assets/workflows.js?v=9.5"></script>
+<script src="assets/app.js?v=9.5"></script>
 </body>
 </html>

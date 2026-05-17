@@ -276,48 +276,110 @@ window.WORKFLOWS = {
   // dev-custodied / dev-idle into 7 sub-states. CUSTODIED is always carry-fee
   // exempt (Decision 9); IDLE accumulates ₹5/day until recall-trigger freezes.
 
+  // v9.5 · Navigation chain added to all DS workflows. Each variant now walks
+  // the realistic CSP journey: dashboard → menu → NetBox section → device
+  // inventory → device detail (with sub-state morph applied).
+
+  // ── Spec-conformance notes for the DS family ──────────────────────────────
+  // Math sanity check:
+  //   CUSTODIED recall window = 45 - days (P_CUSTODIED_RECALL_DAYS = 45)
+  //   IDLE carry fee total    = days × ₹5 (P_CARRY_FEE_RATE = ₹5/day)
+  //   IDLE recall freezes at day 45 → fee caps at ₹225
+  // DS·C1: 45-7=38 ✓  DS·C2: 45-42=3 ✓  DS·C3: 47>45 → recall fired ✓
+  // DS·I1: 1×5=5 ✓   DS·I2: 22×5=110 ✓  DS·I3: 40×5=200 ✓  DS·I4: 45×5=225 frozen ✓
+  //
+  // Conceptual note on DS·C3 + DS·I4 ("recall in progress"):
+  //   Per ACS Patch 4 + Patch 5, once the recall fires the device transitions
+  //   CUSTODIED/IDLE → RETRIEVAL_PENDING via T_RECALL_CUSTODIED / T_RECALL_REQUESTED.
+  //   So the device technically isn't in CUSTODIED/IDLE anymore. The prototype
+  //   keeps the same screen with a "recall चालू" morph for simplicity — a
+  //   real implementation should route the user to dev-retrieval-pending with
+  //   a "system-initiated" banner. Noted as a PC for the real-app pass.
+
   DSC1: {
     title: 'DS·C1 · CUSTODIED · fresh (day 7)',
     purpose: 'Just-received device. 38 दिन recall window. No carry fee (was_ever_deployed = false → Decision 9 exempt). Normal action: deploy or return.',
-    steps: [{ num: 1, label: 'CUSTODIED · day 7', screen: 'dev-custodied',
-      note: 'Recall countdown shows 38 दिन बाकी. Body emphasises "deploy या return". CTA: "Wiom को वापस करना है" (routes to RETRIEVAL_PENDING — the only valid CUSTODIED → next transition per ACS spec).' }]
+    steps: [
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home dashboard.' },
+      { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → opens drawer · selects नेट बॉक्स.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view. Taps hero "82 नेट बॉक्स · सभी देखें" → inventory.' },
+      { num: 4, label: 'Inventory · CUSTODIED tab', screen: 'device-inventory', note: 'CUSTODIED tab active by default. CSP taps NB-00123 (a fresh device sitting 7 days).' },
+      { num: 5, label: 'CUSTODIED · day 7', screen: 'dev-custodied',
+        note: 'Recall countdown shows 38 दिन बाकी (math: 45 − 7 = 38 ✓). Body emphasises "deploy या return". CTA: "Wiom को वापस करना है" routes to RETRIEVAL_PENDING — the only valid CUSTODIED → next transition per ACS Patch 4.' }
+    ]
   },
   DSC2: {
     title: 'DS·C2 · CUSTODIED · recall imminent (day 42)',
     purpose: 'Recall window almost expired. 3 दिन बाकी. Still no carry fee. Last chance for CSP-initiated deploy or clean return — after this, system auto-recalls.',
-    steps: [{ num: 1, label: 'CUSTODIED · day 42', screen: 'dev-custodied',
-      note: 'Recall countdown shows 3 दिन बाकी. Banner softly urgent — encourages "clean return से पहले recall hota" path. CTA still active.' }]
+    steps: [
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home dashboard.' },
+      { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → opens drawer · selects नेट बॉक्स.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view. Taps hero → inventory.' },
+      { num: 4, label: 'Inventory · CUSTODIED tab', screen: 'device-inventory', note: 'CUSTODIED tab active. Taps a row to drill in.' },
+      { num: 5, label: 'CUSTODIED · day 42', screen: 'dev-custodied',
+        note: 'Recall countdown shows 3 दिन बाकी (math: 45 − 42 = 3 ✓). Banner softly urgent. CTA still active. CSP can return now (clean) or wait 3 days for system recall (same end result, different framing).' }
+    ]
   },
   DSC3: {
     title: 'DS·C3 · CUSTODIED · recall in progress (day 47)',
-    purpose: 'System auto-recall fired at day 45. Wiom team coming. CSP just waits for handover. No fee, no liability, no action needed.',
-    steps: [{ num: 1, label: 'CUSTODIED · recall चालू', screen: 'dev-custodied',
-      note: 'Banner morphs to "Wiom team device वापस ले रही है". Recall status "चालू है". CTA reframed to passive "Wiom team के लिए details देखें". Exposure closes on handover.' }]
+    purpose: 'System auto-recall fired at day 45 → device actually in RETRIEVAL_PENDING per ACS Patch 4 (T_RECALL_CUSTODIED). Wiom team coming. CSP just waits for handover. No fee, no liability, no action needed.',
+    steps: [
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home dashboard. Probably notified by push: "system ने NB-00123 का auto-recall शुरू किया".' },
+      { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → drawer.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view.' },
+      { num: 4, label: 'Inventory · CUSTODIED tab', screen: 'device-inventory', note: 'Taps NB-00123 to check status.' },
+      { num: 5, label: 'CUSTODIED · recall चालू', screen: 'dev-custodied',
+        note: 'Banner morphs to "Wiom team device वापस ले रही है". Recall status "चालू है". CTA reframed to passive "Wiom team के लिए details देखें". <strong>PC for real app:</strong> per ACS Patch 4, device is now in RETRIEVAL_PENDING state — real app should route here to dev-retrieval-pending with system-initiated banner. Prototype morphs the same screen for simplicity. Exposure closes on handover.' }
+    ]
   },
 
   DSI1: {
     title: 'DS·I1 · IDLE · day 1 (carry fee just started)',
     purpose: 'Customer churned today. Device recovered to IDLE. Carry fee ₹5 starts accumulating. 44 दिन recall window. Wiom-way nudge: redeploy ASAP.',
-    steps: [{ num: 1, label: 'IDLE · day 1', screen: 'dev-idle',
-      note: 'Banner: "आज carry fee शुरू हुई". Days pill: 1 दिन. Carry fee: ₹5 daily / ₹5 total. Footnote signals fresh start of accumulation.' }]
+    steps: [
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home. Today\'s wallet feed shows the recovery event.' },
+      { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → drawer.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view. Taps hero → inventory.' },
+      { num: 4, label: 'Inventory · IDLE row', screen: 'device-inventory', note: 'In v9.5 the IDLE row (NB-00472) is appended at the bottom with an IDLE badge (would be on a separate IDLE tab in the real app). CSP taps it.' },
+      { num: 5, label: 'IDLE · day 1', screen: 'dev-idle',
+        note: 'Banner: "आज carry fee शुरू हुई". Days pill: 1 दिन. Carry fee: ₹5/day · ₹5 total (math: 1×5=5 ✓). Footnote signals fresh start.' }
+    ]
   },
   DSI2: {
     title: 'DS·I2 · IDLE · mid (day 22 — current default)',
     purpose: 'Device sitting 22 days. ₹110 accumulated. 23 दिन recall window. Steady-state accumulation. Default IDLE view.',
-    steps: [{ num: 1, label: 'IDLE · day 22', screen: 'dev-idle',
-      note: 'Matches the original dev-idle copy. Days pill: 22 दिन. Carry fee: ₹5/day · ₹110 total. Standard action: redeploy or Wiom को वापस.' }]
+    steps: [
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home dashboard.' },
+      { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → drawer.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view also shows NB-00472 in the "कुछ नेट बॉक्स पर ध्यान दें" list.' },
+      { num: 4, label: 'Inventory · IDLE row', screen: 'device-inventory', note: 'IDLE row at the bottom. Tap.' },
+      { num: 5, label: 'IDLE · day 22', screen: 'dev-idle',
+        note: 'Matches the original dev-idle copy. Days pill: 22 दिन. Carry fee: ₹5/day · ₹110 total (math: 22×5=110 ✓). Standard action: redeploy or "Wiom को वापस".' }
+    ]
   },
   DSI3: {
     title: 'DS·I3 · IDLE · recall imminent (day 40)',
     purpose: '5 दिन left in recall window. Carry fee ₹200 accumulated. System will auto-recall at day 45 and freeze the fee. Decision pressure peaks here.',
-    steps: [{ num: 1, label: 'IDLE · day 40', screen: 'dev-idle',
-      note: 'Banner: "जल्द decision लें · recall पास है". Days pill: 40 दिन. Footnote signals the next 5 days will add ₹25 more before recall freezes accumulation.' }]
+    steps: [
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home. Likely notified about approaching recall.' },
+      { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → drawer.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view.' },
+      { num: 4, label: 'Inventory · IDLE row', screen: 'device-inventory', note: 'Taps NB-00472.' },
+      { num: 5, label: 'IDLE · day 40', screen: 'dev-idle',
+        note: 'Banner: "जल्द decision लें · recall पास है". Days pill: 40 दिन. Carry fee ₹200 (math: 40×5=200 ✓). Footnote signals the next 5 days will add ₹25 more (math: 5×5=25 ✓) before recall freezes accumulation.' }
+    ]
   },
   DSI4: {
     title: 'DS·I4 · IDLE · recall in progress (day 47, carry fee frozen)',
-    purpose: 'System auto-recall fired at day 45. Carry fee accumulation stopped at ₹225. Wiom team coming. Carry fee already accrued will settle at next cycle.',
-    steps: [{ num: 1, label: 'IDLE · recall चालू', screen: 'dev-idle',
-      note: 'Banner morphs to "Wiom team device वापस ले रही है". Days pill: "Recall चालू". Carry fee row shows ₹0/day with "रुक गई" label + ₹225 as final accumulation.' }]
+    purpose: 'System auto-recall fired at day 45 → device actually in RETRIEVAL_PENDING per ACS Patch 4 (T_RECALL_REQUESTED). Carry fee accumulation stopped at ₹225. Wiom team coming. Carry fee already accrued settles at next cycle.',
+    steps: [
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home. Notified: "system ने NB-00472 का auto-recall शुरू किया · carry fee रुक गई".' },
+      { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → drawer.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view.' },
+      { num: 4, label: 'Inventory · IDLE row', screen: 'device-inventory', note: 'Taps NB-00472 to verify status.' },
+      { num: 5, label: 'IDLE · recall चालू', screen: 'dev-idle',
+        note: 'Banner morphs to "Wiom team device वापस ले रही है". Days pill: "Recall चालू". Carry fee row shows ₹0/day "रुक गई" + ₹225 final (math: 45×5=225 — capped at recall day ✓). <strong>PC:</strong> per ACS Patch 4, device is in RETRIEVAL_PENDING now — real app should route to dev-retrieval-pending. Prototype morphs the same screen for simplicity.' }
+    ]
   },
 
   W12: {
