@@ -613,6 +613,13 @@
     }
   });
 
+  // v9.9 · collapsible rail groups (toggle on click of group header).
+  // Items inside live in a sibling `.group-items` container; CSS hides them
+  // when the group has `.collapsed`. Default-collapsed state set in HTML.
+  document.querySelectorAll('#rail .group.collapsible').forEach(g => {
+    g.addEventListener('click', () => g.classList.toggle('collapsed'));
+  });
+
   // Rail navigation
   rail.addEventListener('click', e => {
     const item = e.target.closest('.item');

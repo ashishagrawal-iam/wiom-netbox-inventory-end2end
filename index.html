@@ -7,8 +7,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=9.8">
-  <link rel="stylesheet" href="assets/proto.css?v=9.8">
+  <link rel="stylesheet" href="assets/tokens.css?v=9.9">
+  <link rel="stylesheet" href="assets/proto.css?v=9.9">
+  <style>
+    /* v9.9 · collapsible rail groups */
+    .group.collapsible { cursor: pointer; user-select: none; position: relative; padding-right: 28px; }
+    .group.collapsible::after {
+      content: '▾'; position: absolute; right: 10px; top: 50%;
+      transform: translateY(-50%); font-size: 10px; opacity: 0.6;
+      transition: transform 0.18s ease;
+    }
+    .group.collapsible.collapsed::after { transform: translateY(-50%) rotate(-90deg); }
+    .group.collapsible:hover { background: rgba(0,0,0,0.03); }
+    .group.collapsible.collapsed + .group-items { display: none; }
+  </style>
 </head>
 <body class="show-amendments">
 
@@ -115,61 +127,68 @@
     <div class="item is-workflow" data-workflow="W11"><span class="dot"></span> W11 · Legacy Migration <span class="meta">2 steps</span></div>
     <div class="item is-workflow" data-workflow="W12"><span class="dot"></span> W12 · Late Recovery <span class="meta">3 steps</span></div>
 
-    <div class="group">Order side · Pre-amendment</div>
-    <div class="item is-new active" data-screen="dashboard-home"><span class="dot"></span> Dashboard · Home <span class="meta">NEW v5</span></div>
-    <div class="item is-new" data-screen="app-menu"><span class="dot"></span> Menu drawer <span class="meta">v9.1</span></div>
-    <div class="item is-new" data-screen="device-inventory"><span class="dot"></span> Device Inventory · tabbed <span class="meta">v9.1</span></div>
-    <div class="item is-new" data-screen="zone-capacity"><span class="dot"></span> नया काम · opportunity <span class="meta">v7</span></div>
-    <div class="item is-new" data-screen="drilldown-no-capacity"><span class="dot"></span> नया काम · no capacity <span class="meta">v8</span></div>
-    <div class="item is-new" data-screen="drilldown-blocked"><span class="dot"></span> नया काम · blocked <span class="meta">v8</span></div>
-    <div class="item" data-screen="nb-home"><span class="dot"></span> NetBox Home</div>
-    <div class="item has-change" data-screen="request-sheet"><span class="dot"></span> Request New <span class="meta">changed</span></div>
-    <div class="item has-change" data-screen="low-balance"><span class="dot"></span> Low Balance <span class="meta">changed</span></div>
-    <div class="item" data-screen="add-funds-input"><span class="dot"></span> Add Funds · Input</div>
-    <div class="item" data-screen="add-funds-method"><span class="dot"></span> Add Funds · Method</div>
-    <div class="item" data-screen="add-funds-processing"><span class="dot"></span> Add Funds · Processing</div>
-    <div class="item" data-screen="add-funds-success"><span class="dot"></span> Add Funds · Success</div>
-    <div class="item" data-screen="request-success"><span class="dot"></span> Request Success</div>
-    <div class="item" data-screen="nb-home-tracking"><span class="dot"></span> Home · Order in transit</div>
-    <div class="item has-change" data-screen="nb-home-delivered"><span class="dot"></span> Home · Delivered (CTA) <span class="meta">changed</span></div>
-    <div class="item has-change" data-screen="delivery-confirm"><span class="dot"></span> Delivery Confirm <span class="meta">changed</span></div>
-    <div class="item" data-screen="delivery-confirmed"><span class="dot"></span> Delivery Confirmed</div>
+    <!-- v9.9 · collapsible (collapsed by default) — long lists, browsed less often -->
+    <div class="group collapsible collapsed">Order side · Pre-amendment</div>
+    <div class="group-items">
+      <div class="item is-new active" data-screen="dashboard-home"><span class="dot"></span> Dashboard · Home <span class="meta">NEW v5</span></div>
+      <div class="item is-new" data-screen="app-menu"><span class="dot"></span> Menu drawer <span class="meta">v9.1</span></div>
+      <div class="item is-new" data-screen="device-inventory"><span class="dot"></span> Device Inventory · tabbed <span class="meta">v9.1</span></div>
+      <div class="item is-new" data-screen="zone-capacity"><span class="dot"></span> नया काम · opportunity <span class="meta">v7</span></div>
+      <div class="item is-new" data-screen="drilldown-no-capacity"><span class="dot"></span> नया काम · no capacity <span class="meta">v8</span></div>
+      <div class="item is-new" data-screen="drilldown-blocked"><span class="dot"></span> नया काम · blocked <span class="meta">v8</span></div>
+      <div class="item" data-screen="nb-home"><span class="dot"></span> NetBox Home</div>
+      <div class="item has-change" data-screen="request-sheet"><span class="dot"></span> Request New <span class="meta">changed</span></div>
+      <div class="item has-change" data-screen="low-balance"><span class="dot"></span> Low Balance <span class="meta">changed</span></div>
+      <div class="item" data-screen="add-funds-input"><span class="dot"></span> Add Funds · Input</div>
+      <div class="item" data-screen="add-funds-method"><span class="dot"></span> Add Funds · Method</div>
+      <div class="item" data-screen="add-funds-processing"><span class="dot"></span> Add Funds · Processing</div>
+      <div class="item" data-screen="add-funds-success"><span class="dot"></span> Add Funds · Success</div>
+      <div class="item" data-screen="request-success"><span class="dot"></span> Request Success</div>
+      <div class="item" data-screen="nb-home-tracking"><span class="dot"></span> Home · Order in transit</div>
+      <div class="item has-change" data-screen="nb-home-delivered"><span class="dot"></span> Home · Delivered (CTA) <span class="meta">changed</span></div>
+      <div class="item has-change" data-screen="delivery-confirm"><span class="dot"></span> Delivery Confirm <span class="meta">changed</span></div>
+      <div class="item" data-screen="delivery-confirmed"><span class="dot"></span> Delivery Confirmed</div>
+    </div>
 
-    <div class="group">Device states · Pre-amendment</div>
-    <div class="item" data-screen="dev-deployed"><span class="dot"></span> DEPLOYED</div>
-    <div class="item has-change" data-screen="dev-idle"><span class="dot"></span> IDLE (with fee) <span class="meta">changed</span></div>
-    <div class="item has-change" data-screen="dev-custodied"><span class="dot"></span> CUSTODIED <span class="meta">changed</span></div>
-    <div class="item has-change" data-screen="dev-recovery-pending"><span class="dot"></span> RECOVERY_PENDING <span class="meta">changed</span></div>
-    <div class="item" data-screen="dev-retrieval-pending"><span class="dot"></span> RETRIEVAL_PENDING</div>
-    <div class="item has-change" data-screen="dev-returned"><span class="dot"></span> RETURNED <span class="meta">changed</span></div>
-    <div class="item has-change" data-screen="dev-damaged"><span class="dot"></span> DAMAGED <span class="meta">changed</span></div>
-    <div class="item has-change" data-screen="dev-lost"><span class="dot"></span> LOST <span class="meta">changed</span></div>
-    <div class="item" data-screen="dev-writtenoff"><span class="dot"></span> WRITTEN_OFF</div>
+    <div class="group collapsible collapsed">Device states · Pre-amendment</div>
+    <div class="group-items">
+      <div class="item" data-screen="dev-deployed"><span class="dot"></span> DEPLOYED</div>
+      <div class="item has-change" data-screen="dev-idle"><span class="dot"></span> IDLE (with fee) <span class="meta">changed</span></div>
+      <div class="item has-change" data-screen="dev-custodied"><span class="dot"></span> CUSTODIED <span class="meta">changed</span></div>
+      <div class="item has-change" data-screen="dev-recovery-pending"><span class="dot"></span> RECOVERY_PENDING <span class="meta">changed</span></div>
+      <div class="item" data-screen="dev-retrieval-pending"><span class="dot"></span> RETRIEVAL_PENDING</div>
+      <div class="item has-change" data-screen="dev-returned"><span class="dot"></span> RETURNED <span class="meta">changed</span></div>
+      <div class="item has-change" data-screen="dev-damaged"><span class="dot"></span> DAMAGED <span class="meta">changed</span></div>
+      <div class="item has-change" data-screen="dev-lost"><span class="dot"></span> LOST <span class="meta">changed</span></div>
+      <div class="item" data-screen="dev-writtenoff"><span class="dot"></span> WRITTEN_OFF</div>
+    </div>
 
-    <div class="group">New · Proposed by amendments</div>
-    <div class="item is-new" data-screen="onboarding-prompt"><span class="dot"></span> SD Onboarding · prompt <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="onboarding-success"><span class="dot"></span> SD Onboarding · success <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="growth-intent"><span class="dot"></span> Capacity बढ़ाएं · State A <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="growth-intent-B"><span class="dot"></span> Capacity · State B (enough) <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="growth-intent-C"><span class="dot"></span> Capacity · State C (top-up) <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="growth-intent-D"><span class="dot"></span> Capacity · State D (no cap) <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="growth-intent-blocked"><span class="dot"></span> Capacity · Blocked (1 reason) <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="sd-profile"><span class="dot"></span> SD Profile <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="legacy-above"><span class="dot"></span> SD Profile · Legacy (above) <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="legacy-below"><span class="dot"></span> SD Profile · Legacy (below) <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="sd-topup"><span class="dot"></span> SD Top-Up <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="report-loss-sheet" style="border-left-color:var(--wc-state-negative);"><span class="dot" style="background:var(--wc-state-negative);"></span> गुम दर्ज करें · W3 pre-step <span class="meta">v9.0</span></div>
-    <div class="item is-new" data-screen="report-condition-sheet" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> स्थिति बताएं · damage report <span class="meta">v9.8</span></div>
-    <div class="item is-new" data-screen="liability-breakdown"><span class="dot"></span> राशि का विवरण · drill-down <span class="meta">v9.2</span></div>
-    <div class="item is-new" data-screen="loss-card-custody"><span class="dot"></span> Wallet · Custody loss card <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="loss-card-norecovery"><span class="dot"></span> Wallet · Non-recovery card <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="recovery-success"><span class="dot"></span> Recovery success · +₹50 <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="late-recovery-card"><span class="dot"></span> Wallet · Late recovery <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="settlement-detail"><span class="dot"></span> Settlement Detail <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="escalation-notice"><span class="dot"></span> Escalation Notice <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="dispute-form"><span class="dot"></span> Dispute · Form <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="dispute-pending"><span class="dot"></span> Dispute · Under review <span class="meta">NEW</span></div>
-    <div class="item is-new" data-screen="exit-settlement"><span class="dot"></span> Exit Settlement <span class="meta">NEW</span></div>
+    <div class="group collapsible collapsed">New · Proposed by amendments</div>
+    <div class="group-items">
+      <div class="item is-new" data-screen="onboarding-prompt"><span class="dot"></span> SD Onboarding · prompt <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="onboarding-success"><span class="dot"></span> SD Onboarding · success <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="growth-intent"><span class="dot"></span> Capacity बढ़ाएं · State A <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="growth-intent-B"><span class="dot"></span> Capacity · State B (enough) <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="growth-intent-C"><span class="dot"></span> Capacity · State C (top-up) <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="growth-intent-D"><span class="dot"></span> Capacity · State D (no cap) <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="growth-intent-blocked"><span class="dot"></span> Capacity · Blocked (1 reason) <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="sd-profile"><span class="dot"></span> SD Profile <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="legacy-above"><span class="dot"></span> SD Profile · Legacy (above) <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="legacy-below"><span class="dot"></span> SD Profile · Legacy (below) <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="sd-topup"><span class="dot"></span> SD Top-Up <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="report-loss-sheet" style="border-left-color:var(--wc-state-negative);"><span class="dot" style="background:var(--wc-state-negative);"></span> गुम दर्ज करें · W3 pre-step <span class="meta">v9.0</span></div>
+      <div class="item is-new" data-screen="report-condition-sheet" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> स्थिति बताएं · damage report <span class="meta">v9.8</span></div>
+      <div class="item is-new" data-screen="liability-breakdown"><span class="dot"></span> राशि का विवरण · drill-down <span class="meta">v9.2</span></div>
+      <div class="item is-new" data-screen="loss-card-custody"><span class="dot"></span> Wallet · Custody loss card <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="loss-card-norecovery"><span class="dot"></span> Wallet · Non-recovery card <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="recovery-success"><span class="dot"></span> Recovery success · +₹50 <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="late-recovery-card"><span class="dot"></span> Wallet · Late recovery <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="settlement-detail"><span class="dot"></span> Settlement Detail <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="escalation-notice"><span class="dot"></span> Escalation Notice <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="dispute-form"><span class="dot"></span> Dispute · Form <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="dispute-pending"><span class="dot"></span> Dispute · Under review <span class="meta">NEW</span></div>
+      <div class="item is-new" data-screen="exit-settlement"><span class="dot"></span> Exit Settlement <span class="meta">NEW</span></div>
+    </div>
   </nav>
 
   <!-- Stage -->
