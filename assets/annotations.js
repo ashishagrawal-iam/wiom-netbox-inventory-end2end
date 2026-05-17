@@ -6,6 +6,35 @@
 
 window.ANNOTATIONS = {
 
+  'changelog': {
+    title: 'Amendment Changelog',
+    sub: 'Amendment v2 · 17 May 2026',
+    source: 'SDA',
+    sections: [
+      { crumb: 'What this is',
+        anchors: [
+          { kind: 'added',
+            text: 'Live log of amendments that have shipped into the prototype + APK. Each entry: tag · date · summary · source doc · screens touched.' }
+        ]},
+      { crumb: 'Amendment v2 · Payment §Patch 5',
+        anchors: [
+          { kind: 'changed',
+            text: '<strong>Split waterfall by loss_category.</strong><br/>Was: single waterfall (wallet → payouts → SD) for all liabilities.<br/>Now:<br/>• <strong>Custody loss / damage</strong> (full controllability) → wallet first → SD backstop (unchanged)<br/>• <strong>Non-recovery</strong> (partial controllability) → SD adjustment direct, <em>never</em> touches wallet (new) <span class="src">SD_Amendment_3_Payment §Patch 5</span>' },
+          { kind: 'policy',
+            text: 'Per SD-3 — controllability determines liability. Different controllability now drives different amounts (Compensation), different settlement paths (this patch), and different severity ordering (custody first).' },
+          { kind: 'policy',
+            text: 'Rationale: ₹200 non-recovery hitting wallet is disproportionate. SD adjustment is "collateral erosion" — visible in summary, not hidden, but no wallet pain. If SD approaches minimum → top-up escalation (never silent overflow).' }
+        ]},
+      { crumb: 'Screens updated',
+        anchors: [
+          { kind: 'changed', text: '<strong>F6 · Settlement Detail</strong> — "कहाँ से" card now shows split rows: Wallet ₹400 (custody) + SD ₹200 (non-recovery). Footnote explains the path.' },
+          { kind: 'changed', text: '<strong>F2 · Non-recovery card</strong> — footnote changed to "SD से सीधे समायोजित — wallet पर असर नहीं".' },
+          { kind: 'changed', text: '<strong>F4 · SD Profile dues</strong> — footnote now reads "Custody/damage → wallet से। Non-recovery → SD से सीधे।".' },
+          { kind: 'changed', text: '<strong>F7 · Escalation</strong> — top-up grace path now triggers in two scenarios (non-recovery SD adjustment OR custody wallet-insufficient).' }
+        ]}
+    ]
+  },
+
   /* ============================================================
      ORDER-SIDE
      ============================================================ */
@@ -412,16 +441,16 @@ window.ANNOTATIONS = {
 
   'settlement-detail': {
     title: 'Settlement Detail',
-    sub: 'NEW · periodic reconciliation result',
+    sub: 'NEW · periodic reconciliation result (Amendment v2 split-waterfall applied)',
     source: 'SDA',
     sections: [
       { crumb: 'Why this exists',
         anchors: [
           { kind: 'added', text: 'Every 90 days (P_RECON_CYCLE_DAYS) the system reconciles outstanding liabilities. This screen is the CSP\'s itemised receipt. <span class="src">SDA · Payment Amendment</span>' }
         ]},
-      { crumb: 'Waterfall visible',
+      { crumb: 'Split waterfall (Amendment v2 · 17 May 2026)',
         anchors: [
-          { kind: 'added', text: 'Row "Wallet से ₹X / सुरक्षा राशि से ₹0" — explicitly shows that SD stayed untouched (the desired state). If SD <em>is</em> touched, CSP sees the alert clearly.' }
+          { kind: 'changed', text: '<strong>Source rows now split by loss_category:</strong><br/>• "Wallet से · custody loss/damage" — full-controllability liabilities<br/>• "सुरक्षा राशि से · non-recovery" — partial-controllability, SD direct adjustment<br/>Footnote: "Wallet ने custody loss पकड़ा। Non-recovery सीधे SD से समायोजित — wallet पर असर नहीं।" <span class="src">SD_Amendment_3_Payment §Patch 5</span>' }
         ]},
       { crumb: 'Dispute window',
         anchors: [

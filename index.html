@@ -78,6 +78,13 @@
 
   <!-- Left rail -->
   <nav class="rail" id="rail">
+    <div class="group">📋 Changelog</div>
+    <div class="item is-new" data-screen="changelog" style="background:#FFF8E1;border-left-color:var(--wc-state-caution);">
+      <span class="dot" style="background:var(--wc-state-caution);"></span>
+      <strong>Amendment v2</strong>
+      <span class="meta" style="background:var(--wc-state-caution);color:white;">17 May</span>
+    </div>
+
     <div class="group">Workflows · Design Note 3</div>
     <div class="item is-workflow" data-workflow="W1"><span class="dot"></span> W1 · SD at Onboarding <span class="meta">5 steps</span></div>
     <div class="item is-workflow" data-workflow="W2"><span class="dot"></span> W2 · Growth Intent (A/B/C/D) <span class="meta">7 steps</span></div>
@@ -154,6 +161,74 @@
         <!-- ============================================================
              ORDER-SIDE SCREENS
              ============================================================ -->
+
+        <!-- 0. Changelog (Amendment v2 · 2026-05-17) -->
+        <section class="screen" id="screen-changelog">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body" style="background:white;">
+            <header class="app-bar light">
+              <div class="title">Amendment Changelog</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <div class="card" style="background:#FFF8E1;border:0;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-icon-warning);color:var(--wc-text-on-warning);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">AMENDMENT v2</span>
+                  <span class="t-bodySmall" style="color:var(--wc-text-on-warning);">17 May 2026</span>
+                </div>
+                <div class="t-titleSm mt-md" style="color:var(--wc-text-on-warning);">Settlement waterfall अब loss_category के हिसाब से split है</div>
+                <div class="t-bodyMd mt-sm" style="color:var(--wc-text-on-warning);">SD_Amendment_3_Payment §Patch 5</div>
+              </div>
+
+              <div class="t-titleSm mt-lg mb-sm">क्या बदला</div>
+              <div class="card">
+                <div class="t-body" style="font-weight:600;">पहले (Amendment v1)</div>
+                <div class="t-bodyMd text-secondary mt-sm">Single waterfall: हर liability पर wallet → future payouts → SD backstop।</div>
+                <div class="divider"></div>
+                <div class="t-body" style="font-weight:600;">अब (Amendment v2)</div>
+                <div class="t-bodyMd text-secondary mt-sm">Split waterfall — controllability से तय:</div>
+                <div class="row mt-md" style="gap:8px;align-items:flex-start;">
+                  <div style="width:6px;height:6px;border-radius:50%;background:var(--wc-state-negative);margin-top:8px;flex-shrink:0;"></div>
+                  <div class="t-bodyMd"><strong>Custody loss / Damage</strong> (पूरा control) — wallet first → future payouts → SD backstop. (पहले जैसा।)</div>
+                </div>
+                <div class="row mt-md" style="gap:8px;align-items:flex-start;">
+                  <div style="width:6px;height:6px;border-radius:50%;background:var(--wc-state-caution);margin-top:8px;flex-shrink:0;"></div>
+                  <div class="t-bodyMd"><strong>Non-recovery</strong> (आंशिक control) — SD adjustment सीधे। Wallet को कभी नहीं छूता। (नया।)</div>
+                </div>
+              </div>
+
+              <div class="t-titleSm mt-lg mb-sm">क्यों</div>
+              <div class="card">
+                <div class="t-bodyMd">SD-3 (controllability determines liability) के तहत:</div>
+                <div class="t-bodyMd text-secondary mt-sm">Different controllability → different AMOUNTS (Compensation OS)</div>
+                <div class="t-bodyMd text-secondary mt-sm">Different controllability → different SETTLEMENT PATHS (यह amendment)</div>
+                <div class="t-bodyMd text-secondary mt-sm">Different controllability → different SEVERITY ORDERING (custody first)</div>
+                <div class="divider"></div>
+                <div class="t-bodyMd"><strong>Reasoning:</strong></div>
+                <div class="t-bodyMd text-secondary mt-sm">₹200 छोटी रकम है। Non-recovery पर wallet hit करना disproportionate। SD adjustment "collateral erosion" है — दिखता है but wallet pain नहीं। अगर SD minimum तक पहुंचने लगे → top-up escalation, कभी silent wallet overflow नहीं।</div>
+              </div>
+
+              <div class="t-titleSm mt-lg mb-sm">किन screens पर असर</div>
+              <div class="card" style="padding:0;">
+                <div class="row" style="padding:12px 16px;border-bottom:1px solid var(--wc-stroke-primary);">
+                  <span class="t-body" style="flex:1;font-weight:600;">F6 · Settlement Detail</span>
+                  <span class="t-bodySmall" style="background:var(--wc-bg-info);color:var(--wc-state-info);padding:2px 8px;border-radius:4px;font-weight:600;">कहाँ से · split rows</span>
+                </div>
+                <div class="row" style="padding:12px 16px;border-bottom:1px solid var(--wc-stroke-primary);">
+                  <span class="t-body" style="flex:1;font-weight:600;">F2 · Non-recovery card</span>
+                  <span class="t-bodySmall" style="background:var(--wc-bg-info);color:var(--wc-state-info);padding:2px 8px;border-radius:4px;font-weight:600;">footnote</span>
+                </div>
+                <div class="row" style="padding:12px 16px;border-bottom:1px solid var(--wc-stroke-primary);">
+                  <span class="t-body" style="flex:1;font-weight:600;">F4 · SD Profile dues</span>
+                  <span class="t-bodySmall" style="background:var(--wc-bg-info);color:var(--wc-state-info);padding:2px 8px;border-radius:4px;font-weight:600;">footnote</span>
+                </div>
+                <div class="row" style="padding:12px 16px;">
+                  <span class="t-body" style="flex:1;font-weight:600;">F7 · Escalation</span>
+                  <span class="t-bodySmall" style="background:var(--wc-bg-info);color:var(--wc-state-info);padding:2px 8px;border-radius:4px;font-weight:600;">two trigger paths</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <!-- 1. NetBox Home (no active order) -->
         <section class="screen active" id="screen-nb-home">
@@ -998,7 +1073,8 @@
                 <div class="row between mt-sm"><span class="t-body">Damage claim (×1)</span><span class="t-body text-negative">₹200</span></div>
                 <div class="divider"></div>
                 <div class="row between"><span class="t-body" style="font-weight:700;">कुल</span><span class="t-body" style="font-weight:700;">₹600</span></div>
-                <div class="t-bodySmall text-secondary mt-sm">Wallet से समायोजित होगा — SD पर असर नहीं</div>
+                <!-- Amendment v2 · split waterfall -->
+                <div class="t-bodySmall text-secondary mt-sm">Custody/damage → wallet से। Non-recovery → SD से सीधे।</div>
               </div>
 
               <div class="card mt-md">
@@ -1046,7 +1122,9 @@
           </div>
         </section>
 
-        <!-- 25. Settlement Detail -->
+        <!-- 25. Settlement Detail (UPDATED · Amendment v2 · 2026-05-17 · Payment §Patch 5)
+             Split waterfall by loss_category: custody/damage → wallet first;
+             non-recovery → SD direct (never wallet). -->
         <section class="screen" id="screen-settlement-detail">
           <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
           <div class="screen-body">
@@ -1071,12 +1149,15 @@
                 <div class="row between"><span class="t-body" style="font-weight:700;">कुल समायोजित</span><span class="t-body text-negative" style="font-weight:700;">−₹600</span></div>
               </div>
 
-              <div class="card mt-md">
+              <div class="card mt-md" style="position:relative;">
                 <div class="t-titleSm mb-sm">कहाँ से</div>
-                <div class="row between"><span class="t-body text-secondary">Wallet से</span><span class="t-body">₹600</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">सुरक्षा राशि से</span><span class="t-body text-positive">₹0</span></div>
+                <!-- Amendment v2 · split waterfall by loss_category -->
+                <div class="row between"><span class="t-body text-secondary">Wallet से · custody loss/damage</span><span class="t-body">₹400</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">सुरक्षा राशि से · non-recovery</span><span class="t-body text-negative">₹200</span></div>
                 <div class="divider"></div>
-                <div class="row between"><span class="t-body" style="font-weight:700;">SD यथावत</span><span class="t-body" style="font-weight:700;">₹24,000</span></div>
+                <div class="row between"><span class="t-body" style="font-weight:700;">वर्तमान सुरक्षा राशि</span><span class="t-body" style="font-weight:700;">₹23,800</span></div>
+                <div class="t-bodySmall text-secondary mt-sm">Wallet ने custody loss पकड़ा। Non-recovery सीधे SD से समायोजित — wallet पर असर नहीं।</div>
+                <span class="amendment-badge changed" style="top:8px;right:8px;">Amendment v2</span>
               </div>
 
               <div style="background:var(--wc-bg-warning);border-radius:12px;padding:12px 14px;margin-top:12px;display:flex;gap:10px;">
@@ -1441,7 +1522,7 @@
             </header>
             <div class="scrollable" style="padding:16px;">
               <div class="t-bodySmall text-secondary mb-sm" style="text-transform:uppercase;letter-spacing:0.5px;">आज</div>
-              <div class="card" style="border-left:4px solid var(--wc-state-caution);">
+              <div class="card" style="border-left:4px solid var(--wc-state-caution);position:relative;">
                 <div class="row" style="gap:8px;color:var(--wc-state-caution);">
                   <svg class="mi mi-sm"><use href="#i-warning"/></svg>
                   <span class="t-titleSm">NetBox not recovered</span>
@@ -1451,7 +1532,9 @@
                 <div class="row between mt-sm"><span class="t-body text-secondary">देय राशि</span><span class="t-titleSm" style="color:var(--wc-state-caution);">₹200</span></div>
                 <div class="divider"></div>
                 <div class="t-bodyMd">ग्राहक ने NetBox recovery SLA में वापस नहीं किया। आंशिक देय।</div>
-                <div class="t-bodyMd text-secondary mt-sm">अगले settlement में शामिल होगा।</div>
+                <!-- Amendment v2 · non-recovery → SD direct, never wallet -->
+                <div class="t-bodyMd text-secondary mt-sm">अगले settlement में <strong>SD से सीधे</strong> समायोजित — wallet पर असर नहीं।</div>
+                <span class="amendment-badge changed" style="top:8px;right:8px;">Amendment v2</span>
               </div>
               <div class="card mt-md row between" data-tap="dispute-form" style="cursor:pointer;">
                 <span class="t-body">विवाद दर्ज करें</span>
