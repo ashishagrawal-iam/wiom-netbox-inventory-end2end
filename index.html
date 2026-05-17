@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=9.7">
-  <link rel="stylesheet" href="assets/proto.css?v=9.7">
+  <link rel="stylesheet" href="assets/tokens.css?v=9.8">
+  <link rel="stylesheet" href="assets/proto.css?v=9.8">
 </head>
 <body class="show-amendments">
 
@@ -159,6 +159,7 @@
     <div class="item is-new" data-screen="legacy-below"><span class="dot"></span> SD Profile · Legacy (below) <span class="meta">NEW</span></div>
     <div class="item is-new" data-screen="sd-topup"><span class="dot"></span> SD Top-Up <span class="meta">NEW</span></div>
     <div class="item is-new" data-screen="report-loss-sheet" style="border-left-color:var(--wc-state-negative);"><span class="dot" style="background:var(--wc-state-negative);"></span> गुम दर्ज करें · W3 pre-step <span class="meta">v9.0</span></div>
+    <div class="item is-new" data-screen="report-condition-sheet" style="border-left-color:var(--wc-state-caution);"><span class="dot" style="background:var(--wc-state-caution);"></span> स्थिति बताएं · damage report <span class="meta">v9.8</span></div>
     <div class="item is-new" data-screen="liability-breakdown"><span class="dot"></span> राशि का विवरण · drill-down <span class="meta">v9.2</span></div>
     <div class="item is-new" data-screen="loss-card-custody"><span class="dot"></span> Wallet · Custody loss card <span class="meta">NEW</span></div>
     <div class="item is-new" data-screen="loss-card-norecovery"><span class="dot"></span> Wallet · Non-recovery card <span class="meta">NEW</span></div>
@@ -589,6 +590,32 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Improvement v9.8 · 17 May 2026 — "स्थिति बताएं" condition-report sheet -->
+              <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-warning),#FFF0C2);border:0;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-caution);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v9.8</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · condition-report sheet</span>
+                </div>
+                <div class="t-titleSm mt-md">"स्थिति बताएं" now opens a proper condition-report form</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged: tapping "स्थिति बताएं" on dev-idle went straight to dev-damaged showing ₹600 ready to charge — skipped the form where CSP actually tells the system what's wrong. Same bug class as the earlier "setup nahin lagana" misroute.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">New screen: <code>report-condition-sheet</code></div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • Device identity (NB-00472)<br>
+                  • Status picker (radio): टूट गया · पावर नहीं हो रहा · पानी से खराब · slow/issues · और कुछ<br>
+                  • Optional photo upload (recommended)<br>
+                  • Optional free-text note<br>
+                  • Disclaimer card: "Wiom warehouse में जाँच के बाद ही देय राशि तय होगी — आपकी जानकारी inspection को speed up करेगी। <strong>अभी कोई liability दर्ज नहीं हो रही</strong>."<br>
+                  • CTA: "हाँ, Wiom को return करें" → routes to dev-damaged
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Why optional fields:</div>
+                <div class="t-bodySmall text-secondary mt-sm">Per ACS Patch 5: CSP's report is preliminary (informational, not financially authoritative). Final call is at Wiom warehouse via CONDITION_CLASSIFIED. So the form helps inspection but doesn't lock CSP into anything — all fields optional per Wiom-way "no forced friction".</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Open question / PC for dev-damaged:</div>
+                <div class="t-bodySmall text-secondary mt-sm">dev-damaged currently shows ₹600 liability + "Wiom warehouse में जाँच के बाद देय राशि तय होगी" — internally inconsistent (shows amount AND says amount not yet decided). Should probably split into two sub-states: <strong>"awaiting inspection"</strong> (no amount yet, just status) vs <strong>"inspection done"</strong> (amount + age-band drill-down). Worth a separate dev-damaged audit pass.</div>
+              </div>
+
               <!-- Fix v9.7 · 17 May 2026 — param-key leak + state-code leak in DS·I0 -->
               <div class="card" style="background:#FFE0E0;border:0;border-left:4px solid var(--wc-state-negative);">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -1781,7 +1808,11 @@
             </div>
             <div class="cta-bar">
               <button data-tap="dev-retrieval-pending" class="cta cta-primary" id="di-cta-primary">वापस करें</button>
-              <button data-tap="dev-damaged" class="cta cta-tertiary">स्थिति बताएं</button>
+              <!-- v9.8 · "स्थिति बताएं" now opens a condition-report sheet instead
+                   of jumping straight to dev-damaged (which assumes inspection
+                   already done). Per ACS Patch 5: condition is preliminarily
+                   reported by CSP, finalized by Wiom warehouse. -->
+              <button data-tap="report-condition-sheet" class="cta cta-tertiary">स्थिति बताएं</button>
               <button data-tap="report-loss-sheet" class="cta cta-link" style="color:var(--wc-state-negative);margin:0 auto;">मुझे यह डिवाइस नहीं मिल रहा</button>
             </div>
           </div>
@@ -2028,6 +2059,83 @@
             <div class="cta-bar">
               <button data-tap="dispute-form" class="cta cta-tertiary">विवाद दर्ज करें</button>
               <button data-tap="__back" class="cta cta-link" style="margin:0 auto;">ठीक है</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- v9.8 · REPORT CONDITION · "स्थिति बताएं" form. Replaces the buggy
+             direct jump from dev-idle "स्थिति बताएं" → dev-damaged (which was
+             premature — assumed Wiom warehouse inspection already done). Per
+             ACS Patch 5: CSP can declare a preliminary condition observation
+             (status + optional photo + optional note), Wiom warehouse then
+             does CONDITION_CLASSIFIED for the financially-authoritative call.
+             Form fields all OPTIONAL per Wiom-way "no forced friction". -->
+        <section class="screen" id="screen-report-condition-sheet">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">स्थिति बताएं</div>
+            </header>
+            <div class="scrollable" style="padding:16px;">
+              <!-- Device identity -->
+              <div class="card">
+                <div class="t-bodySmall text-secondary">किस device के लिए</div>
+                <div class="t-titleSm mt-sm">NB-00472</div>
+                <div class="t-bodySmall text-secondary mt-sm">आपकी custody में · खाली पड़ा है</div>
+              </div>
+
+              <!-- Status picker (radio) -->
+              <div class="card mt-md" style="padding:0;">
+                <div class="t-titleSm" style="padding:14px 16px 8px;">क्या दिक्कत है</div>
+                <label class="row" style="padding:14px 16px;border-top:1px solid var(--wc-stroke-primary);gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:6px solid var(--wc-brand-primary);border-radius:50%;background:white;flex-shrink:0;"></div>
+                  <span class="t-body">टूट गया है (physical damage)</span>
+                </label>
+                <label class="row" style="padding:14px 16px;border-top:1px solid var(--wc-stroke-primary);gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:2px solid var(--wc-stroke-secondary);border-radius:50%;flex-shrink:0;"></div>
+                  <span class="t-body">पावर नहीं हो रहा / चालू नहीं हो रहा</span>
+                </label>
+                <label class="row" style="padding:14px 16px;border-top:1px solid var(--wc-stroke-primary);gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:2px solid var(--wc-stroke-secondary);border-radius:50%;flex-shrink:0;"></div>
+                  <span class="t-body">पानी से खराब हुआ है</span>
+                </label>
+                <label class="row" style="padding:14px 16px;border-top:1px solid var(--wc-stroke-primary);gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:2px solid var(--wc-stroke-secondary);border-radius:50%;flex-shrink:0;"></div>
+                  <span class="t-body">काम कर रहा है पर slow है / issues हैं</span>
+                </label>
+                <label class="row" style="padding:14px 16px;border-top:1px solid var(--wc-stroke-primary);gap:12px;cursor:pointer;">
+                  <div style="width:20px;height:20px;border:2px solid var(--wc-stroke-secondary);border-radius:50%;flex-shrink:0;"></div>
+                  <span class="t-body">और कुछ (नीचे बताइए)</span>
+                </label>
+              </div>
+
+              <!-- Optional photo -->
+              <div class="t-bodySmall text-secondary mt-md mb-sm">photo जोड़ें (recommended · दिक्कत दिखाने के लिए)</div>
+              <div style="height:84px;border:1px dashed var(--wc-stroke-secondary);border-radius:10px;display:grid;place-items:center;color:var(--wc-text-secondary);background:white;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+                  <svg class="mi mi-sm"><use href="#i-add"/></svg>
+                  <span class="t-bodySmall">photo जोड़ें</span>
+                </div>
+              </div>
+
+              <!-- Optional note -->
+              <div class="t-bodySmall text-secondary mt-md mb-sm">और कुछ जोड़ना है (optional)</div>
+              <textarea style="width:100%;min-height:72px;border:1px solid var(--wc-input-border);border-radius:12px;padding:12px;font-family:inherit;font-size:14px;background:var(--wc-input-bg);resize:none;" placeholder="जैसे · screen टूटा है · 2 दिन पहले से चालू नहीं हो रहा"></textarea>
+
+              <!-- Disclaimer · CSP's report is preliminary; final call at warehouse -->
+              <div class="card mt-md" style="background:var(--wc-bg-info);border-color:transparent;">
+                <div class="row" style="gap:8px;color:var(--wc-state-info);align-items:center;">
+                  <svg class="mi mi-sm"><use href="#i-info"/></svg>
+                  <span class="t-titleSm" style="color:var(--wc-state-info);">आगे क्या होगा</span>
+                </div>
+                <div class="t-bodyMd mt-sm">यह device Wiom को return होगा। Warehouse में जाँच के बाद ही देय राशि तय होगी — आपकी यह जानकारी inspection को speed up करेगी।</div>
+                <div class="t-bodySmall text-secondary mt-sm"><strong>अभी कोई liability दर्ज नहीं हो रही</strong> — actual amount जाँच के बाद ही पता चलेगा।</div>
+              </div>
+            </div>
+            <div class="cta-bar">
+              <button data-tap="dev-damaged" class="cta cta-primary">हाँ, Wiom को return करें</button>
+              <button data-tap="__back" class="cta cta-link" style="margin:0 auto;">अभी नहीं</button>
             </div>
           </div>
         </section>
@@ -3000,9 +3108,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=9.7"></script>
-<script src="assets/annotations-new.js?v=9.7"></script>
-<script src="assets/workflows.js?v=9.7"></script>
-<script src="assets/app.js?v=9.7"></script>
+<script src="assets/annotations.js?v=9.8"></script>
+<script src="assets/annotations-new.js?v=9.8"></script>
+<script src="assets/workflows.js?v=9.8"></script>
+<script src="assets/app.js?v=9.8"></script>
 </body>
 </html>
