@@ -333,16 +333,34 @@ window.WORKFLOWS = {
     ]
   },
 
-  DSI1: {
-    title: 'DS·I1 · IDLE · day 1 (carry fee just started)',
-    purpose: 'Customer churned today. Device recovered to IDLE. Carry fee ₹5 starts accumulating. 44 दिन recall window. Wiom-way nudge: redeploy ASAP.',
+  // v9.6 · DS·I0 added: IDLE within grace period. Per Amendment 1 Patch 3 note
+  // ("existing carry fee parameters P_CARRY_FEE_RATE, P_CARRY_FEE_IDLE_DAYS
+  // unchanged"), P_CARRY_FEE_IDLE_DAYS is the grace window between recovery
+  // to IDLE and carry-fee accrual start. Exact value is a PC — prototype
+  // assumes 7 days. CSP gets time to redeploy without penalty.
+  DSI0: {
+    title: 'DS·I0 · IDLE · grace period (day 3 of 7)',
+    purpose: 'Device recently recovered from a customer churn. Sitting IDLE but inside the grace window — carry fee has NOT started yet. CSP has 4 more days to redeploy without any fee. If they redeploy in time, zero carry fee. If they don\'t, fee starts on day 8.',
     steps: [
-      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home. Today\'s wallet feed shows the recovery event.' },
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home. Recent recovery event visible in wallet feed.' },
+      { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → drawer.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view.' },
+      { num: 4, label: 'Inventory · IDLE row', screen: 'device-inventory', note: 'IDLE row at bottom of inventory list. CSP taps NB-00472 to check status.' },
+      { num: 5, label: 'IDLE · grace period', screen: 'dev-idle',
+        note: 'Banner: "हाल ही में recover हुआ · grace period चालू". Days pill: "Grace · 4 दिन बाकी" (3 of 7 grace days elapsed). Carry fee: ₹0/day "grace में" · ₹0 total. Footnote signals fee starts on day 8 if device is still IDLE. <strong>PC:</strong> exact P_CARRY_FEE_IDLE_DAYS value not redefined by amendments — prototype assumes 7. Real value to be confirmed with payments team.' }
+    ]
+  },
+
+  DSI1: {
+    title: 'DS·I1 · IDLE · day 8 (post-grace · carry fee just started)',
+    purpose: 'Grace period expired (P_CARRY_FEE_IDLE_DAYS = 7 assumed). CSP didn\'t redeploy in time. Carry fee ₹5 starts accumulating today. 37 दिन left in recall window. First nudge that the meter is running.',
+    steps: [
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home', note: 'CSP at home. May see push: "NB-00472 का grace period खत्म · carry fee आज से शुरू".' },
       { num: 2, label: 'Menu drawer', screen: 'app-menu', note: 'Taps hamburger → drawer.' },
       { num: 3, label: 'NetBox section', screen: 'nb-home', note: 'Fleet view. Taps hero → inventory.' },
-      { num: 4, label: 'Inventory · IDLE row', screen: 'device-inventory', note: 'In v9.5 the IDLE row (NB-00472) is appended at the bottom with an IDLE badge (would be on a separate IDLE tab in the real app). CSP taps it.' },
-      { num: 5, label: 'IDLE · day 1', screen: 'dev-idle',
-        note: 'Banner: "आज carry fee शुरू हुई". Days pill: 1 दिन. Carry fee: ₹5/day · ₹5 total (math: 1×5=5 ✓). Footnote signals fresh start.' }
+      { num: 4, label: 'Inventory · IDLE row', screen: 'device-inventory', note: 'CSP taps NB-00472.' },
+      { num: 5, label: 'IDLE · day 1 of fee', screen: 'dev-idle',
+        note: 'Banner: "आज carry fee शुरू हुई" (first day after grace). Days pill: 1 दिन (counting from fee start, not from recovery). Carry fee: ₹5/day · ₹5 total. Footnote signals fresh start of accumulation.' }
     ]
   },
   DSI2: {

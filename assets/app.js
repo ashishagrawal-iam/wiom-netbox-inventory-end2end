@@ -346,6 +346,20 @@
         'dc-cta-primary': 'Wiom team के लिए details देखें'
       }
     },
+    'DSI0': { // IDLE · within grace period (day 3 of P_CARRY_FEE_IDLE_DAYS = 7)
+      'dev-idle': {
+        'di-banner-title': 'हाल ही में recover हुआ',
+        'di-banner-sub': 'Grace period चालू · carry fee अभी शुरू नहीं हुई',
+        'di-days-pill': 'Grace · 4 दिन बाकी',
+        'di-action-body': 'Customer churn के बाद आपको थोड़ा समय मिलता है redeploy करने का। 4 दिन में carry fee शुरू होगी (P_CARRY_FEE_IDLE_DAYS = 7) — तब तक redeploy कर लें तो कोई carry fee नहीं लगेगी।',
+        'di-fee-title': 'कैरी फ़ी',
+        'di-fee-daily-label': 'अभी',
+        'di-fee-daily': '₹0 · grace में',
+        'di-fee-total-label': 'अब तक',
+        'di-fee-total': '₹0',
+        'di-fee-footnote': 'Grace period के 4 दिन बाद ₹5/day शुरू होगी (अगर तब भी IDLE हो)'
+      }
+    },
     'DSI1': { // IDLE · day 1 · just started
       'dev-idle': {
         'di-banner-title': 'यह नेट बॉक्स अभी customer के पास नहीं है',
