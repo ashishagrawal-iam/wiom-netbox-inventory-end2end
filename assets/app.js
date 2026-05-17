@@ -195,6 +195,29 @@
     return 'wallet-topup';
   }
 
+  // v8.8 · Screen-level tap remaps (works across sticky workflow drift).
+  // Keyed by [workflow][fromScreen][originalTapTarget] → remappedTarget.
+  // This complements the step-level tapRemap inside workflow definitions —
+  // SCREEN_TAP_REMAP fires whenever the workflow is active, regardless of
+  // which step is currently highlighted, so drifted in-phone tap chains
+  // route correctly to the workflow's intended destination.
+  const SCREEN_TAP_REMAP = {
+    'W1': {
+      // After UPI processing animation, W1 wants its dedicated SD-active
+      // surface (with capacity-unlock CTA), not the generic add-funds-success.
+      'add-funds-processing': { 'add-funds-success': 'onboarding-success' }
+    },
+    'W7': {
+      // After top-up clears the escalation, W7 lands on settlement-detail
+      // (early reconciliation triggered) — not the wallet tracker.
+      'add-funds-success': { 'nb-home-tracking': 'settlement-detail' }
+    },
+    'W9': {
+      // Standalone top-up goes back to SD profile to show the new balance.
+      'add-funds-success': { 'nb-home-tracking': 'sd-profile' }
+    }
+  };
+
   // v8.7 · Per-workflow content overrides for shared screens that get visited
   // from multiple workflows with different state semantics. Same shape as
   // PAYMENT_CONTEXTS but keyed by [workflowId][screenId][fieldId]. Default
@@ -408,24 +431,32 @@
 
   function navigate(targetScreen) {
     if (!targetScreen) return;
-    // v8 · workflow-aware tap remap. The same in-phone CTA can route
-    // differently depending on which flow is active (e.g. State A's "हाँ"
-    // → State B in F1·A but → State C in F1·B/C). Per-step tapRemap on the
-    // workflow definition overrides the hardcoded data-tap target.
+    // v8 · workflow-aware step-level tap remap. The same in-phone CTA can
+    // route differently depending on which flow is active (e.g. State A's
+    // "हाँ" → State B in F1·A but → State C in F1·B/C). Per-step tapRemap on
+    // the workflow definition overrides the hardcoded data-tap target.
     if (currentWorkflow) {
       const wf = window.WORKFLOWS[currentWorkflow];
       const currentStep = wf && wf.steps[currentStepIndex];
       if (currentStep && currentStep.tapRemap && currentStep.tapRemap[targetScreen]) {
         targetScreen = currentStep.tapRemap[targetScreen];
       }
+      // v8.8 · screen-level tap remap (survives sticky-workflow drift).
+      const wfScreenMap = SCREEN_TAP_REMAP[currentWorkflow];
+      const screenMap = wfScreenMap && currentScreen && wfScreenMap[currentScreen];
+      if (screenMap && screenMap[targetScreen]) {
+        targetScreen = screenMap[targetScreen];
+      }
     }
     if (maybeAdvanceWorkflow(targetScreen)) return;
-    // If navigation leaves the workflow's known path, clear workflow
-    if (currentWorkflow) {
-      const wf = window.WORKFLOWS[currentWorkflow];
-      const screenInWf = wf && wf.steps.some(s => s.screen === targetScreen);
-      if (!screenInWf) clearWorkflow();
-    }
+    // v8.8 · STICKY workflow on out-of-path tap. Previously we cleared the
+    // workflow when a tap landed on a screen not in the step list — which
+    // destroyed the content-morph mid-flow (W1 → add-funds-method tapped CTA →
+    // add-funds-processing not in W1 → cleared → next success screen reverted
+    // to wallet copy). Now the workflow stays sticky so the morph remains
+    // applied. Stepper highlight may briefly desync until next on-path tap,
+    // which is a fair trade for content correctness. Workflow is only cleared
+    // by an explicit rail-item click or another workflow entry.
     showScreen(targetScreen);
     if (history.replaceState) history.replaceState(null, '', '#' + targetScreen);
   }
