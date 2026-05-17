@@ -550,12 +550,14 @@
                 <div class="t-heroAmount" style="margin-top: 2px;">82 <span class="t-bodyLg" style="font-weight:400;color:var(--wc-text-secondary);">नेट बॉक्स</span></div>
               </div>
 
+              <!-- v5/v7 cleanup: Capacity tile removed from nb-home-tracking too.
+                   Growth ≠ NetBox ordering. Only the pre-amendment "नया ऑर्डर"
+                   tile is kept (disabled while order in flight), behind preamend-only. -->
               <div class="qa-grid">
                 <div class="qa-tile"><div class="icon-circle" style="background:var(--wc-bg-info);color:var(--wc-state-info);"><svg class="mi"><use href="#i-assignment-return"/></svg></div><div class="label">वापसी स्वीकार</div></div>
-                <div class="qa-tile" style="opacity:0.5;">
+                <div class="qa-tile preamend-only" style="opacity:0.5;">
                   <div class="icon-circle" style="background:var(--wc-bg-disabled);color:var(--wc-text-hint);"><svg class="mi"><use href="#i-add"/></svg></div>
-                  <div class="label preamend-only">नया ऑर्डर</div>
-                  <div class="label amended-only">Capacity बढ़ाएं</div>
+                  <div class="label">नया ऑर्डर</div>
                   <div class="t-bodySmall text-secondary">पहले वाला पूरा होने दें</div>
                 </div>
                 <div class="qa-tile"><div class="icon-circle" style="background:var(--wc-bg-brand-tint);color:var(--wc-brand-primary);"><svg class="mi"><use href="#i-checklist"/></svg></div><div class="label">कई वापस करें</div></div>
