@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=9.2">
-  <link rel="stylesheet" href="assets/proto.css?v=9.2">
+  <link rel="stylesheet" href="assets/tokens.css?v=9.3">
+  <link rel="stylesheet" href="assets/proto.css?v=9.3">
 </head>
 <body class="show-amendments">
 
@@ -489,11 +489,14 @@
                 <span class="t-bodySmall text-secondary">CUSTODIED = आपके पास हैं, customer पर नहीं लगे</span>
               </div>
               <!-- Device list (CUSTODIED tab) -->
+              <!-- v9.3 · Removed "X months" age from device rows (Must-Not-Do
+                   #12 caution — age is formula-input). Kept custody-since date
+                   and recall window — both are factual non-formula attributes. -->
               <div data-tap="dev-custodied" class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
                 <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
                 <div style="flex:1;">
                   <div class="t-body" style="font-weight:600;">NB-00123</div>
-                  <div class="t-bodySmall text-secondary">28 months · custody 12 May से · 38 दिन recall window</div>
+                  <div class="t-bodySmall text-secondary">custody 12 May से · 38 दिन recall window</div>
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
@@ -501,7 +504,7 @@
                 <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
                 <div style="flex:1;">
                   <div class="t-body" style="font-weight:600;">NB-00124</div>
-                  <div class="t-bodySmall text-secondary">14 months · custody 3 May से · 42 दिन recall window</div>
+                  <div class="t-bodySmall text-secondary">custody 3 May से · 42 दिन recall window</div>
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
@@ -509,7 +512,7 @@
                 <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
                 <div style="flex:1;">
                   <div class="t-body" style="font-weight:600;">NB-00125</div>
-                  <div class="t-bodySmall text-secondary">9 months · custody 9 May से · 44 दिन recall window</div>
+                  <div class="t-bodySmall text-secondary">custody 9 May से · 44 दिन recall window</div>
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
@@ -517,7 +520,7 @@
                 <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
                 <div style="flex:1;">
                   <div class="t-body" style="font-weight:600;">NB-00126</div>
-                  <div class="t-bodySmall text-secondary">6 months · custody 11 May से · 45 दिन recall window</div>
+                  <div class="t-bodySmall text-secondary">custody 11 May से · 45 दिन recall window</div>
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
@@ -525,7 +528,7 @@
                 <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
                 <div style="flex:1;">
                   <div class="t-body" style="font-weight:600;">NB-00127</div>
-                  <div class="t-bodySmall text-secondary">3 months · custody 14 May से · 45 दिन recall window</div>
+                  <div class="t-bodySmall text-secondary">custody 14 May से · 45 दिन recall window</div>
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
@@ -533,7 +536,7 @@
                 <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
                 <div style="flex:1;">
                   <div class="t-body" style="font-weight:600;">NB-00128</div>
-                  <div class="t-bodySmall text-secondary">2 months · custody 15 May से · 45 दिन recall window</div>
+                  <div class="t-bodySmall text-secondary">custody 15 May से · 45 दिन recall window</div>
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
@@ -541,7 +544,7 @@
                 <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
                 <div style="flex:1;">
                   <div class="t-body" style="font-weight:600;">NB-00129</div>
-                  <div class="t-bodySmall text-secondary">1 month · custody 16 May से · 45 दिन recall window</div>
+                  <div class="t-bodySmall text-secondary">custody 16 May से · 45 दिन recall window</div>
                 </div>
                 <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
               </div>
@@ -561,6 +564,29 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Fix v9.3 · 17 May 2026 — strip designer-invented form + age leaks -->
+              <div class="card" style="background:#FFE0E0;border:0;border-left:4px solid var(--wc-state-negative);">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-negative);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">FIX v9.3</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · report-loss-sheet trim + age-leak sweep</span>
+                </div>
+                <div class="t-titleSm mt-md">Removed designer-invented form + remaining "X months" age leaks</div>
+                <div class="t-bodyMd text-secondary mt-sm">v9.2 fixed the slab exposure but I'd left two designer inventions in place: the "क्या हुआ" form (कहाँ last seen + कब noticed + photo) and the "28 months" age leak in the device meta. User flagged both. Removed both.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">report-loss-sheet · what changed:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • <strong>Removed</strong> the entire "क्या हुआ" form (कहाँ last seen text field, कब noticed time pills, photo upload). These were my designer inventions (PC-1/2/3) — spec just says "CSP or system reports device missing", not "CSP fills a form". Declaration is a confirmation act; backend infers <code>loss_detected_at</code> from the report timestamp.<br>
+                  • <strong>Removed</strong> "28 months" from device meta (formula-input per Must-Not-Do #12).<br>
+                  • <strong>Kept</strong>: device ID, custody-since date, liability disclosure (computed amount + settlement timing + late-recovery clause + drill-down link), trust line, both CTAs.<br>
+                  • <strong>Added</strong> a brief context line: "यह device आपकी custody में मार्क है पर अभी आपके पास नहीं मिल रहा। गुम दर्ज करने से पहले एक बार देख लें — इसके बाद liability जुड़ जाएगी।"
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">device-inventory · what changed:</div>
+                <div class="t-bodySmall text-secondary mt-sm">Stripped "X months" age prefix from all 7 CUSTODIED device rows (Must-Not-Do #12 caution — age is the formula input). Kept custody-since date and recall window — both are factual non-formula attributes per spec rules.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall text-secondary"><strong>Lesson:</strong> When PCs are flagged, default to removing the invented part rather than shipping it with a "PC pending" badge. Spec compliance > prototype completeness when the two conflict.</div>
+              </div>
+
               <!-- Critical fix v9.2 · 17 May 2026 — Must-Not-Do compliance sweep -->
               <div class="card" style="background:#FFE0E0;border:0;border-left:4px solid var(--wc-state-negative);">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -1863,34 +1889,24 @@
               <div class="title">गुम दर्ज करें</div>
             </header>
             <div class="scrollable" style="padding:16px;">
-              <!-- Device identity -->
+              <!-- v9.3 · Removed the "क्या हुआ" form (कहाँ last seen + कब noticed +
+                   photo upload) — those were my designer inventions (PC-1/2/3),
+                   not in spec. Spec just says "CSP or system reports device
+                   missing" — declaration is a confirmation act, not data
+                   collection. Backend infers loss_detected_at from report
+                   timestamp. Also simplified device meta to remove the
+                   "28 months" age (formula-adjacent per Must-Not-Do #12).
+                   Result: confirmation-style screen, not a form. -->
               <div class="card">
                 <div class="t-bodySmall text-secondary">किस device के लिए</div>
                 <div class="t-titleSm mt-sm" id="rls-device-id">NB-00567</div>
-                <div class="t-bodySmall text-secondary mt-sm" id="rls-device-meta">28 months · आपकी custody में · 12 May से</div>
+                <div class="t-bodySmall text-secondary mt-sm" id="rls-device-meta">आपकी custody में · 12 May से</div>
               </div>
 
-              <!-- Form: where last seen + when noticed -->
-              <div class="card mt-md">
-                <div class="t-titleSm mb-md">क्या हुआ</div>
-                <div class="t-bodySmall text-secondary mb-sm">कहाँ last seen था?</div>
-                <div style="height:48px;background:var(--wc-input-bg);border:1px solid var(--wc-input-border);border-radius:10px;padding:0 14px;display:flex;align-items:center;">
-                  <span class="t-body text-secondary">जैसे · दुकान में · van में · ग्राहक के घर के पास</span>
-                </div>
-                <div class="t-bodySmall text-secondary mb-sm mt-md">कब noticed किया missing है?</div>
-                <div class="row" style="gap:8px;flex-wrap:wrap;">
-                  <div class="card" style="padding:8px 14px;border-color:var(--wc-brand-primary);background:var(--wc-bg-brand-tint);"><span class="t-bodyMd" style="color:var(--wc-brand-primary);font-weight:600;">आज</span></div>
-                  <div class="card" style="padding:8px 14px;"><span class="t-bodyMd">कल</span></div>
-                  <div class="card" style="padding:8px 14px;"><span class="t-bodyMd">2–3 दिन पहले</span></div>
-                  <div class="card" style="padding:8px 14px;"><span class="t-bodyMd">और पहले</span></div>
-                </div>
-                <div class="t-bodySmall text-secondary mt-md mb-sm">photo जोड़ें (optional · last known location)</div>
-                <div style="height:84px;border:1px dashed var(--wc-stroke-secondary);border-radius:10px;display:grid;place-items:center;color:var(--wc-text-secondary);">
-                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-                    <svg class="mi mi-sm"><use href="#i-add"/></svg>
-                    <span class="t-bodySmall">photo जोड़ें</span>
-                  </div>
-                </div>
+              <!-- Brief context line — confirmation framing, not form -->
+              <div class="t-bodyMd text-secondary mt-md" style="padding:0 4px;">
+                यह device आपकी custody में मार्क है पर अभी आपके पास नहीं मिल रहा।<br>
+                गुम दर्ज करने से पहले एक बार देख लें — इसके बाद liability जुड़ जाएगी।
               </div>
 
               <!-- Liability disclosure · v9.2 spec-compliance (Must-Not-Do #12):
@@ -2828,9 +2844,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=9.2"></script>
-<script src="assets/annotations-new.js?v=9.2"></script>
-<script src="assets/workflows.js?v=9.2"></script>
-<script src="assets/app.js?v=9.2"></script>
+<script src="assets/annotations.js?v=9.3"></script>
+<script src="assets/annotations-new.js?v=9.3"></script>
+<script src="assets/workflows.js?v=9.3"></script>
+<script src="assets/app.js?v=9.3"></script>
 </body>
 </html>
