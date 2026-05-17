@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=9.0">
-  <link rel="stylesheet" href="assets/proto.css?v=9.0">
+  <link rel="stylesheet" href="assets/tokens.css?v=9.1">
+  <link rel="stylesheet" href="assets/proto.css?v=9.1">
 </head>
 <body class="show-amendments">
 
@@ -94,7 +94,7 @@
 
     <div class="group">Workflows · Design Note 3</div>
     <div class="item is-workflow" data-workflow="W1"><span class="dot"></span> W1 · SD at Onboarding <span class="meta">5 steps</span></div>
-    <div class="item is-workflow" data-workflow="W3"><span class="dot"></span> W3 · Custody Loss <span class="meta">6 steps</span></div>
+    <div class="item is-workflow" data-workflow="W3"><span class="dot"></span> W3 · Custody Loss <span class="meta">10 steps</span></div>
     <div class="item is-workflow" data-workflow="W4"><span class="dot"></span> W4 · Customer Non-Recovery <span class="meta">6 steps</span></div>
     <div class="item is-workflow" data-workflow="W5"><span class="dot"></span> W5 · Device Return to Wiom <span class="meta">5 steps</span></div>
     <div class="item is-workflow" data-workflow="W6"><span class="dot"></span> W6 · Scheduled Reconciliation <span class="meta">3 steps</span></div>
@@ -107,6 +107,8 @@
 
     <div class="group">Order side · Pre-amendment</div>
     <div class="item is-new active" data-screen="dashboard-home"><span class="dot"></span> Dashboard · Home <span class="meta">NEW v5</span></div>
+    <div class="item is-new" data-screen="app-menu"><span class="dot"></span> Menu drawer <span class="meta">v9.1</span></div>
+    <div class="item is-new" data-screen="device-inventory"><span class="dot"></span> Device Inventory · tabbed <span class="meta">v9.1</span></div>
     <div class="item is-new" data-screen="zone-capacity"><span class="dot"></span> नया काम · opportunity <span class="meta">v7</span></div>
     <div class="item is-new" data-screen="drilldown-no-capacity"><span class="dot"></span> नया काम · no capacity <span class="meta">v8</span></div>
     <div class="item is-new" data-screen="drilldown-blocked"><span class="dot"></span> नया काम · blocked <span class="meta">v8</span></div>
@@ -179,7 +181,8 @@
           <div class="status-bar dark"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
           <div class="screen-body">
             <header class="app-bar">
-              <div class="icon-btn" data-tap="__back"><svg class="mi"><use href="#i-menu"/></svg></div>
+              <!-- v9.1 · hamburger now opens the app menu drawer (was no-op __back). -->
+              <div class="icon-btn" data-tap="app-menu"><svg class="mi"><use href="#i-menu"/></svg></div>
               <div class="title" style="flex:1;">Rajesh Kumar <span class="t-bodySmall" style="opacity:0.85;font-weight:400;"> · एडमिन</span></div>
               <div class="icon-btn"><svg class="mi"><use href="#i-bug"/></svg></div>
               <div class="icon-btn" style="position:relative;"><svg class="mi"><use href="#i-clock"/></svg><span style="position:absolute;top:6px;right:6px;background:var(--wc-state-negative);color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;">3</span></div>
@@ -394,6 +397,158 @@
         </section>
 
         <!-- ============================================================
+             v9.1 · APP MENU (drawer) · opened from dashboard hamburger
+             First step in any workflow that begins from "user opens app".
+             Plain list of major sections — Home, NetBox, सुरक्षा राशि,
+             Wallet, Profile. Tap "नेट बॉक्स" → nb-home.
+             ============================================================ -->
+        <section class="screen" id="screen-app-menu">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body" style="background:white;">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">Menu</div>
+            </header>
+            <div class="scrollable" style="padding:0;">
+              <!-- Profile header -->
+              <div style="padding:20px 16px;background:var(--wc-bg-brand-tint);border-bottom:1px solid var(--wc-stroke-primary);">
+                <div class="row" style="gap:12px;align-items:center;">
+                  <div style="width:48px;height:48px;border-radius:50%;background:var(--wc-brand-primary);color:white;display:grid;place-items:center;font-weight:700;font-size:18px;">R</div>
+                  <div>
+                    <div class="t-titleSm">Rajesh Kumar</div>
+                    <div class="t-bodySmall text-secondary">एडमिन · Sector 8</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Menu items -->
+              <div data-tap="dashboard-home" class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <svg class="mi" style="color:var(--wc-text-secondary);"><use href="#i-task-alt"/></svg>
+                <span class="t-body" style="flex:1;">Home · Dashboard</span>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div data-tap="nb-home" class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;background:var(--wc-bg-brand-tint);">
+                <svg class="mi" style="color:var(--wc-brand-primary);"><use href="#i-router"/></svg>
+                <span class="t-body" style="flex:1;color:var(--wc-brand-primary);font-weight:600;">नेट बॉक्स · इनवेंटरी</span>
+                <svg class="mi mi-sm" style="color:var(--wc-brand-primary);"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div data-tap="sd-profile" class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <svg class="mi" style="color:var(--wc-text-secondary);"><use href="#i-shield-check"/></svg>
+                <span class="t-body" style="flex:1;">सुरक्षा राशि</span>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div data-tap="low-balance" class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <svg class="mi" style="color:var(--wc-text-secondary);"><use href="#i-wallet"/></svg>
+                <span class="t-body" style="flex:1;">वॉलेट · लेन-देन</span>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <svg class="mi" style="color:var(--wc-text-secondary);"><use href="#i-help"/></svg>
+                <span class="t-body" style="flex:1;">सहायता</span>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="row" style="padding:16px;gap:12px;cursor:pointer;">
+                <svg class="mi" style="color:var(--wc-text-secondary);"><use href="#i-info"/></svg>
+                <span class="t-body" style="flex:1;">About Wiom</span>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             v9.1 · DEVICE INVENTORY · tabbed list of CSP's devices by status
+             Visited from nb-home → "82 नेट बॉक्स · सभी देखें" hero tap.
+             Default tab: CUSTODIED (where W3 entry sits). Tap a device row
+             → routes to the appropriate device-state screen (dev-custodied,
+             dev-idle, etc.). This is the surface where a CSP discovers
+             "NB-00123 is missing from my stock".
+             ============================================================ -->
+        <section class="screen" id="screen-device-inventory">
+          <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
+          <div class="screen-body" style="background:white;">
+            <header class="app-bar light">
+              <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
+              <div class="title">मेरे डिवाइस · 82</div>
+              <div class="spacer"></div>
+              <div class="icon-btn"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-checklist"/></svg></div>
+            </header>
+            <!-- Status tabs -->
+            <div style="display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--wc-stroke-primary);background:white;">
+              <div style="padding:14px 16px;border-bottom:2px solid var(--wc-brand-primary);color:var(--wc-brand-primary);font-weight:700;font-size:14px;white-space:nowrap;">CUSTODIED · 7</div>
+              <div style="padding:14px 16px;color:var(--wc-text-secondary);font-size:14px;white-space:nowrap;">DEPLOYED · 74</div>
+              <div style="padding:14px 16px;color:var(--wc-text-secondary);font-size:14px;white-space:nowrap;">IDLE · 1</div>
+              <div style="padding:14px 16px;color:var(--wc-text-secondary);font-size:14px;white-space:nowrap;">RECOVERY · 1</div>
+              <div style="padding:14px 16px;color:var(--wc-text-secondary);font-size:14px;white-space:nowrap;">DAMAGED · 1</div>
+              <div style="padding:14px 16px;color:var(--wc-text-secondary);font-size:14px;white-space:nowrap;">LOST · 0</div>
+            </div>
+            <div class="scrollable" style="padding:0;">
+              <!-- Sub-bar: filter / counts -->
+              <div style="padding:12px 16px;background:var(--wc-bg-subtle);border-bottom:1px solid var(--wc-stroke-primary);display:flex;gap:8px;align-items:center;">
+                <svg class="mi mi-sm" style="color:var(--wc-text-secondary);"><use href="#i-info"/></svg>
+                <span class="t-bodySmall text-secondary">CUSTODIED = आपके पास हैं, customer पर नहीं लगे</span>
+              </div>
+              <!-- Device list (CUSTODIED tab) -->
+              <div data-tap="dev-custodied" class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
+                <div style="flex:1;">
+                  <div class="t-body" style="font-weight:600;">NB-00123</div>
+                  <div class="t-bodySmall text-secondary">28 months · custody 12 May से · 38 दिन recall window</div>
+                </div>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
+                <div style="flex:1;">
+                  <div class="t-body" style="font-weight:600;">NB-00124</div>
+                  <div class="t-bodySmall text-secondary">14 months · custody 3 May से · 42 दिन recall window</div>
+                </div>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
+                <div style="flex:1;">
+                  <div class="t-body" style="font-weight:600;">NB-00125</div>
+                  <div class="t-bodySmall text-secondary">9 months · custody 9 May से · 44 दिन recall window</div>
+                </div>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
+                <div style="flex:1;">
+                  <div class="t-body" style="font-weight:600;">NB-00126</div>
+                  <div class="t-bodySmall text-secondary">6 months · custody 11 May से · 45 दिन recall window</div>
+                </div>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
+                <div style="flex:1;">
+                  <div class="t-body" style="font-weight:600;">NB-00127</div>
+                  <div class="t-bodySmall text-secondary">3 months · custody 14 May से · 45 दिन recall window</div>
+                </div>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="row" style="padding:16px;gap:12px;border-bottom:1px solid var(--wc-stroke-primary);cursor:pointer;">
+                <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
+                <div style="flex:1;">
+                  <div class="t-body" style="font-weight:600;">NB-00128</div>
+                  <div class="t-bodySmall text-secondary">2 months · custody 15 May से · 45 दिन recall window</div>
+                </div>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+              <div class="row" style="padding:16px;gap:12px;cursor:pointer;">
+                <div style="width:40px;height:40px;border-radius:10px;background:var(--wc-bg-caution);display:grid;place-items:center;color:var(--wc-state-caution);"><svg class="mi mi-sm"><use href="#i-inventory"/></svg></div>
+                <div style="flex:1;">
+                  <div class="t-body" style="font-weight:600;">NB-00129</div>
+                  <div class="t-bodySmall text-secondary">1 month · custody 16 May से · 45 दिन recall window</div>
+                </div>
+                <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
              ORDER-SIDE SCREENS
              ============================================================ -->
 
@@ -405,6 +560,44 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Improvement v9.1 · 17 May 2026 — W3 navigation chain (full end-to-end) -->
+              <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-brand-primary);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v9.1</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · W3 navigation chain</span>
+                </div>
+                <div class="t-titleSm mt-md">W3 now shows the FULL end-to-end: dashboard → menu → NetBox → inventory → device → declare → ...</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged that v9.0 jumped straight to dev-custodied without showing how a real CSP navigates there. Built the missing pre-pre-steps so the prototype reader sees the natural app journey: open app → tap hamburger → select NetBox → browse inventory → tap missing device.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Two new screens:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • <strong><code>app-menu</code></strong> — drawer opened from dashboard hamburger. Lists Home · नेट बॉक्स · सुरक्षा राशि · वॉलेट · सहायता · About. "नेट बॉक्स · इनवेंटरी" row highlighted in brand tint (entry to inventory).<br>
+                  • <strong><code>device-inventory</code></strong> — status-tabbed list (CUSTODIED · DEPLOYED · IDLE · RECOVERY · DAMAGED · LOST). Default tab CUSTODIED with the 7 devices visible (including NB-00123 — the one CSP can't find on shelf). Tap a row → device-state screen.
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Wiring added:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • Dashboard hamburger now opens <code>app-menu</code> (was no-op back button)<br>
+                  • nb-home hero summary card now tappable → opens <code>device-inventory</code> with "सभी डिवाइस देखें · status से filter करें" hint<br>
+                  • app-menu "नेट बॉक्स" row → nb-home<br>
+                  • device-inventory CUSTODIED row → dev-custodied
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">W3 expanded 6 → 10 steps:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  <strong>1.</strong> dashboard-home · CSP opens app<br>
+                  <strong>2.</strong> app-menu · taps hamburger, sees drawer<br>
+                  <strong>3.</strong> nb-home · selects नेट बॉक्स<br>
+                  <strong>4.</strong> device-inventory · CUSTODIED tab, finds the missing one<br>
+                  <strong>5.</strong> dev-custodied · NB-00123 detail (banner morphs in W3 context)<br>
+                  <strong>6.</strong> report-loss-sheet · declaration form + ₹600 disclosure<br>
+                  <strong>7.</strong> dev-lost · ACS marks LOST<br>
+                  <strong>8.</strong> loss-card-custody · wallet card<br>
+                  <strong>9.</strong> sd-profile · sits in बकाया देय<br>
+                  <strong>10.</strong> settlement-detail · reconciled
+                </div>
+              </div>
+
               <!-- Improvement v9.0 · 17 May 2026 — W3 pre-steps (declaration UI) -->
               <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-brand-tint),var(--wc-brand-tint));border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -866,10 +1059,14 @@
               <div class="icon-btn"><svg class="mi"><use href="#i-bug"/></svg></div>
             </header>
             <div class="scrollable" style="padding: 16px;">
-              <!-- Hero summary card -->
-              <div class="card" style="margin-bottom: 12px;">
+              <!-- Hero summary card · v9.1 · tap opens device inventory list -->
+              <div class="card" data-tap="device-inventory" style="margin-bottom: 12px;cursor:pointer;">
                 <div class="t-bodyLg text-secondary">आपके पास</div>
                 <div class="t-heroAmount" style="margin-top: 2px;">82 <span class="t-bodyLg" style="font-weight:400;color:var(--wc-text-secondary);">नेट बॉक्स</span></div>
+                <div class="row between mt-sm">
+                  <span class="t-bodySmall text-secondary">सभी डिवाइस देखें · status से filter करें</span>
+                  <svg class="mi mi-sm text-secondary"><use href="#i-chevron-right"/></svg>
+                </div>
                 <div class="row between mt-md" style="padding: 8px 12px; background: var(--wc-bg-warning); border-radius: 8px;">
                   <div class="t-bodyMd"><svg class="mi mi-sm" style="vertical-align:middle;color:var(--wc-text-on-warning);"><use href="#i-dollar"/></svg> रोज़ का कैरी फ़ी: <strong>₹5</strong></div>
                   <svg class="mi mi-sm" style="color:var(--wc-text-on-warning);"><use href="#i-chevron-right"/></svg>
@@ -2518,9 +2715,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=9.0"></script>
-<script src="assets/annotations-new.js?v=9.0"></script>
-<script src="assets/workflows.js?v=9.0"></script>
-<script src="assets/app.js?v=9.0"></script>
+<script src="assets/annotations.js?v=9.1"></script>
+<script src="assets/annotations-new.js?v=9.1"></script>
+<script src="assets/workflows.js?v=9.1"></script>
+<script src="assets/app.js?v=9.1"></script>
 </body>
 </html>

@@ -130,20 +130,28 @@ window.WORKFLOWS = {
   // missing in their inventory → declares loss with liability disclosure
   // → device flips to LOST → wallet card → settlement.
   W3: {
-    title: 'W3 · Custody Loss (with declaration pre-step)',
-    purpose: 'Device disappears from CSP\'s possession (office/transport/shelf). CSP declares the loss in the app via an explicit liability-disclosure form. ACS then marks LOST with lost_reason=CSP_CUSTODY_LOST; age-band liability recorded; settled at next reconciliation.',
+    title: 'W3 · Custody Loss (full end-to-end)',
+    purpose: 'Device disappears from CSP\'s possession (office/transport/shelf). Walk covers the realistic navigation: CSP opens app → hamburger menu → NetBox section → inventory list → device detail → declares loss with liability disclosure → ACS marks LOST → wallet card → settled at next reconciliation.',
     steps: [
-      { num: 1, label: 'Device in custody · नहीं मिल रहा', screen: 'dev-custodied',
+      { num: 1, label: 'CSP opens app', screen: 'dashboard-home',
+        note: 'v9.1 navigation pre-step. CSP at home dashboard. Realizes a device in stock is missing (could be office burglary, transport theft, shelf-audit mismatch). Taps hamburger icon (top-left) → opens app menu drawer.' },
+      { num: 2, label: 'Menu drawer · नेट बॉक्स', screen: 'app-menu',
+        note: 'v9.1 NEW screen. Slide-in drawer pattern. Lists major sections: Home · नेट बॉक्स · सुरक्षा राशि · वॉलेट · सहायता · About. CSP taps the highlighted "नेट बॉक्स · इनवेंटरी" row.' },
+      { num: 3, label: 'NetBox section', screen: 'nb-home',
+        note: 'Fleet summary view (82 नेट बॉक्स). v9.1 made the hero summary card tappable — "सभी डिवाइस देखें · status से filter करें" → opens device inventory.' },
+      { num: 4, label: 'Inventory list · CUSTODIED tab', screen: 'device-inventory',
+        note: 'v9.1 NEW screen. Status-tabbed list (CUSTODIED · DEPLOYED · IDLE · RECOVERY · DAMAGED · LOST). Default tab: CUSTODIED. CSP scans the 7 custodied devices and identifies that NB-00123 should be on the shelf but isn\'t. Taps NB-00123 row → device detail.' },
+      { num: 5, label: 'Device detail · "नहीं मिल रहा?"', screen: 'dev-custodied',
         note: 'v9.0 pre-step. CSP opens the device record (NB-00123) — was CUSTODIED on shelf, now can\'t locate. Three CTAs visible: सेटअप में नहीं लगाना · वापस करें · "मुझे यह डिवाइस नहीं मिल रहा" (red link). Real-life triggers: office theft, transport loss, shelf audit mismatch, lost during installation.' },
-      { num: 2, label: 'गुम दर्ज करें · liability disclosure', screen: 'report-loss-sheet',
-        note: 'v9.0 pre-step. Form captures कहाँ last seen + कब noticed + optional photo. Critical red disclosure card shows the computed age-band liability up-front (₹600 for a 28-month device · 40% slab), the settlement-cycle date, and the late-recovery clause (Decision 12: charge stands even if found later). Trust line offers 7-day dispute window if CSP regrets the declaration. Primary CTA explicitly states the amount: "हाँ, गुम दर्ज करें · ₹600 liability जुड़ेगी".' },
-      { num: 3, label: 'Device → LOST', screen: 'dev-lost',
+      { num: 6, label: 'गुम दर्ज करें · liability disclosure', screen: 'report-loss-sheet',
+        note: 'v9.0 declaration form. Captures कहाँ last seen + कब noticed + optional photo. Critical red disclosure card shows the computed age-band liability up-front (₹600 for a 28-month device · 40% slab), the settlement-cycle date, and the late-recovery clause (Decision 12: charge stands even if found later). Trust line offers 7-day dispute window. Primary CTA explicitly states the amount: "हाँ, गुम दर्ज करें · ₹600 liability जुड़ेगी".' },
+      { num: 7, label: 'Device → LOST', screen: 'dev-lost',
         note: 'CSP confirmed → ACS marks the device LOST with <code>lost_reason=CSP_CUSTODY_LOST</code>. Carries device_commissioned_at + loss_detected_at. Liability sits as recoverable due (not deducted in real-time per SD-5).' },
-      { num: 4, label: 'Wallet card appears', screen: 'loss-card-custody',
+      { num: 8, label: 'Wallet card appears', screen: 'loss-card-custody',
         note: 'Wallet feed card: "NetBox custody loss · ₹600 · Device आपकी custody में था". Shown immediately; SD untouched.' },
-      { num: 5, label: 'Awaits reconciliation', screen: 'sd-profile',
+      { num: 9, label: 'Awaits reconciliation', screen: 'sd-profile',
         note: 'Liability sits in बकाया देय with next-settlement date. No real-time SD mutation.' },
-      { num: 6, label: 'Settled', screen: 'settlement-detail',
+      { num: 10, label: 'Settled', screen: 'settlement-detail',
         note: 'At reconciliation: wallet first → SD only if wallet insufficient → escalation if SD at minimum.' }
     ]
   },
