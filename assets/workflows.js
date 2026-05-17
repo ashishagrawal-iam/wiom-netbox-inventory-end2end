@@ -22,22 +22,22 @@ window.WORKFLOWS = {
 
   W2: {
     title: 'System-Led Device Provisioning (Growth Intent)',
-    purpose: 'CSP wants to serve more customers. System decides quantity — CSP never picks device count.',
+    purpose: 'CSP wants to serve more customers. System surfaces capacity, CSP confirms in two steps (general intent → specific batch), then system ships / routes. CSP never picks device count.',
     steps: [
       { num: 1, label: 'Tap "Capacity बढ़ाएं"', screen: 'nb-home',
-        note: 'Entry from Home (open Q D1 — actual placement TBD).' },
-      { num: 2, label: 'State A · devices needed', screen: 'growth-intent',
-        note: 'System computes capacity headroom and decides how many devices to send. CSP sees connections available, not device counts.' },
-      { num: 3, label: 'State B · enough devices', screen: 'growth-intent-B',
-        note: 'CSP already has CUSTODIED/IDLE devices to serve the connections. No action required.' },
-      { num: 4, label: 'State C · SD top-up', screen: 'growth-intent-C',
-        note: 'SD insufficient for the proposed exposure. Inline top-up flow, framed as capacity expansion cost.' },
-      { num: 5, label: 'State D · no capacity', screen: 'growth-intent-D',
-        note: 'Zone at capacity. CSP waits — system will notify when demand opens.' },
-      { num: 6, label: 'Blocked · 1 reason', screen: 'growth-intent-blocked',
-        note: 'If multiple constraints fail, system surfaces only ONE reason (the highest-priority one). Never expose the 5-constraint formula.' },
-      { num: 7, label: 'Devices ship', screen: 'nb-home-tracking',
-        note: 'Inventory dispatches → ACS creates PENDING_CSP_RECEIPT → CSP sees order tracker. Receipt confirmation transitions to CUSTODIED.' }
+        note: 'Entry from NetBox home — the renamed quick-action tile when amendment overlay is ON.' },
+      { num: 2, label: 'State A · capacity offer', screen: 'growth-intent',
+        note: 'Happy-path Step 1. System surfaces "you can take 25 more connections" and asks for general intent. CSP confirms by tapping "हाँ, capacity बढ़ाइए" → chains forward to State B (specific batch).' },
+      { num: 3, label: 'State B · final confirm', screen: 'growth-intent-B',
+        note: 'Happy-path Step 2 (Improvement v4 · 17 May). Specific batch confirmation — "System आपको ये भेजेगा: 5 नए connections". Inventory math card shows where the devices come from (7 deployable in hand → 0 to ship). CSP taps "हाँ, पुष्टि करें" → order placed → home with tracker.' },
+      { num: 4, label: 'Devices route / ship', screen: 'nb-home-tracking',
+        note: 'Order tracker appears at top of NetBox home. Inventory dispatches → ACS creates PENDING_CSP_RECEIPT (when shipping is needed) or routing starts immediately (when devices are already on hand).' },
+      { num: 5, label: 'Alt · State C SD top-up', screen: 'growth-intent-C',
+        note: 'Alternate path if SD insufficient for the proposed exposure. Inline top-up flow, framed as capacity expansion cost — partner pays ₹2,000 then re-enters State A.' },
+      { num: 6, label: 'Alt · State D no capacity', screen: 'growth-intent-D',
+        note: 'Alternate path if zone is at capacity. Info-only — CSP waits, system notifies when demand opens. No CTA.' },
+      { num: 7, label: 'Alt · Blocked one-reason', screen: 'growth-intent-blocked',
+        note: 'Alternate path if a constraint fails (deployment efficiency, enforcement, etc.). System surfaces ONE highest-priority reason — never the 5-constraint formula.' }
     ]
   },
 

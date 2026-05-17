@@ -170,15 +170,26 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Improvement v4 · 17 May 2026 -->
+              <div class="card" style="background:var(--wc-brand-tint);border:0;">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-brand-primary);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v4</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026</span>
+                </div>
+                <div class="t-titleSm mt-md">F1 · State A → State B chain (two-step consent)</div>
+                <div class="t-bodyMd text-secondary mt-sm">State A = general capacity offer ("25 connections available, want to grow?"). State B reframed as "अंतिम पुष्टि" — specific batch confirmation showing what System will send (5 connections, inventory math). Tapping "हाँ, capacity बढ़ाइए" on A now chains forward to B instead of going straight to home.</div>
+                <div class="t-bodySmall text-secondary mt-sm">Source: F1 review · 17 May 2026</div>
+              </div>
+
               <!-- Improvement v3 · 17 May 2026 -->
-              <div class="card" style="background:var(--wc-bg-info);border:0;">
+              <div class="card mt-md" style="background:var(--wc-bg-info);border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
                   <span style="background:var(--wc-state-info);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">IMPROVEMENT v3</span>
                   <span class="t-bodySmall text-secondary">17 May 2026</span>
                 </div>
                 <div class="t-titleSm mt-md">F1 · State B अब explicit consent मांगता है</div>
-                <div class="t-bodyMd text-secondary mt-sm">"कोई action ज़रूरी नहीं" framing हटा। Partner को "हाँ, X connections भेजिए" से explicit consent देना ज़रूरी। Capacity acceptance = exposure acceptance — silent auto-enrollment trust-first principle के खिलाफ।</div>
-                <div class="t-bodySmall text-secondary mt-sm">Source: F1 review · State B consent gap</div>
+                <div class="t-bodyMd text-secondary mt-sm">"कोई action ज़रूरी नहीं" framing हटा। Partner को explicit consent देना ज़रूरी। (अब v4 ने reframe किया है — B अब confirmation step है।)</div>
+                <div class="t-bodySmall text-secondary mt-sm">Source: F1 review · State B consent gap (superseded by v4)</div>
               </div>
 
               <!-- Amendment v2 · 17 May 2026 -->
@@ -1047,8 +1058,10 @@
               </div>
             </div>
             <div class="cta-bar">
-              <button data-tap="nb-home-tracking" class="cta cta-primary">हाँ, capacity बढ़ाइए</button>
-              <button class="cta cta-link" style="margin:0 auto;">सिर्फ अभी नहीं</button>
+              <!-- Improvement v4 · 17 May 2026: State A's primary CTA now chains
+                   to State B (specific batch confirmation), not directly to home. -->
+              <button data-tap="growth-intent-B" class="cta cta-primary">हाँ, capacity बढ़ाइए</button>
+              <button data-tap="__back" class="cta cta-link" style="margin:0 auto;">सिर्फ अभी नहीं</button>
             </div>
           </div>
         </section>
@@ -1369,7 +1382,11 @@
           </div>
         </section>
 
-        <!-- 31. W2 · Growth Intent · State B (enough devices) -->
+        <!-- 31. W2 · Growth Intent · State B — final batch confirmation
+             (Improvement v4 · 17 May 2026): reframed from "enough devices on hand"
+             info-only view into the "specific batch confirmation" step that
+             follows State A. Same screen does both jobs (post-A chain + direct
+             debug-test entry). -->
         <section class="screen" id="screen-growth-intent-B">
           <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
           <div class="screen-body">
@@ -1378,25 +1395,22 @@
               <div class="title">Capacity बढ़ाएं</div>
             </header>
             <div class="scrollable" style="padding:16px;">
-              <!-- Improvement v3 (17 May 2026): explicit consent required.
-                   Removed "कोई action ज़रूरी नहीं" framing. Acceptance of
-                   capacity = acceptance of exposure responsibility. -->
               <div class="card" style="background:var(--wc-bg-positive);border-color:transparent;position:relative;">
-                <div class="row" style="gap:8px;color:var(--wc-state-positive);"><svg class="mi mi-sm"><use href="#i-check-circle"/></svg><span class="t-titleSm" style="color:var(--wc-state-positive);">आपके पास तैयार है</span></div>
-                <div class="t-headingLg mt-sm">आप अभी <span class="text-positive">5 और</span><br>connections ले सकते हैं</div>
-                <div class="t-bodyMd text-secondary mt-sm">आपके पास पर्याप्त devices हैं। आपकी हाँ पर system 5 connections route करेगा।</div>
-                <span class="amendment-badge changed" style="top:8px;right:8px;">Improvement v3</span>
+                <div class="row" style="gap:8px;color:var(--wc-state-positive);"><svg class="mi mi-sm"><use href="#i-check-circle"/></svg><span class="t-titleSm" style="color:var(--wc-state-positive);">अंतिम पुष्टि</span></div>
+                <div class="t-headingLg mt-sm">System आपको ये भेजेगा</div>
+                <div class="t-bodyMd text-secondary mt-sm"><strong>5 नए connections</strong> — आपके area में route होंगे। पुष्टि होने पर तुरंत शुरू।</div>
+                <span class="amendment-badge changed" style="top:8px;right:8px;">Improvement v4</span>
               </div>
               <div class="card mt-md">
-                <div class="t-titleSm mb-sm">अभी आपके पास</div>
-                <div class="row between"><span class="t-body text-secondary">कुल devices</span><span class="t-body" style="font-weight:600;">82</span></div>
-                <div class="row between mt-sm"><span class="t-body text-secondary">IDLE / CUSTODIED (deployable)</span><span class="t-body text-positive" style="font-weight:600;">7</span></div>
+                <div class="t-titleSm mb-sm">Devices कैसे आएंगे</div>
+                <div class="row between"><span class="t-body text-secondary">आपकी custody में</span><span class="t-body" style="font-weight:600;">82</span></div>
+                <div class="row between mt-sm"><span class="t-body text-secondary">Deploy के लिए तैयार</span><span class="t-body text-positive" style="font-weight:600;">7</span></div>
                 <div class="divider"></div>
-                <div class="t-bodyMd">5 नए connections के लिए 5 devices चाहिए। आपके पास 7 तैयार हैं।</div>
+                <div class="t-bodyMd">5 नए connections के लिए 5 devices चाहिए। आपके पास 7 तैयार हैं — System इन्हें route करेगा। नए NetBox shipping की ज़रूरत नहीं।</div>
               </div>
             </div>
             <div class="cta-bar">
-              <button class="cta cta-primary" data-tap="nb-home-tracking">हाँ, 5 connections भेजिए</button>
+              <button class="cta cta-primary" data-tap="nb-home-tracking">हाँ, पुष्टि करें</button>
               <button class="cta cta-link" data-tap="__back" style="margin:0 auto;">अभी नहीं</button>
             </div>
           </div>

@@ -37,17 +37,23 @@ Object.assign(window.ANNOTATIONS, {
   },
 
   'growth-intent-B': {
-    title: 'Capacity · State B (enough devices)',
-    sub: 'NEW · Growth Intent variant',
+    title: 'Capacity · State B (final confirmation)',
+    sub: 'Happy-path Step 2 · reframed in Improvement v4',
     source: 'SDA',
     sections: [
-      { crumb: 'What this state says',
+      { crumb: 'What this state says now (v4)',
         anchors: [
-          { kind: 'added', text: '"आपके पास पर्याप्त devices हैं। System आपको connections भेजेगा।" — CSP has CUSTODIED/IDLE inventory to serve the offered capacity. No new dispatch needed. <span class="src">Note 3 §Surface 2 · State B</span>' }
+          { kind: 'changed', text: '<strong>"अंतिम पुष्टि / System आपको ये भेजेगा: 5 नए connections — आपके area में route होंगे।"</strong> Inventory math card shows where the devices come from (7 deployable in hand → 0 to ship). Primary CTA: "हाँ, पुष्टि करें" → order placed → home with tracker. <span class="src">Improvement v4 · 17 May 2026</span>' },
+          { kind: 'removed', text: 'Was: "आपके पास पर्याप्त devices हैं। System आपको connections भेजेगा।" with no CTA — superseded because it conflated "no new shipping" with "no consent needed".' }
         ]},
-      { crumb: 'Why it matters',
+      { crumb: 'Two-step consent rationale',
         anchors: [
-          { kind: 'policy', text: 'Prevents over-ordering — system reuses CSP\'s existing inventory before sending new devices. Reinforces P1 (system-led demand) and SD-4 (no per-device thinking).' }
+          { kind: 'policy', text: 'State A = <em>general intent</em> ("yes I want to grow"). State B = <em>specific acknowledgment</em> ("yes send these 5 connections + use my 7 deployable devices"). Both required because capacity acceptance = exposure acceptance.' },
+          { kind: 'policy', text: 'When no shipping is needed (current example), the inventory math card explicitly says so — "नए NetBox shipping की ज़रूरत नहीं" — so the partner understands why the batch can start immediately.' }
+        ]},
+      { crumb: 'Debug-test path',
+        anchors: [
+          { kind: 'unchanged', text: 'Setting "Growth Intent state" to B in debug lands you directly on this screen (skipping A) — useful for QA. The screen does both jobs: post-A chain + standalone test entry.' }
         ]}
     ]
   },

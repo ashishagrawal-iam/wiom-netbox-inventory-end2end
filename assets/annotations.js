@@ -8,13 +8,27 @@ window.ANNOTATIONS = {
 
   'changelog': {
     title: 'Amendment Changelog',
-    sub: 'Amendment v2 · 17 May 2026',
+    sub: 'Improvement v4 · 17 May 2026',
     source: 'SDA',
     sections: [
       { crumb: 'What this is',
         anchors: [
           { kind: 'added',
-            text: 'Live log of amendments that have shipped into the prototype + APK. Each entry: tag · date · summary · source doc · screens touched.' }
+            text: 'Live log of amendments + improvements shipped into the prototype + APK. Each entry: tag · date · summary · source · screens touched.' }
+        ]},
+      { crumb: 'Improvement v4 · F1 State A → B chain',
+        anchors: [
+          { kind: 'changed',
+            text: '<strong>State A is now the general capacity offer; State B is the specific batch confirmation</strong>. Tapping "हाँ, capacity बढ़ाइए" on A chains forward to B (instead of going straight to home). B reframed as "अंतिम पुष्टि / System आपको ये भेजेगा: 5 नए connections" with the inventory-math card explaining where the devices come from. <span class="src">F1 review · 17 May 2026</span>' },
+          { kind: 'policy',
+            text: 'Two-step consent: <strong>general intent</strong> ("yes I want to grow") + <strong>specific acknowledgment</strong> ("yes send these 5 connections + use my 7 deployable devices"). Aligns with Wiom\'s trust-first + no-surprises pattern.' },
+          { kind: 'policy',
+            text: 'Debug picker still lets you land on State B directly for QA — the same screen does both jobs (post-A chain + direct test entry).' }
+        ]},
+      { crumb: 'Improvement v3 · F1 State B consent',
+        anchors: [
+          { kind: 'changed',
+            text: 'Removed "कोई action ज़रूरी नहीं" framing. Partner must explicitly confirm via primary CTA. (Now superseded by v4 which reframes B entirely as the confirmation step.)' }
         ]},
       { crumb: 'Amendment v2 · Payment §Patch 5',
         anchors: [
@@ -373,13 +387,17 @@ window.ANNOTATIONS = {
      ============================================================ */
 
   'growth-intent': {
-    title: 'Capacity बढ़ाएं',
-    sub: 'NEW · Replaces Request New Sheet',
+    title: 'Capacity बढ़ाएं · State A (general capacity offer)',
+    sub: 'Happy-path Step 1 — confirm intent → chains to State B',
     source: 'SDA',
     sections: [
       { crumb: 'Why this exists',
         anchors: [
           { kind: 'added', text: 'CSP cannot order devices by quantity anymore. They express <strong>intent to serve more customers</strong>; system computes capacity, devices, and SD top-up needs. <span class="src">SDA · Design Note 3 §Workflow 2</span>' }
+        ]},
+      { crumb: 'Chain (Improvement v4 · 17 May 2026)',
+        anchors: [
+          { kind: 'changed', text: 'Primary CTA "हाँ, capacity बढ़ाइए" now <strong>chains forward to State B</strong> (specific batch confirmation), not directly to home. Two-step consent: general intent here → specific batch acknowledgment on B.' }
         ]},
       { crumb: 'Branching states',
         anchors: [
