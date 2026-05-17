@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/tokens.css?v=8.6">
-  <link rel="stylesheet" href="assets/proto.css?v=8.6">
+  <link rel="stylesheet" href="assets/tokens.css?v=8.7">
+  <link rel="stylesheet" href="assets/proto.css?v=8.7">
 </head>
 <body class="show-amendments">
 
@@ -404,6 +404,41 @@
               <div class="title">Amendment Changelog</div>
             </header>
             <div class="scrollable" style="padding:16px;">
+              <!-- Critical fix v8.7 · 17 May 2026 — shared-screen stale context -->
+              <div class="card" style="background:#FFE0E0;border:0;border-left:4px solid var(--wc-state-negative);">
+                <div class="row" style="gap:8px;align-items:center;">
+                  <span style="background:var(--wc-state-negative);color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.5px;">CRITICAL FIX v8.7</span>
+                  <span class="t-bodySmall text-secondary">17 May 2026 · shared-screen context bug</span>
+                </div>
+                <div class="t-titleSm mt-md">Shared screens were leaking F1·C wallet copy into W1, W3, W4, W5, W12</div>
+                <div class="t-bodyMd text-secondary mt-sm">User flagged that W1 step 3 (UPI payment) showed <strong>₹2,000 + "वॉलेट में पैसे डालें"</strong> — copy from F1·C's wallet top-up flow — when W1 needs <strong>₹20,000 + "सुरक्षा राशि जमा करें"</strong>. Same bug class: any shared screen visited from multiple workflows kept the hardcoded copy of whichever flow built it first.</div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Workflow-aware content morph system added:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  <strong>app.js</strong> gains <code>WORKFLOW_CONTENT</code> map keyed by <code>[workflow][screen][fieldId]</code> + <code>applyWorkflowContent()</code> that mutates relevant DOM ids when a workflow is active. Original textContent snapshotted on first call so defaults restore cleanly when no override applies.
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Screens now context-aware:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  • <strong>add-funds-method / input / success</strong> — 3 payment contexts: <code>sd-onboarding</code> (W1, ₹20k), <code>sd-topup</code> (F1·B/C, W7, W9, ₹2k), <code>wallet-topup</code> (default ₹2k)<br>
+                  • <strong>dev-lost</strong> — 3 lost_reason contexts: W3 (custody loss · age-band · ₹600), W4 (non-recovery · flat ₹200), W12 (prior-lost · charge stands)<br>
+                  • <strong>dev-returned</strong> — 2 contexts: W5 (clean return · exposure closure only), W12 (late recovery · ₹200 stands · no reward)<br>
+                  • <strong>sd-topup</strong> — W7 entry shows an escalation-context banner above the standalone copy
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall" style="font-weight:600;">Walk to verify:</div>
+                <div class="t-bodySmall text-secondary mt-sm">
+                  W1 step 3 → <strong>₹20,000 जमा करें · "Wiom साझेदारी की सुरक्षा राशि"</strong> ✅<br>
+                  W3 step 1 → <strong>"Custody loss · ₹600 · 28 months · 40% slab"</strong> ✅<br>
+                  W4 step 4 → <strong>"ग्राहक से वापस नहीं आया · ₹200 flat · age-irrelevant"</strong> ✅<br>
+                  W5 step 3 → <strong>"Wiom को वापस हो गया · कोई liability नहीं"</strong> ✅<br>
+                  W7 step 2 → <strong>"Escalation हटाने के लिए top-up ज़रूरी" banner</strong> ✅<br>
+                  W12 step 1 → <strong>"पहले LOST मार्क हुआ था · ₹200 बना रहेगा"</strong>; step 3 → <strong>"Late recovery · ₹200 stays · कोई reward नहीं"</strong> ✅
+                </div>
+                <div class="divider"></div>
+                <div class="t-bodySmall text-secondary"><strong>Audit class:</strong> "Shared-screen stale context" — caused by single screen serving multiple workflows with diverged copy needs. The morph system is the durable fix; future shared screens can extend WORKFLOW_CONTENT without touching HTML.</div>
+              </div>
+
               <!-- Improvement v8.6 · 17 May 2026 — W1 audit + Hindi-first sweep -->
               <div class="card" style="background:linear-gradient(135deg,var(--wc-bg-positive),#E0F2E9);border:0;">
                 <div class="row" style="gap:8px;align-items:center;">
@@ -983,13 +1018,13 @@
           <div class="screen-body">
             <header class="app-bar light">
               <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
-              <div class="title">वॉलेट में पैसे डालें</div>
+              <div class="title" id="afi-title">वॉलेट में पैसे डालें</div>
             </header>
             <div class="scrollable" style="padding:16px;">
-              <div class="t-bodySmall text-secondary mb-sm">अपना अमाउंट लिखें</div>
+              <div class="t-bodySmall text-secondary mb-sm" id="afi-hint">अपनी राशि लिखें</div>
               <div style="height:64px;background:var(--wc-input-bg);border:1px solid var(--wc-input-border);border-radius:12px;display:flex;align-items:center;padding:0 16px;gap:8px;">
                 <span class="t-chipValue" style="color:var(--wc-text-secondary);">₹</span>
-                <span class="t-chipValue">2,000</span>
+                <span class="t-chipValue" id="afi-amount">2,000</span>
               </div>
 
               <div class="t-bodySmall text-secondary mt-lg mb-sm">पैसे जोड़ें</div>
@@ -1004,23 +1039,23 @@
                 <span class="t-bodyMd" style="color:var(--wc-brand-primary);font-weight:600;">पैसे जोड़ने में दिक्कत? सपोर्ट से बात करें</span>
               </div>
             </div>
-            <div class="cta-bar"><button data-tap="add-funds-method" class="cta cta-primary">पैसे जोड़ें</button></div>
+            <div class="cta-bar"><button data-tap="add-funds-method" class="cta cta-primary" id="afi-cta">पैसे जोड़ें</button></div>
           </div>
         </section>
 
-        <!-- 7. Add Funds — Method -->
+        <!-- 7. Add Funds — Method (v8.7 · workflow-aware) -->
         <section class="screen" id="screen-add-funds-method">
           <div class="status-bar"><span>9:41</span><span class="right"><span class="battery"></span></span></div>
           <div class="screen-body">
             <header class="app-bar light">
               <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
-              <div class="title">भुगतान विधि</div>
+              <div class="title" id="afm-title">भुगतान विधि</div>
             </header>
             <div class="scrollable" style="padding:16px;">
               <div class="card" style="background:var(--wc-bg-brand-tint);border-color:transparent;">
-                <div class="t-bodySmall text-secondary">वॉलेट में पैसे डालें</div>
-                <div class="t-headingLg" style="margin-top:2px;">₹2,000</div>
-                <div class="t-bodySmall text-secondary mt-sm">अपने वॉलेट में जोड़ा जाएगा</div>
+                <div class="t-bodySmall text-secondary" id="afm-hero-label">वॉलेट में पैसे डालें</div>
+                <div class="t-headingLg" id="afm-hero-amount" style="margin-top:2px;">₹2,000</div>
+                <div class="t-bodySmall text-secondary mt-sm" id="afm-hero-sub">अपने वॉलेट में जोड़ा जाएगा</div>
               </div>
 
               <div class="t-titleSm mt-lg mb-sm">UPI</div>
@@ -1041,7 +1076,7 @@
                 </div>
               </div>
             </div>
-            <div class="cta-bar"><button data-tap="add-funds-processing" class="cta cta-primary">₹2,000 pay करें</button></div>
+            <div class="cta-bar"><button data-tap="add-funds-processing" class="cta cta-primary" id="afm-cta">₹2,000 जमा करें</button></div>
           </div>
         </section>
 
@@ -1076,10 +1111,10 @@
                 <svg style="width:56px;height:56px;"><use href="#i-check"/></svg>
               </div>
               <div class="t-headingLg">पेमेंट हो गया!</div>
-              <div class="t-bodyLg text-secondary">₹2,000 वॉलेट में जुड़ गया</div>
+              <div class="t-bodyLg text-secondary" id="afs-subtitle">₹2,000 वॉलेट में जुड़ गया</div>
               <div style="background:var(--wc-bg-brand-tint);border-radius:16px;padding:16px 20px;width:100%;margin-top:8px;">
-                <div class="t-bodySmall text-secondary">नया वॉलेट बैलेंस</div>
-                <div class="t-heroAmount text-brand" style="margin-top:4px;">₹3,800</div>
+                <div class="t-bodySmall text-secondary" id="afs-balance-label">नया वॉलेट बैलेंस</div>
+                <div class="t-heroAmount text-brand" id="afs-balance-amount" style="margin-top:4px;">₹3,800</div>
               </div>
             </div>
             <div class="cta-bar"><button data-tap="nb-home-tracking" class="cta cta-primary">ठीक है</button></div>
@@ -1366,26 +1401,26 @@
               <div class="spacer"></div>
             </header>
             <div class="scrollable" style="padding:16px;">
-              <div class="banner banner-positive">
-                <div class="icon-wrap"><svg class="mi"><use href="#i-check"/></svg></div>
+              <div class="banner banner-positive" id="dr-banner">
+                <div class="icon-wrap" id="dr-icon-wrap"><svg class="mi"><use href="#i-check"/></svg></div>
                 <div class="text">
-                  <div class="title">व्योम को वापस हो गया</div>
+                  <div class="title" id="dr-banner-title">व्योम को वापस हो गया</div>
                   <div class="sub preamend-only">जमा राशि सेटलमेंट में वापस होगी</div>
-                  <div class="sub amended-only">Exposure कम हुआ — partnership सुरक्षा यथावत</div>
+                  <div class="sub amended-only" id="dr-banner-sub">Exposure कम हुआ — partnership सुरक्षा यथावत</div>
                 </div>
               </div>
               <div class="card mt-md">
-                <div class="t-titleSm mb-sm">क्या हुआ</div>
+                <div class="t-titleSm mb-sm" id="dr-card-title">क्या हुआ</div>
                 <div class="t-body text-secondary preamend-only">यह नेट बॉक्स व्योम को वापस हो गया है। अब आप नया डिवाइस ऑर्डर कर सकते हैं।</div>
-                <div class="t-body text-secondary amended-only">NetBox Wiom को लौटाया गया। आपकी custody exposure -1 हुई।</div>
+                <div class="t-body text-secondary amended-only" id="dr-card-body">NetBox Wiom को लौटाया गया। आपकी custody exposure −1 हुई।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm preamend-only">वित्तीय असर</div>
-                <div class="t-titleSm mb-sm amended-only">अब क्या होगा</div>
-                <div class="row between"><span class="t-body text-secondary">कैरी शुल्क</span><span class="t-body">₹60</span></div>
+                <div class="t-titleSm mb-sm amended-only" id="dr-finance-title">अब क्या होगा</div>
+                <div class="row between"><span class="t-body text-secondary" id="dr-row1-label">कैरी शुल्क</span><span class="t-body" id="dr-row1-value">₹60</span></div>
                 <div class="row between mt-sm preamend-only"><span class="t-body text-secondary">नेट बॉक्स वापसी क्रेडिट</span><span class="t-body text-positive">पूरा</span></div>
-                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">Condition जाँच</span><span class="t-body">Wiom warehouse में</span></div>
-                <div class="t-bodySmall text-secondary mt-sm amended-only">कोई पैसा वापस नहीं आता — return = exposure closure (SD-4)। केवल exit settlement पर SD bank में जाती है।</div>
+                <div class="row between mt-sm amended-only"><span class="t-body text-secondary" id="dr-row2-label">Condition जाँच</span><span class="t-body" id="dr-row2-value">Wiom warehouse में</span></div>
+                <div class="t-bodySmall text-secondary mt-sm amended-only" id="dr-footer">कोई पैसा वापस नहीं आता — return = exposure closure (SD-4)। केवल exit settlement पर SD bank में जाती है।</div>
               </div>
             </div>
           </div>
@@ -1444,23 +1479,23 @@
               <div class="banner banner-negative">
                 <div class="icon-wrap"><svg class="mi"><use href="#i-search-off"/></svg></div>
                 <div class="text">
-                  <div class="title">गुम बताया गया है</div>
+                  <div class="title" id="dl-banner-title">गुम बताया गया है</div>
                   <div class="sub preamend-only">रिकवरी राशि लगेगी — पूरा मूल्य</div>
-                  <div class="sub amended-only">Custody loss — age-band के हिसाब से देय</div>
+                  <div class="sub amended-only" id="dl-banner-sub">Custody loss — age-band के हिसाब से देय</div>
                 </div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">क्या होगा</div>
                 <div class="t-body text-secondary preamend-only">रिकवरी राशि आपके वॉलेट से कटेगी। अगर मिल जाए तो तुरंत व्योम को बताएं।</div>
-                <div class="t-body text-secondary amended-only">Device आपकी custody में था — आपकी ज़िम्मेदारी। अगले Settlement Cycle में शामिल किया जाएगा।</div>
+                <div class="t-body text-secondary amended-only" id="dl-body">Device आपकी custody में था — आपकी ज़िम्मेदारी। अगले Settlement Cycle में शामिल किया जाएगा।</div>
               </div>
               <div class="card mt-md">
                 <div class="t-titleSm mb-sm">देय राशि</div>
                 <div class="row between preamend-only"><span class="t-body text-secondary">नुकसान वसूली</span><span class="t-body text-negative" style="font-weight:700;">₹3,000</span></div>
-                <div class="row between amended-only"><span class="t-body text-secondary">Custody loss देय</span><span class="t-body text-negative" style="font-weight:700;">₹600</span></div>
-                <div class="row between mt-sm amended-only"><span class="t-body text-secondary">Device age</span><span class="t-body">28 months · 40% slab</span></div>
+                <div class="row between amended-only"><span class="t-body text-secondary" id="dl-amount-label">Custody loss देय</span><span class="t-body text-negative" id="dl-amount" style="font-weight:700;">−₹600</span></div>
+                <div class="row between mt-sm amended-only"><span class="t-body text-secondary" id="dl-meta-label">Device age</span><span class="t-body" id="dl-meta-value">28 months · 40% slab</span></div>
                 <div class="row between mt-sm amended-only"><span class="t-body text-secondary">अगला settlement</span><span class="t-body">1 Jul 2026</span></div>
-                <div class="amended-only t-bodySmall text-secondary mt-sm">Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300</div>
+                <div class="amended-only t-bodySmall text-secondary mt-sm" id="dl-formula">Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300</div>
               </div>
             </div>
             <div class="cta-bar"><button data-tap="dev-retrieval-pending" class="cta cta-tertiary">नेट बॉक्स खोज गया</button></div>
@@ -1619,11 +1654,19 @@
               <div class="icon-btn" data-tap="__back"><svg class="mi" style="color:var(--wc-text-primary);"><use href="#i-back"/></svg></div>
               <div class="title">सुरक्षा राशि में top-up</div>
             </header>
-            <!-- v8.1 fix · sd-topup is now STANDALONE only (Workflow 9 entry from
-                 SD Profile). Removed "Capacity बढ़ाने के लिए" framing — that's
-                 State C's job per Design Note 3 (top-up flow inline in growth
-                 intent). Generalized to a partner-initiated top-up. -->
+            <!-- v8.1 fix · sd-topup is STANDALONE (W9 entry from SD Profile).
+                 v8.7 · Optional workflow-context banner above the main banner
+                 (e.g. W7 escalation framing). Hidden by default; app.js shows
+                 it only when entered from a workflow that needs explicit
+                 entry-context disambiguation. -->
             <div class="scrollable" style="padding:16px;">
+              <div id="sdt-context-banner" class="banner banner-caution" style="display:none;margin-bottom:12px;">
+                <div class="icon-wrap"><svg class="mi"><use href="#i-stop"/></svg></div>
+                <div class="text">
+                  <div class="title" id="sdt-context-title"></div>
+                  <div class="sub" id="sdt-context-sub"></div>
+                </div>
+              </div>
               <div class="banner banner-info">
                 <div class="icon-wrap"><svg class="mi"><use href="#i-shield-check"/></svg></div>
                 <div class="text">
@@ -2303,9 +2346,9 @@
   @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
 </style>
 
-<script src="assets/annotations.js?v=8.6"></script>
-<script src="assets/annotations-new.js?v=8.6"></script>
-<script src="assets/workflows.js?v=8.6"></script>
-<script src="assets/app.js?v=8.6"></script>
+<script src="assets/annotations.js?v=8.7"></script>
+<script src="assets/annotations-new.js?v=8.7"></script>
+<script src="assets/workflows.js?v=8.7"></script>
+<script src="assets/app.js?v=8.7"></script>
 </body>
 </html>

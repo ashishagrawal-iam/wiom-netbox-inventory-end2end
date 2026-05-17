@@ -167,12 +167,171 @@
     return 'opportunity';
   }
 
+  // v8.7 · Shared payment screens (add-funds-method/input/success) morph per
+  // active workflow. Originally hardcoded ₹2,000 + wallet-top-up framing
+  // from F1·C — which leaked into W1 (₹20,000 SD onboarding) and other flows.
+  // Each context defines copy + amount for the destination of the payment.
+  const PAYMENT_CONTEXTS = {
+    'sd-onboarding': { // W1 — one-time partnership SD
+      method:  { title: 'सुरक्षा राशि जमा करें', label: 'Wiom साझेदारी की सुरक्षा राशि', amount: '₹20,000', sub: 'सीधे आपकी सुरक्षा राशि में जाएगी', cta: '₹20,000 जमा करें' },
+      input:   { title: 'सुरक्षा राशि जमा करें', hint: 'राशि', amount: '20,000', cta: '₹20,000 जमा करें' },
+      success: { subtitle: '₹20,000 सुरक्षा राशि में जमा हो गए', balLabel: 'वर्तमान सुरक्षा राशि', balAmount: '₹20,000' }
+    },
+    'sd-topup': { // F1·B / F1·C / W7 / W9 — top-up to existing SD
+      method:  { title: 'सुरक्षा राशि में top-up', label: 'सुरक्षा राशि में जमा', amount: '₹2,000', sub: 'आपकी सुरक्षा राशि में जाएगा', cta: '₹2,000 जमा करें' },
+      input:   { title: 'सुरक्षा राशि में जोड़ें', hint: 'राशि', amount: '2,000', cta: '₹2,000 जमा करें' },
+      success: { subtitle: '₹2,000 सुरक्षा राशि में जमा हो गए', balLabel: 'वर्तमान सुरक्षा राशि', balAmount: '₹22,000' }
+    },
+    'wallet-topup': { // default / legacy wallet refill
+      method:  { title: 'भुगतान विधि', label: 'वॉलेट में पैसे डालें', amount: '₹2,000', sub: 'अपने वॉलेट में जोड़ा जाएगा', cta: '₹2,000 जमा करें' },
+      input:   { title: 'वॉलेट में पैसे डालें', hint: 'अपनी राशि लिखें', amount: '2,000', cta: 'पैसे जोड़ें' },
+      success: { subtitle: '₹2,000 वॉलेट में जुड़ गया', balLabel: 'नया वॉलेट बैलेंस', balAmount: '₹3,800' }
+    }
+  };
+
+  function paymentContextForFlow(wfId) {
+    if (wfId === 'W1') return 'sd-onboarding';
+    if (wfId === 'F1B' || wfId === 'F1C' || wfId === 'W7' || wfId === 'W9') return 'sd-topup';
+    return 'wallet-topup';
+  }
+
+  // v8.7 · Per-workflow content overrides for shared screens that get visited
+  // from multiple workflows with different state semantics. Same shape as
+  // PAYMENT_CONTEXTS but keyed by [workflowId][screenId][fieldId]. Default
+  // (workflow not present here) leaves the HTML's static copy untouched.
+  const WORKFLOW_CONTENT = {
+    'W3': { // Custody loss · lost_reason = CSP_CUSTODY_LOST · age-band ₹600
+      'dev-lost': {
+        'dl-banner-title': 'गुम बताया गया है',
+        'dl-banner-sub': 'Custody loss · age-band के हिसाब से देय',
+        'dl-body': 'Device आपकी custody में था — आपकी ज़िम्मेदारी। अगले Settlement Cycle में शामिल किया जाएगा।',
+        'dl-amount-label': 'Custody loss देय',
+        'dl-amount': '−₹600',
+        'dl-meta-label': 'Device age',
+        'dl-meta-value': '28 months · 40% slab',
+        'dl-formula': 'Age-band: 0–12mo full · 12–24mo 70% · 24–36mo 40% · 36+ floor ₹300'
+      }
+    },
+    'W4': { // Customer Non-Recovery · ₹200 flat · partial responsibility
+      'dev-lost': {
+        'dl-banner-title': 'ग्राहक से वापस नहीं आया',
+        'dl-banner-sub': 'Recovery SLA खत्म · ₹200 flat',
+        'dl-body': '30 दिन की recovery SLA खत्म हो गई और customer ने NetBox वापस नहीं किया। आंशिक ज़िम्मेदारी — flat amount, device age से नहीं।',
+        'dl-amount-label': 'Non-recovery देय',
+        'dl-amount': '−₹200',
+        'dl-meta-label': 'Liability type',
+        'dl-meta-value': 'Flat · age-irrelevant',
+        'dl-formula': 'Non-recovery: सभी devices पर ₹200 flat। ₹50 reward window SLA के साथ खत्म।'
+      }
+    },
+    'W12': { // Late Recovery · prior LOST · charge stands
+      'dev-lost': {
+        'dl-banner-title': 'पहले LOST मार्क हुआ था',
+        'dl-banner-sub': '₹200 पहले ही दर्ज · late recovery context',
+        'dl-body': 'यह device 1 May को LOST mark हुआ था (non-recovery, ₹200 चार्ज हो चुका)। अब late में मिल गया — exposure बंद होगा पर charge बना रहेगा। ₹50 reward window पहले ही expire हो गई।',
+        'dl-amount-label': 'पहले से दर्ज (बना रहेगा)',
+        'dl-amount': '−₹200',
+        'dl-meta-label': 'Status',
+        'dl-meta-value': 'पहले LOST · अब late recovery',
+        'dl-formula': 'Late recovery: exposure closes, charge stands, no reward. Decision 12 के अनुसार।'
+      },
+      'dev-returned': {
+        'dr-banner-title': 'Late recovery · वापस आ गया',
+        'dr-banner-sub': 'Exposure बंद · पहले की ₹200 charge बनी रहेगी',
+        'dr-card-title': 'क्या हुआ',
+        'dr-card-body': 'पहले LOST mark था · अब recovery हुई। Exposure तो बंद हो गया, लेकिन ₹200 की liability पहले ही दर्ज है।',
+        'dr-finance-title': 'अब क्या होगा',
+        'dr-row1-label': 'पहले की liability',
+        'dr-row1-value': '−₹200 (बना रहेगा)',
+        'dr-row2-label': 'Late recovery reward',
+        'dr-row2-value': 'कोई नहीं · window खत्म',
+        'dr-footer': 'Decision 12: late recovery exposure बंद करती है, पर पहले की charge नहीं हटाती। ₹50 reward सिर्फ SLA window में।'
+      }
+    },
+    'W5': { // Clean return — no liability
+      'dev-returned': {
+        'dr-banner-title': 'Wiom को वापस हो गया',
+        'dr-banner-sub': 'Exposure कम हुआ — साझेदारी सुरक्षा यथावत',
+        'dr-card-title': 'क्या हुआ',
+        'dr-card-body': 'NetBox Wiom को लौटाया गया। आपकी custody exposure −1 हुई। कोई liability नहीं।',
+        'dr-finance-title': 'अब क्या होगा',
+        'dr-row1-label': 'कैरी शुल्क',
+        'dr-row1-value': '₹60',
+        'dr-row2-label': 'Condition जाँच',
+        'dr-row2-value': 'Wiom warehouse में',
+        'dr-footer': 'कोई पैसा वापस नहीं आता — return = exposure closure (SD-4)। केवल exit settlement पर SD bank में जाती है।'
+      }
+    },
+    'W7': { // Risk-triggered escalation → sd-topup as the unblock action
+      'sd-topup': {
+        'sdt-context-title': 'Escalation हटाने के लिए top-up ज़रूरी',
+        'sdt-context-sub': 'बकाया देय threshold से ऊपर — नई capacity अभी रुकी हुई'
+      }
+    }
+  };
+
+  // Snapshot original textContent of any element we may mutate, so we can
+  // restore the default copy when no workflow override is active.
+  const ORIGINAL_CONTENT = {};
+  function snapshotOriginal(id) {
+    if (ORIGINAL_CONTENT[id] != null) return;
+    const el = document.getElementById(id);
+    if (el) ORIGINAL_CONTENT[id] = el.textContent;
+  }
+
+  function applyWorkflowContent(screenId) {
+    // Collect every id that ANY workflow may override on this screen, so we
+    // can restore defaults for ids the current workflow doesn't touch.
+    const idsForScreen = new Set();
+    Object.values(WORKFLOW_CONTENT).forEach(wf => {
+      if (wf[screenId]) Object.keys(wf[screenId]).forEach(id => idsForScreen.add(id));
+    });
+    idsForScreen.forEach(snapshotOriginal);
+
+    const wfMap = currentWorkflow ? WORKFLOW_CONTENT[currentWorkflow] : null;
+    const overrides = (wfMap && wfMap[screenId]) || {};
+
+    idsForScreen.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = (id in overrides) ? overrides[id] : (ORIGINAL_CONTENT[id] || el.textContent);
+    });
+
+    // sd-topup: show escalation banner only when W7 supplied context content.
+    const sdtBanner = document.getElementById('sdt-context-banner');
+    if (sdtBanner) {
+      sdtBanner.style.display = (screenId === 'sd-topup' && overrides['sdt-context-title']) ? '' : 'none';
+    }
+  }
+
+  function setPaymentContext(flow) {
+    const ctx = PAYMENT_CONTEXTS[flow] || PAYMENT_CONTEXTS['wallet-topup'];
+    // add-funds-method
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.textContent = val; };
+    set('afm-title', ctx.method.title);
+    set('afm-hero-label', ctx.method.label);
+    set('afm-hero-amount', ctx.method.amount);
+    set('afm-hero-sub', ctx.method.sub);
+    set('afm-cta', ctx.method.cta);
+    // add-funds-input
+    set('afi-title', ctx.input.title);
+    set('afi-hint', ctx.input.hint);
+    set('afi-amount', ctx.input.amount);
+    set('afi-cta', ctx.input.cta);
+    // add-funds-success
+    set('afs-subtitle', ctx.success.subtitle);
+    set('afs-balance-label', ctx.success.balLabel);
+    set('afs-balance-amount', ctx.success.balAmount);
+  }
+
   function showScreen(id, opts) {
     opts = opts || {};
     if (currentScreen && currentScreen !== id && !opts.fromBack) backStack.push(currentScreen);
     if (backStack.length > 30) backStack.shift();
     currentScreen = id;
     setZoneChipState(chipStateForFlow(currentWorkflow));
+    setPaymentContext(paymentContextForFlow(currentWorkflow));
+    applyWorkflowContent(id);
 
     document.querySelectorAll('.screen').forEach(s => {
       s.classList.toggle('active', s.id === 'screen-' + id);
@@ -225,6 +384,7 @@
     wfStepper.style.display = 'none';
     wfStepper.innerHTML = '';
     setZoneChipState('opportunity');
+    setPaymentContext('wallet-topup');
   }
 
   function maybeAdvanceWorkflow(targetScreen) {
